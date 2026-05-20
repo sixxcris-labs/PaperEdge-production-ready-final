@@ -1,0 +1,22 @@
+{
+  "name": "@paperedge/core",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "exports": {
+    ".": "./src/index.ts",
+    "./bankroll-snapshots": "./src/bankroll-snapshots.ts",
+    "./calc": "./src/calc.ts",
+    "./calculator-router": "./src/calculator-router.ts",
+    "./checklist": "./src/checklist.ts",
+    "./constants": "./src/constants.ts",
+    "./dashboard-series": "./src/dashboard-series.ts",
+    "./fmt": "./src/fmt.ts",
+    "./import-settlement": "./src/import-settlement.ts",
+    "./status": "./src/status.ts",
+    "./trade-metrics": "./src/trade-metrics.ts",
+    "./verify": "./src/verify.ts",
+    "./opportunity-parser": "./src/opportunity-parser.ts",
+    "./verification-analytics": "./src/verification-analytics.ts"
+  }
+}

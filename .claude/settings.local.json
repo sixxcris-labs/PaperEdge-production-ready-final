@@ -1,0 +1,38 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(npm install *)",
+      "Bash(npm run *)",
+      "Bash(npx prisma *)",
+      "Bash(sqlite3 packages/database/prisma/dev.db \".tables\")",
+      "Bash(curl -s http://localhost:3002)",
+      "Bash(curl -s http://localhost:3000)",
+      "Bash(curl -s http://localhost:3001)",
+      "Bash(TaskStop bkd6clqt8 *)",
+      "Bash(netstat -tuln)",
+      "Bash(curl -s http://localhost:3000/api/health)",
+      "Bash(curl -s http://localhost:3000/trades)",
+      "Bash(curl -s -w \"\\\\nStatus: %{http_code}\\\\n\" http://localhost:3000/trades)",
+      "Bash(ls -la \"C:/Users/Cristian/Desktop/PapertradingDash/\" 2>&1 | head -20)",
+      "Read(//c/Users/Cristian/Desktop/PapertradingDash/**)",
+      "Bash(curl -s http://localhost:3003)",
+      "Bash(curl -s -w \"\\\\nStatus: %{http_code}\\\\n\" http://localhost:3003/trades)",
+      "Bash(timeout 5 curl -v http://localhost:3003)",
+      "Bash(taskkill /PID 3176 /F)",
+      "Bash(kill -9 3176)",
+      "PowerShell(Get-Process node -ErrorAction SilentlyContinue)",
+      "PowerShell(Stop-Process -Force)",
+      "Bash(curl -s -w \"\\\\nStatus: %{http_code}\\\\n\" http://localhost:3000/)",
+      "Bash(cd \"C:/Users/Cristian/Desktop/PapertradingDash\" && npm run dev > /tmp/devserver.log 2>&1 & *)",
+      "Read(//tmp/**)",
+      "Bash(curl -s -o /tmp/page.html -w \"Status: %{http_code}\\\\n\" http://localhost:3000/)",
+      "Bash(grep -oE '\"message\":\"[^\"]{0,300}\"' /tmp/page.html)",
+      "Bash(grep -oE '\\(KPI|Total|Bankroll|Open|Locked|Settled|Mistakes\\)[^<>\"]{0,40}' /tmp/page.html)",
+      "Bash(curl -s -o /dev/null -w '%{http_code}' http://localhost:3000__TRACKED_VAR__)",
+      "Bash(curl -s -o /dev/null -w \"/books/manage → %{http_code}\\\\n\" http://localhost:3000/books/manage)",
+      "Bash(Get-ChildItem -Path \"C:\\\\Users\\\\Cristian\\\\Desktop\\\\PapertradingDash\" -Recurse -Directory)",
+      "Bash(Select-Object -ExpandProperty FullName)",
+      "Bash(xargs ls -lh)"
+    ]
+  }
+}

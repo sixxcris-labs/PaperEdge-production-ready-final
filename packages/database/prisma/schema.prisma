@@ -1,0 +1,331 @@
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "sqlite"
+}
+
+model User {
+  id            String             @id @default(uuid())
+  email         String             @unique
+  displayName   String?
+  createdAt     DateTime           @default(now())
+  updatedAt     DateTime           @updatedAt
+  books         Book[]
+  trades        PaperTrade[]
+  bonuses       Bonus[]
+  settings      UserSettings?
+  bankrollSnaps BankrollSnapshot[]
+  opportunities TradeOpportunity[]
+}
+
+model UserSettings {
+  userId                     String  @id
+  user                       User    @relation(fields: [userId], references: [id])
+  startingBankroll           Float   @default(1000)
+  currentBankroll            Float   @default(1000)
+  maxStakePct                Float   @default(5.0)
+  oddsFreshnessMinutes       Int     @default(5)
+  defaultUnitPct             Float   @default(1.0)
+  warnLowHoldPctAbove        Float   @default(3.0)
+  activeVerificationTradeId  String?
+}
+
+model Book {
+  id                String        @id @default(uuid())
+  userId            String
+  user              User          @relation(fields: [userId], references: [id])
+  name              String
+  role              String        @default("unknown")
+  available         Boolean       @default(true)
+  currentBalance    Float         @default(0)
+  rolloverRemaining Float         @default(0)
+  maxBetLimit       Float?
+  kycCompleted      Boolean       @default(false)
+  notes             String?
+  createdAt         DateTime      @default(now())
+  legs              TradeLeg[]
+  bonuses           Bonus[]
+  deepLinks         BookDeepLink[]
+  opportunitiesAsA  TradeOpportunity[] @relation("OpportunityBookA")
+  opportunitiesAsB  TradeOpportunity[] @relation("OpportunityBookB")
+}
+
+model BookDeepLink {
+  id          String   @id @default(uuid())
+  bookId      String
+  book        Book     @relation(fields: [bookId], references: [id], onDelete: Cascade)
+  sport       String   // "nba" | "nfl" | "mlb" | "nhl" | "ncaaf" | "ncaab" | "default"
+  marketType  String   // "moneyline" | "spread" | "total" | "player_prop" | "default"
+  urlTemplate String
+  queryParam  String?  // "player" | "team" | "event" | null
+  fallbackUrl String?
+  notes       String?
+  createdAt   DateTime @default(now())
+}
+
+model PaperTrade {
+  id                   String              @id @default(uuid())
+  userId               String
+  user                 User                @relation(fields: [userId], references: [id])
+  tradeDate            DateTime
+  sport                String
+  league               String?
+  eventName            String
+  marketType           String
+  gamePeriod           String
+  lineValue            Float?
+  tradeType            String
+  bonusType            String              @default("none")
+  goal                 String
+  requiredCalculator   String
+  status               String              @default("draft")
+  // draft | unverified | verifying | verified |
+  // not_placed_line_moved | not_placed_odds_moved |
+  // not_placed_market_unavailable | not_placed_player_not_listed |
+  // not_placed_book_unavailable | not_placed_other |
+  // ready | paper_traded | pending_result |
+  // settled_won | settled_lost | settled_push | settled_partial |
+  // mistake_invalid | cancelled
+  source               String              @default("manual")
+  // "manual" | "oddsjam_paste" | "oddsjam_csv"
+  oddsjamSnapshotJson  String?
+  importedAt           DateTime?
+  expectedProfitIfA    Float?
+  expectedProfitIfB    Float?
+  worstCasePL          Float?
+  bestCasePL           Float?
+  totalStakeExposure   Float?
+  hedgeStake           Float?
+  promoConversionValue Float?
+  lowHoldLossAmount    Float?
+  lowHoldLossPct       Float?
+  expectedRoiPct       Float?
+  notes                String?
+  customTradeId        String?
+  player               String?
+  expectedProfitRange  String?
+  createdAt            DateTime            @default(now())
+  updatedAt            DateTime            @updatedAt
+  legs                 TradeLeg[]
+  checklist            TradeChecklist?
+  result               Result?
+  mistakes             TradeMistake[]
+  overrides            ChecklistOverride[]
+  lockedFromOpportunity TradeOpportunity?  @relation("OpportunityLock")
+}
+
+model TradeOpportunity {
+  id                   String   @id @default(uuid())
+  userId               String
+  user                 User     @relation(fields: [userId], references: [id])
+
+  // Lifecycle — see ADR-001 for the full status vocabulary.
+  status               String   @default("imported")
+  source               String   @default("oddsjam_paste")
+
+  rawEntryText         String?
+  importedAt           DateTime @default(now())
+  verifiedAt           DateTime?
+  lockedAt             DateTime?
+  skippedAt            DateTime?
+  failedAt             DateTime?
+  failureReason        String?
+  notes                String?
+
+  // Link to the locked PaperTrade once promoted. Null until lock.
+  lockedTradeId        String?     @unique
+  lockedTrade          PaperTrade? @relation("OpportunityLock", fields: [lockedTradeId], references: [id])
+
+  // Market identity
+  tradeType            String   @default("cash_arbitrage")
+  event                String
+  startTime            DateTime?
+  sport                String   @default("unknown")
+  league               String?
+  market               String   @default("moneyline")
+  playerOrTeam         String?
+  period               String   @default("full_game")
+
+  // Book A — expected (from import) and observed (from verifier)
+  bookAId              String?
+  bookA                Book?    @relation("OpportunityBookA", fields: [bookAId], references: [id])
+  sideA                String?
+  oddsA                Int?
+  lineA                Float?
+  stakeA               Float?
+  liquidityA           Float?
+  verifiedOddsA        Int?
+  verifiedLineA        Float?
+  verifiedLiquidityA   Float?
+  bookANotes           String?
+  bookAVerified        Boolean  @default(false)
+
+  // Book B
+  bookBId              String?
+  bookB                Book?    @relation("OpportunityBookB", fields: [bookBId], references: [id])
+  sideB                String?
+  oddsB                Int?
+  lineB                Float?
+  stakeB               Float?
+  liquidityB           Float?
+  verifiedOddsB        Int?
+  verifiedLineB        Float?
+  verifiedLiquidityB   Float?
+  bookBNotes           String?
+  bookBVerified        Boolean  @default(false)
+
+  // Market-match checks
+  sameEventConfirmed         Boolean @default(false)
+  sameMarketConfirmed        Boolean @default(false)
+  samePlayerOrTeamConfirmed  Boolean @default(false)
+  samePeriodConfirmed        Boolean @default(false)
+  sameLineConfirmed          Boolean @default(false)
+  oppositeSidesConfirmed     Boolean @default(false)
+  oddsAcceptedConfirmed      Boolean @default(false)
+  stakeAcceptedConfirmed     Boolean @default(false)
+  liquidityEnoughConfirmed   Boolean @default(false)
+  recalculatedConfirmed      Boolean @default(false)
+  userFinalConfirm           Boolean @default(false)
+
+  // Computed at import + refined post-verification
+  totalExposure        Float?
+  profitIfAWins        Float?
+  profitIfBWins        Float?
+  expectedProfitMin    Float?
+  expectedProfitMax    Float?
+
+  // Middle-trade specifics (null for non-middles)
+  middleDistance       Float?
+  middleNumber         Float?
+  middleRange          String?
+  outsideLoss          Float?
+  middleProfit         Float?
+
+  createdAt            DateTime @default(now())
+  updatedAt            DateTime @updatedAt
+
+  @@index([userId, status])
+  @@index([userId, importedAt])
+}
+
+model TradeLeg {
+  id                   String     @id @default(uuid())
+  tradeId              String
+  trade                PaperTrade @relation(fields: [tradeId], references: [id], onDelete: Cascade)
+  bookId               String
+  book                 Book       @relation(fields: [bookId], references: [id])
+  legLabel             String
+  side                 String
+  oddsAmerican         Int
+  lineValue            Float?
+  stake                Float
+  isPromoLeg           Boolean    @default(false)
+  promoStakeReturned   Boolean    @default(true)
+  oddsCapturedAt       DateTime   @default(now())
+  maxBetAtBook         Float?
+  bonusId              String?
+  bonus                Bonus?     @relation(fields: [bonusId], references: [id])
+  // Verification fields
+  verificationStatus   String     @default("unverified")
+  // unverified | verified | line_moved | odds_moved |
+  // market_unavailable | player_not_listed | book_unavailable
+  verifiedAt           DateTime?
+  observedOddsAmerican Int?
+  observedLineValue    Float?
+  observationNotes     String?
+  createdAt            DateTime   @default(now())
+}
+
+model TradeChecklist {
+  id                         String     @id @default(uuid())
+  tradeId                    String     @unique
+  trade                      PaperTrade @relation(fields: [tradeId], references: [id], onDelete: Cascade)
+  goalStated                 Boolean    @default(false)
+  bookRolesClassified        Boolean    @default(false)
+  calculatorMatchesBonusType Boolean    @default(false)
+  sameEventConfirmed         Boolean    @default(false)
+  sameMarketTypeConfirmed    Boolean    @default(false)
+  sameGamePeriodConfirmed    Boolean    @default(false)
+  oppositeSidesConfirmed     Boolean    @default(false)
+  sameLineConfirmed          Boolean    @default(false)
+  oddsWithinFreshnessWindow  Boolean    @default(false)
+  maxBetWithinLimits         Boolean    @default(false)
+  bankrollExposureReviewed   Boolean    @default(false)
+  promoStakeLogicCorrect     Boolean    @default(false)
+  checklistComplete          Boolean    @default(false)
+  updatedAt                  DateTime   @updatedAt
+}
+
+model ChecklistOverride {
+  id          String     @id @default(uuid())
+  tradeId     String
+  trade       PaperTrade @relation(fields: [tradeId], references: [id], onDelete: Cascade)
+  failedItems String
+  reason      String
+  createdAt   DateTime   @default(now())
+}
+
+model Result {
+  id                     String     @id @default(uuid())
+  tradeId                String     @unique
+  trade                  PaperTrade @relation(fields: [tradeId], references: [id], onDelete: Cascade)
+  winningSide            String?
+  actualPayout           Float?
+  actualProfitLoss       Float?
+  matchedExpectedOutcome Boolean?
+  resultNotes            String?
+  finalStat              String?
+  settledAt              DateTime?
+  createdAt              DateTime   @default(now())
+}
+
+model MistakeTag {
+  id       String         @id @default(uuid())
+  name     String         @unique
+  mistakes TradeMistake[]
+}
+
+model TradeMistake {
+  id           String     @id @default(uuid())
+  tradeId      String
+  trade        PaperTrade @relation(fields: [tradeId], references: [id], onDelete: Cascade)
+  mistakeTagId String
+  mistakeTag   MistakeTag @relation(fields: [mistakeTagId], references: [id])
+  notes        String?
+  createdAt    DateTime   @default(now())
+}
+
+model Bonus {
+  id                    String     @id @default(uuid())
+  userId                String
+  user                  User       @relation(fields: [userId], references: [id])
+  bookId                String
+  book                  Book       @relation(fields: [bookId], references: [id])
+  bonusAmount           Float
+  depositAmount         Float?
+  rolloverMultiple      Float?
+  requiredBettingVolume Float?
+  volumeCompleted       Float      @default(0)
+  volumeRemaining       Float?
+  status                String     @default("not_started")
+  notes                 String?
+  createdAt             DateTime   @default(now())
+  updatedAt             DateTime   @updatedAt
+  legs                  TradeLeg[]
+}
+
+model BankrollSnapshot {
+  id              String   @id @default(uuid())
+  userId          String
+  user            User     @relation(fields: [userId], references: [id])
+  snapshotDate    DateTime
+  currentBankroll Float
+  dailyPL         Float?
+  weeklyPL        Float?
+  monthlyPL       Float?
+  drawdown        Float?
+  createdAt       DateTime @default(now())
+}
