@@ -13,6 +13,7 @@
     "./dashboard-series": "./src/dashboard-series.ts",
     "./fmt": "./src/fmt.ts",
     "./import-settlement": "./src/import-settlement.ts",
+    "./scores": "./src/scores/index.ts",
     "./status": "./src/status.ts",
     "./trade-metrics": "./src/trade-metrics.ts",
     "./verify": "./src/verify.ts",

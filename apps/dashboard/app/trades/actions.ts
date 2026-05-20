@@ -14,7 +14,7 @@ async function getLocalUser() {
   return db.user.findUniqueOrThrow({ where: { email: LOCAL_USER_EMAIL } });
 }
 
-export const TradeFormSchema = z.object({
+const TradeFormSchema = z.object({
   tradeType: z.string(),
   bonusType: z.string().default("none"),
   goal: z.string(),
@@ -188,11 +188,11 @@ export async function createTrade(data: TradeFormData, status: string) {
   return trade.id;
 }
 
-/** Statuses whose history must be preserved — never soft-removable. */
-const PROTECTED_STATUSES = new Set([
-  "settled_win", "settled_loss", "settled_push_void",
-  "settled_won", "settled_lost", "settled_push", "settled_partial",
-]);
+/** Statuses whose history must be preserved — never soft-removable.
+ *  Currently empty: user-driven cleanup is allowed for all trades, including settled.
+ *  Removed trades become `replaced_removed` (soft-deleted) — the row stays
+ *  so audit trail is preserved, but it disappears from active lists and P&L. */
+const PROTECTED_STATUSES = new Set<string>();
 
 /**
  * Soft-remove a trade that still needs review (pending / unverified / queued).

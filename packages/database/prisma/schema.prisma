@@ -107,14 +107,38 @@ model PaperTrade {
   customTradeId        String?
   player               String?
   expectedProfitRange  String?
+  needsManualSettle    Boolean             @default(false)
   createdAt            DateTime            @default(now())
   updatedAt            DateTime            @updatedAt
   legs                 TradeLeg[]
   checklist            TradeChecklist?
   result               Result?
+  settlementSuggestion SettlementSuggestion?
   mistakes             TradeMistake[]
   overrides            ChecklistOverride[]
   lockedFromOpportunity TradeOpportunity?  @relation("OpportunityLock")
+}
+
+model SettlementSuggestion {
+  id                   String     @id @default(uuid())
+  paperTradeId         String     @unique
+  paperTrade           PaperTrade @relation(fields: [paperTradeId], references: [id], onDelete: Cascade)
+  suggestedWinningSide String?
+  suggestedProfitLoss  Float?
+  confidence           Float
+  tier                 String
+  reason               String
+  providerName         String?
+  rawApiResponse       Json?
+  fetchedAt            DateTime   @default(now())
+  reviewedAt           DateTime?
+  reviewedBy           String?
+  status               String     @default("pending")
+  createdAt            DateTime   @default(now())
+  updatedAt            DateTime   @updatedAt
+
+  @@index([status])
+  @@index([tier])
 }
 
 model TradeOpportunity {

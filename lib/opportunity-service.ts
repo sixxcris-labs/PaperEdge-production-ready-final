@@ -25,7 +25,11 @@ export interface VerifyLegPayload {
 }
 
 export async function getLocalUser(client: PrismaClient = db) {
-  return client.user.findUniqueOrThrow({ where: { email: LOCAL_USER_EMAIL } });
+  return client.user.upsert({
+    where: { email: LOCAL_USER_EMAIL },
+    update: {},
+    create: { email: LOCAL_USER_EMAIL },
+  });
 }
 
 export async function createOpportunityFromRaw(raw: string, client: PrismaClient = db) {

@@ -32,6 +32,7 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
               <NavItem href="/import">Bulk Import</NavItem>
               <NavItem href="/verify">Verification Queue</NavItem>
               <NavItem href="/locked">Locked From Queue</NavItem>
+              <NavItem href="/settlement">Settlement Suggestions</NavItem>
               <NavItem href="/skipped">Skipped / Failed</NavItem>
               <div className="nav-section">Admin</div>
               <a className="nav-item" href={process.env.NEXT_PUBLIC_DASHBOARD_URL ?? "http://localhost:3000"}>Dashboard</a>

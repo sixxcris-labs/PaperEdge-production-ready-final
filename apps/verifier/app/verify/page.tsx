@@ -1,12 +1,12 @@
 import Link from "next/link";
 import { db } from "@paperedge/database";
 import { fmtUSD } from "@paperedge/core/fmt";
-import { LOCAL_USER_EMAIL } from "@/lib/opportunity-service";
+import { getLocalUser } from "@/lib/opportunity-service";
 
 export const dynamic = "force-dynamic";
 
 export default async function QueuePage() {
-  const user = await db.user.findUniqueOrThrow({ where: { email: LOCAL_USER_EMAIL } });
+  const user = await getLocalUser();
   const opportunities = await db.tradeOpportunity.findMany({
     where: { userId: user.id, NOT: [{ status: "locked" }, { status: "skipped" }] },
     include: { bookA: true, bookB: true },

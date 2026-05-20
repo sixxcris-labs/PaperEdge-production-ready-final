@@ -9,6 +9,7 @@ export * from "./import-settlement";
 export * from "./status";
 export * from "./trade-metrics";
 export * from "./verify";
+export * from "./scores";
 
 export function coreWorkspaceStatus(): string {
   return "PaperEdge core workspace linked";

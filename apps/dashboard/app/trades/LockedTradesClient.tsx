@@ -4,27 +4,26 @@ import { useState, useEffect } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
 import Link from "next/link";
 import { toast } from "sonner";
-import { fmtUSD, fmtOdds } from "@paperedge/core/fmt";
+import { fmtUSD, fmtOdds } from "@/lib/fmt";
 import { BookCell, SportPill, StatusBadge } from "@/components/ui/design";
 import { removeTrade } from "./actions";
-import {
-  isSettled,
-  hasOpenExposure,
-  isFailedVerification,
-} from "@paperedge/core/status";
 
-/** Statuses that are part of finalized history — not removable. */
-const isRemovable = (status: string) =>
-  !isSettled(status) && status !== "replaced_removed";
+/** All trades are user-removable except ones already soft-removed. */
+const isRemovable = (status: string) => status !== "replaced_removed";
+
+/** Maps any status into one of the ordered display sections. */
+const LOCKED_SET = new Set([
+  "locked_paper_trade", "locked_paper_trade_upgraded",
+  "paper_traded", "pending_result",
+]);
 
 type SectionKey = "pending" | "locked" | "settled" | "notplaced" | "removed";
 
 function sectionOf(status: string): SectionKey {
   if (status === "replaced_removed") return "removed";
-  if (isSettled(status)) return "settled";
-  if (isFailedVerification(status)) return "notplaced";
-  // LOCKED_OPEN ∪ PENDING_SETTLEMENT — both are real paper exposure.
-  if (hasOpenExposure(status)) return "locked";
+  if (status.startsWith("settled_")) return "settled";
+  if (status.startsWith("not_placed")) return "notplaced";
+  if (LOCKED_SET.has(status)) return "locked";
   return "pending"; // pending_verification, draft, ready, verifying, unverified…
 }
 

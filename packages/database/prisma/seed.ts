@@ -1,9 +1,13 @@
 import path from "node:path";
+import { fileURLToPath } from "node:url";
 import { PrismaBetterSqlite3 } from "@prisma/adapter-better-sqlite3";
 import { ACTIVE_BOOKS, ARCHIVED_DEFAULT_BOOK_NAMES } from "@paperedge/core/constants";
 import { PrismaClient } from "../src/generated/prisma/client";
 
-const dbUrl = `file:${path.resolve(__dirname, "dev.db")}`;
+// The generated Prisma client mutates globalThis.__dirname on import; resolve our
+// own path from import.meta.url instead of relying on __dirname.
+const SEED_DIR = path.dirname(fileURLToPath(import.meta.url));
+const dbUrl = `file:${path.resolve(SEED_DIR, "dev.db")}`;
 const db = new PrismaClient({
   adapter: new PrismaBetterSqlite3({ url: dbUrl }),
 });

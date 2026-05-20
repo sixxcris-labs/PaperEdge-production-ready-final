@@ -97,10 +97,7 @@ export function Sidebar() {
         <div className="nav-section">Workspace</div>
         <NavItem href="/" label="Dashboard" icon={ICONS.dashboard} exactMatch />
         <NavItem href="/trades/new" label="Add Paper Trade" icon={ICONS.plus} />
-        <a className="nav-item" href={process.env.NEXT_PUBLIC_VERIFIER_URL ?? "http://localhost:3001/import"}>
-          <span className="ico">{ICONS.download}</span>
-          <span>Import / Verify</span>
-        </a>
+        <NavItem href="/trades/import" label="Import Trades" icon={ICONS.download} />
         <NavItem href="/trades" label="Locked Trades" icon={ICONS.lock} />
         <NavItem href="/settlement" label="Settlement Review" icon={ICONS.flag} />
         <NavItem href="/pnl" label="Profit/Loss Tracker" icon={ICONS.chart} />
