@@ -3,6 +3,7 @@ import {
   ACT_NOW,
   buildRankedFindings,
   parseArbFindings,
+  parseComparisonBoard,
   parseCsvRecords,
   parseValueFindings,
   rankFindings,
@@ -114,6 +115,30 @@ describe("scoreFinding / ranking", () => {
     ].join("\n");
     const ranked = buildRankedFindings({ arbsCsv, valueCsv });
     expect(ranked.map((f) => f.kind)).toEqual(["arb", "value", "middle"]);
+  });
+});
+
+describe("parseComparisonBoard", () => {
+  const HEADER =
+    "selection,bovada_american,novig_american,4c_american,rebet_american,prophetx_american,book_count,best_book,implied_gap";
+
+  it("parses per-book odds and sorts by widest gap", () => {
+    const csv = [
+      HEADER,
+      '"basketball|nba|thunder vs spurs|moneyline||full_game|na|spurs",-125,,-116,,,2,4c,0.0185',
+      '"basketball|nba|thunder vs spurs|total||full_game|218|under",-110,,101,,,2,4c,0.0263',
+    ].join("\n");
+    const rows = parseComparisonBoard(csv);
+    expect(rows).toHaveLength(2);
+    expect(rows[0].gap).toBeCloseTo(0.0263, 6); // widest first
+    expect(rows[0].market).toBe("total");
+    expect(rows[0].selection).toBe("under");
+    expect(rows[0].detail).toContain("218");
+    expect(rows[0].odds.bovada).toBe("-110");
+    expect(rows[0].odds["4c"]).toBe("+101");
+    expect(rows[0].odds.novig).toBe(""); // no price
+    expect(rows[0].bestBook).toBe("4c");
+    expect(rows[0].bookCount).toBe(2);
   });
 });
 

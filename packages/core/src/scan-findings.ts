@@ -237,6 +237,57 @@ export function rankFindings(findings: ScanFinding[]): ScanFinding[] {
   );
 }
 
+/** Books that get their own column in book_comparison.csv, in display order. */
+export const COMPARISON_BOOKS = ["bovada", "novig", "4c", "rebet", "prophetx"] as const;
+
+export interface ComparisonRow {
+  sport: string;
+  league: string;
+  event: string;
+  market: string;
+  selection: string;
+  detail: string;
+  /** American odds per book as a display string; "" when the book has no price. */
+  odds: Record<string, string>;
+  bookCount: number;
+  bestBook: string;
+  /** Implied-probability spread between best and worst book (line-shop edge). */
+  gap: number;
+}
+
+/**
+ * book_comparison.csv columns:
+ * selection,bovada_american,novig_american,4c_american,rebet_american,
+ * prophetx_american,book_count,best_book,implied_gap
+ * `selection` is a pipe key ending in the outcome:
+ * sport|league|event|market|player|period|line|side
+ */
+export function parseComparisonBoard(csvText: string): ComparisonRow[] {
+  const rows: ComparisonRow[] = [];
+  for (const r of parseCsvRecords(csvText)) {
+    const parts = r.selection.split("|");
+    const [sport = "", league = "", event = "", marketType = "", player = "", period = "", line = "", side = ""] =
+      parts;
+    const odds: Record<string, string> = {};
+    for (const b of COMPARISON_BOOKS) odds[b] = fmtAmerican(r[`${b}_american`] ?? "").replace("—", "");
+    const detail = [player, period, line && line !== "na" ? line : ""].filter((v) => v && v !== "na").join(" · ");
+    rows.push({
+      sport,
+      league,
+      event: shortEvent(event),
+      market: marketType,
+      selection: side || player || "—",
+      detail,
+      odds,
+      bookCount: Number(r.book_count) || 0,
+      bestBook: r.best_book,
+      gap: Number(r.implied_gap) || 0,
+    });
+  }
+  // Widest line-shopping gap first.
+  return rows.sort((a, b) => b.gap - a.gap);
+}
+
 export interface FindingSummary {
   total: number;
   actNow: number;

@@ -2,7 +2,7 @@ import { KPI, SportPill, BookCell } from "@/components/ui/design";
 import { RefreshButton } from "@/components/RefreshButton";
 import { RunScanButton } from "./RunScanButton";
 import { loadScanResults } from "@/apps/dashboard/lib/scan-results";
-import type { ScanFinding } from "@paperedge/core/scan-findings";
+import { COMPARISON_BOOKS, type ScanFinding } from "@paperedge/core/scan-findings";
 
 export const dynamic = "force-dynamic";
 
@@ -73,7 +73,7 @@ function FindingRow({ f, rank }: { f: ScanFinding; rank: number }) {
 }
 
 export default function ScanPage() {
-  const { findings, summary, lastScanAt, empty } = loadScanResults();
+  const { findings, summary, board, coverage, totalMarkets, lastScanAt, empty } = loadScanResults();
   const actNow = findings.filter((f) => f.actNow);
 
   return (
@@ -114,6 +114,39 @@ export default function ScanPage() {
           up={summary.topEdge > 0}
         />
       </div>
+
+      {/* Coverage strip — proves how much was actually pulled per book. */}
+      {totalMarkets > 0 && (
+        <div className="card" style={{ marginBottom: 14 }}>
+          <div className="card-head">
+            <h3>Market Coverage</h3>
+            <span className="sub">{totalMarkets} markets captured · {board.length} quoted by 2+ books</span>
+          </div>
+          <div style={{ display: "flex", flexWrap: "wrap", gap: 10, padding: "12px 16px" }}>
+            {coverage.map((c) => (
+              <div
+                key={c.book}
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  gap: 8,
+                  padding: "6px 12px",
+                  borderRadius: 8,
+                  border: "1px solid var(--line)",
+                  background: c.markets === 0 ? "var(--warn-bg)" : "var(--card-hi)",
+                  opacity: c.markets === 0 ? 0.8 : 1,
+                }}
+              >
+                <BookCell name={c.book} />
+                <b className="num" style={{ color: c.markets === 0 ? "var(--warn)" : undefined }}>
+                  {c.markets}
+                </b>
+                {c.markets === 0 && <span className="hint" style={{ color: "var(--warn)" }}>no data</span>}
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
 
       {empty ? (
         <div className="card">
@@ -192,6 +225,56 @@ export default function ScanPage() {
             </div>
           </div>
         </>
+      )}
+
+      {/* Line-shopping board: every selection priced by 2+ books, widest
+          price gap first. This is the raw cross-book comparison, not an edge. */}
+      {board.length > 0 && (
+        <div className="card" style={{ marginTop: 14 }}>
+          <div className="card-head">
+            <h3>Cross-Book Prices</h3>
+            <span className="sub">{board.length} selections quoted by 2+ books · widest gap first</span>
+          </div>
+          <div className="tbl-wrap">
+            <table className="tbl">
+              <thead>
+                <tr>
+                  <th>Event</th>
+                  <th>Market</th>
+                  {COMPARISON_BOOKS.map((b) => (
+                    <th key={b} className="num" style={{ textTransform: "capitalize" }}>{b}</th>
+                  ))}
+                  <th>Best</th>
+                  <th className="num">Gap</th>
+                </tr>
+              </thead>
+              <tbody>
+                {board.map((row, i) => (
+                  <tr key={i}>
+                    <td>
+                      <b>{row.event}</b>
+                      <div className="hint">{row.sport ? <SportPill sport={row.sport} /> : row.league}</div>
+                    </td>
+                    <td>
+                      {row.market}
+                      <div className="hint">
+                        {row.selection}
+                        {row.detail ? ` · ${row.detail}` : ""}
+                      </div>
+                    </td>
+                    {COMPARISON_BOOKS.map((b) => (
+                      <td key={b} className="num" style={row.bestBook === b ? { color: "var(--profit)", fontWeight: 600 } : undefined}>
+                        {row.odds[b] || <span className="dim">—</span>}
+                      </td>
+                    ))}
+                    <td><BookCell name={row.bestBook} /></td>
+                    <td className="num">{(row.gap * 100).toFixed(2)}%</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </div>
       )}
     </div>
   );

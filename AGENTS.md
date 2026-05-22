@@ -8,6 +8,33 @@ Use this file as the operating guide for coding agents working on PaperEdge.
 This is not the Next.js you know. This version has breaking changes; APIs, conventions, and file structure may differ from training data. Before writing Next.js code, read the relevant guide in `node_modules/next/dist/docs/` and heed deprecation notices.
 <!-- END:nextjs-agent-rules -->
 
+## 🛑 Platform — Native Windows Only (Hard Rule)
+
+**PaperEdge runs on native Windows. Never use WSL, and never switch platforms.**
+
+The Windows dashboard (Next.js + the `better-sqlite3` native addon) and a
+WSL/Linux toolchain share one `node_modules` and **cannot coexist**. Crossing
+the boundary has already caused two failures: (1) `better-sqlite3` rebuilt as a
+Linux ELF → every DB page threw *"not a valid Win32 application"*; (2) a WSL run
+translated the novig `filePath` to `/mnt/c/...` and captured **0 markets**.
+
+**Always**
+- Run all Node / npm / tsx / prisma / vitest / next commands from **PowerShell**
+  (native Windows). Use Git Bash for `git` only — not for project tooling.
+- Use **repo-relative paths** in configs/scripts (`raw_data/novig_marketNBA.json`),
+  resolved against the repo root in code. Never commit absolute paths.
+
+**Never**
+- `wsl`, `wsl bash`, or any WSL shell for building/running/testing this project.
+- `TMPDIR=/tmp`, `/tmp/...`, `/mnt/c/...`, or POSIX absolute paths anywhere.
+- Absolute Windows paths (`C:\Users\...`) hard-coded in committed configs.
+- `npm install` / `npm rebuild` from WSL.
+
+**Recovery** — if a DB page throws *"not a valid Win32 application"*, the native
+addon is built for the wrong OS: run `npm rebuild better-sqlite3` from PowerShell.
+
+Rationale and full recovery steps: `docs/PLATFORM.md`.
+
 ## Live Planning Sources
 
 - Completion tracker (update every coding session): `docs/active/PROJECT_COMPLETION_TRACKER.md`

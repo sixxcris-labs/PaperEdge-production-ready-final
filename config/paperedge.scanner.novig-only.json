@@ -36,7 +36,7 @@
       "requests": [
         {
           "id": "novig-nba-market-file",
-          "filePath": "C:\\Users\\Cristian\\Downloads\\PaperEdge-production-ready-final\\raw_data\\novig_marketNBA.json",
+          "filePath": "raw_data/novig_marketNBA.json",
           "sport": "basketball",
           "league": "nba",
           "period": "full_game",
@@ -44,7 +44,7 @@
         },
         {
           "id": "novig-mlb-market-file",
-          "filePath": "C:\\Users\\Cristian\\Downloads\\PaperEdge-production-ready-final\\raw_data\\novigMLB.json",
+          "filePath": "raw_data/novigMLB.json",
           "sport": "baseball",
           "league": "mlb",
           "period": "full_game",
@@ -52,7 +52,7 @@
         },
         {
           "id": "novig-soccer-market-file",
-          "filePath": "C:\\Users\\Cristian\\Downloads\\PaperEdge-production-ready-final\\raw_data\\novigSoccer.json",
+          "filePath": "raw_data/novigSoccer.json",
           "sport": "soccer",
           "league": "soccer",
           "period": "full_game",

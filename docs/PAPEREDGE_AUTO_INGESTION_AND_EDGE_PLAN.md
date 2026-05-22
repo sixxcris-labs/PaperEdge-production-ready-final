@@ -75,7 +75,8 @@ normalized, schema-validated, and the relevant tests run — pass/fail logged.
       6) run the adapter's vitest, 7) one-line PASS/FAIL. Modes: default watch,
       `--once`, `<path>`, `--no-test`, `--pipeline` (refresh detect-edges).
 - [x] npm scripts: `ingest` (--once), `ingest:watch`, `ingest:pipeline`.
-      WSL: `TMPDIR=/tmp npx tsx scripts/watch-ingest.ts`.
+      Run from PowerShell on Windows (e.g. `npm run ingest:watch`). WSL is not
+      supported — see `docs/PLATFORM.md`.
 - [x] Multi-market fixtures: watcher recurses `raw_data/**`, so
       `raw_data/fixtures/<sport>/<market>/*.json` is auto-exercised. (NOTE: output
       is per-book `<book>_normalized.jsonl`; multi-event/multi-sport routing of

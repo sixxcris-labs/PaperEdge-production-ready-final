@@ -153,7 +153,11 @@ function timestampForPath(value: string): string {
 
 function resolveRequestFilePath(filePath: string): string {
   const trimmed = filePath.trim();
-  if (/^[A-Za-z]:\\/.test(trimmed)) {
+  if (/^[A-Za-z]:[\\/]/.test(trimmed)) {
+    // Native Windows (incl. Git Bash, which runs win32 node) reads C:\ paths
+    // directly. Only translate to the /mnt/<drive> form when actually on Linux
+    // (i.e. real WSL), where the Windows drive is mounted there.
+    if (process.platform === "win32") return trimmed;
     const drive = trimmed[0].toLowerCase();
     const rest = trimmed.slice(2).replace(/\\/g, "/");
     return `/mnt/${drive}${rest}`;

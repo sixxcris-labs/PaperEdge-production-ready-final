@@ -123,7 +123,8 @@
       "Bash(npx vitest *)",
       "PowerShell(Get-Process -Name node -ErrorAction SilentlyContinue | Select-Object Id, StartTime, @{n='Cmd';e={\\(Get-CimInstance Win32_Process -Filter \"ProcessId=$\\($_.Id\\)\"\\).CommandLine}} | Format-Table -Wrap -AutoSize)",
       "PowerShell(taskkill /PID 53895 /F)",
-      "PowerShell($c = Get-NetTCPConnection -LocalPort 3000 -State Listen -ErrorAction SilentlyContinue; if \\($c\\) { \"PORT 3000 IN USE by PID\\(s\\): \" + \\($c.OwningProcess -join ','\\) } else { \"PORT 3000 FREE\" })"
+      "PowerShell($c = Get-NetTCPConnection -LocalPort 3000 -State Listen -ErrorAction SilentlyContinue; if \\($c\\) { \"PORT 3000 IN USE by PID\\(s\\): \" + \\($c.OwningProcess -join ','\\) } else { \"PORT 3000 FREE\" })",
+      "Bash(grep -rniE \"/mnt/|wsl|tmpdir|/tmp|\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\?\\\\\\\\\\\\\\\\\" --include=*.ts --include=*.tsx --include=*.json --include=*.md --include=*.mjs .)"
     ]
   }
 }
