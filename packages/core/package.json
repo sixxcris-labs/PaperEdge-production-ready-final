@@ -31,6 +31,9 @@
     "./adapters": "./src/adapters/index.ts",
     "./adapters/novig": "./src/adapters/novig.ts",
     "./adapters/prophetx": "./src/adapters/prophetx.ts",
-    "./adapters/bovada": "./src/adapters/bovada.ts"
+    "./adapters/bovada": "./src/adapters/bovada.ts",
+    "./adapters/kalshi": "./src/adapters/kalshi.ts",
+    "./adapters/rebet": "./src/adapters/rebet.ts",
+    "./adapters/fourc": "./src/adapters/fourc.ts"
   }
 }

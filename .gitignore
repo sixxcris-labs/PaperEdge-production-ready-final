@@ -48,3 +48,6 @@ next-env.d.ts
 /packages/database/prisma/dev.db-*
 
 dist/
+
+# generated ingestion artifact (>100MB)
+normalized_data/edge_signals.jsonl

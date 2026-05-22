@@ -155,3 +155,117 @@ describe("normalizeNovigMarkets", () => {
     expect(raw.outcome).not.toHaveProperty("outcomes");
   });
 });
+
+const eventShapeRaw = {
+  data: {
+    event: [
+      {
+        id: "evt-okc-sas",
+        description: "Oklahoma City Thunder @ San Antonio Spurs",
+        status: "OPEN_PREGAME",
+        scheduled_start: "2026-05-23T00:35:00+00:00",
+        game: {
+          league: "NBA",
+          sport: "Basketball",
+          awayTeam: { name: "Oklahoma City Thunder", symbol: "OKC" },
+          homeTeam: { name: "San Antonio Spurs", symbol: "SA" },
+        },
+        markets: [
+          {
+            id: "mkt-spread-25",
+            type: "SPREAD",
+            strike: 2.5,
+            status: "OPEN",
+            player: null,
+            outcomes: [
+              { id: "oc-okc", description: "OKC -2.5", available: 0.449 },
+              { id: "oc-sas", description: "SAS +2.5", available: 0.595 },
+            ],
+          },
+          {
+            id: "mkt-money",
+            type: "MONEY",
+            strike: 0,
+            status: "OPEN",
+            player: null,
+            outcomes: [{ id: "oc-ml-okc", description: "OKC", available: 0.7 }],
+          },
+          {
+            id: "mkt-dd",
+            type: "DOUBLE_DOUBLE",
+            strike: 0.5,
+            status: "OPEN",
+            player: { full_name: "Alex Caruso", __typename: "player" },
+            outcomes: [
+              { id: "oc-over", description: "Over 0.5", available: 0.021 },
+              { id: "oc-under", description: "Under 0.5", available: null },
+            ],
+          },
+          {
+            id: "mkt-total-1h",
+            type: "TOTAL_1H",
+            strike: 110.5,
+            status: "OPEN",
+            player: null,
+            outcomes: [{ id: "oc-1h-over", description: "Over 110.5", available: 0.52 }],
+          },
+        ],
+      },
+    ],
+  },
+};
+
+describe("normalizeNovigMarkets — captured GraphQL event shape", () => {
+  it("flattens data.event[].markets[].outcomes[] into rows", () => {
+    const rows = normalizeNovigMarkets(eventShapeRaw);
+    // 2 + 1 + 2 + 1 outcomes
+    expect(rows.length).toBe(6);
+    expect(rows.every((r) => r.source === "novig")).toBe(true);
+  });
+
+  it("converts outcome.available into implied probability and American odds", () => {
+    const rows = normalizeNovigMarkets(eventShapeRaw);
+    const okc = rows.find((r) => r.sourceOutcomeId === "oc-okc")!;
+    expect(okc.implied_probability).toBe(0.449);
+    expect(okc.odds_american).toBe(123); // probabilityToAmerican(0.449)
+  });
+
+  it("maps type, strike, and side correctly", () => {
+    const rows = normalizeNovigMarkets(eventShapeRaw);
+    const sas = rows.find((r) => r.sourceOutcomeId === "oc-sas")!;
+    expect(sas.market_type).toBe("spread");
+    expect(sas.line).toBe(2.5);
+    expect(sas.side).toBe("sas +2.5");
+  });
+
+  it("nulls the line for moneyline and normalizes over/under sides", () => {
+    const rows = normalizeNovigMarkets(eventShapeRaw);
+    const ml = rows.find((r) => r.sourceOutcomeId === "oc-ml-okc")!;
+    expect(ml.market_type).toBe("moneyline");
+    expect(ml.line).toBeNull();
+
+    const over = rows.find((r) => r.sourceOutcomeId === "oc-over")!;
+    expect(over.side).toBe("over");
+    expect(over.market_type).toBe("double_double");
+    expect(over.player).toBe("alex caruso");
+  });
+
+  it("derives event/sport/league and first-half period from type suffix", () => {
+    const rows = normalizeNovigMarkets(eventShapeRaw);
+    const row = rows[0];
+    expect(row.event_name).toBe("oklahoma city thunder @ san antonio spurs");
+    expect(row.sport).toBe("basketball");
+    expect(row.league).toBe("nba");
+
+    const h1 = rows.find((r) => r.sourceOutcomeId === "oc-1h-over")!;
+    expect(h1.period).toBe("first_half");
+  });
+
+  it("sets liquidity null and leaves missing prices as null odds", () => {
+    const rows = normalizeNovigMarkets(eventShapeRaw);
+    expect(rows.every((r) => r.liquidity === null)).toBe(true);
+    const under = rows.find((r) => r.sourceOutcomeId === "oc-under")!;
+    expect(under.implied_probability).toBeNull();
+    expect(under.odds_american).toBeNull();
+  });
+});

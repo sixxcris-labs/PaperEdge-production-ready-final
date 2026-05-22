@@ -1,4 +1,4 @@
-export type MarketSource = "novig" | "prophetx" | "bovada" | "kalshi" | "unknown";
+export type MarketSource = "novig" | "prophetx" | "bovada" | "kalshi" | "rebet" | "4c" | "unknown";
 
 export type NormalizedMarketStatus = "open" | "suspended" | "closed" | "upcoming" | "unknown";
 
@@ -68,6 +68,9 @@ export function normalizePeriod(value: unknown, fallback = "unknown"): string {
     case "fg":
     case "game":
     case "full game":
+    case "full time":
+    case "fulltime":
+    case "ft":
       return "full_game";
     case "1h":
     case "first half":
@@ -159,21 +162,57 @@ export function groupMarketsByComparisonKey(markets: NormalizedMarket[]): Map<st
   return grouped;
 }
 
+const STRUCTURED_SIDES = new Set(["over", "under", "yes", "no"]);
+
+function isStructuredSide(side: string): boolean {
+  return STRUCTURED_SIDES.has(side);
+}
+
+/**
+ * A "team side" is any concrete outcome that is not an over/under or yes/no
+ * leg — i.e. a moneyline or spread selection identified by team. Assumes team
+ * identity has been normalized upstream (the same team resolves to the same
+ * string); otherwise the same team across books could look like opposites.
+ */
+function isTeamSide(side: string): boolean {
+  return side !== "" && side !== "unknown" && !isStructuredSide(side);
+}
+
 export function isOppositeSide(a: NormalizedMarket, b: NormalizedMarket): boolean {
   const sideA = normalizeSide(a.side);
   const sideB = normalizeSide(b.side);
-  return (
+  if (
     (sideA === "over" && sideB === "under") ||
     (sideA === "under" && sideB === "over") ||
     (sideA === "yes" && sideB === "no") ||
     (sideA === "no" && sideB === "yes")
-  );
+  ) {
+    return true;
+  }
+  // Team-vs-team: two distinct normalized team identities are the opposite
+  // outcomes of a 2-way market (moneyline, spread).
+  return isTeamSide(sideA) && isTeamSide(sideB) && sideA !== sideB;
 }
 
 export function hasSameLineRelationship(a: NormalizedMarket, b: NormalizedMarket): boolean {
   if (!isOppositeSide(a, b)) return false;
-  if (a.line === null || a.line === undefined || b.line === null || b.line === undefined) return false;
-  return a.line === b.line;
+
+  const sideA = normalizeSide(a.side);
+  const sideB = normalizeSide(b.side);
+
+  // Over/under & yes/no: opposite legs share the same numeric line.
+  if (isStructuredSide(sideA) && isStructuredSide(sideB)) {
+    if (a.line === null || a.line === undefined || b.line === null || b.line === undefined) return false;
+    return a.line === b.line;
+  }
+
+  // Team sides: moneyline has no line on either leg; a spread's two sides carry
+  // mirror lines (e.g. -2.5 and +2.5).
+  const aNull = a.line === null || a.line === undefined;
+  const bNull = b.line === null || b.line === undefined;
+  if (aNull && bNull) return true;
+  if (!aNull && !bNull) return a.line === -(b.line as number);
+  return false;
 }
 
 export function hasMiddleLineRelationship(a: NormalizedMarket, b: NormalizedMarket): boolean {

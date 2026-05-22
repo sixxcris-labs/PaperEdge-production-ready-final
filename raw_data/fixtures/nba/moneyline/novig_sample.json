@@ -1,0 +1,42 @@
+{
+  "data": {
+    "event": [
+      {
+        "id": "fx-evt-novig",
+        "description": "Team A @ Team B",
+        "status": "OPEN_PREGAME",
+        "scheduled_start": "2026-05-23T00:35:00+00:00",
+        "game": {
+          "league": "NBA",
+          "sport": "Basketball",
+          "awayTeam": { "name": "Team A", "symbol": "TA" },
+          "homeTeam": { "name": "Team B", "symbol": "TB" }
+        },
+        "markets": [
+          {
+            "id": "fx-ml",
+            "type": "MONEY",
+            "strike": 0,
+            "status": "OPEN",
+            "player": null,
+            "outcomes": [
+              { "id": "fx-ml-a", "description": "TA", "available": 0.52 },
+              { "id": "fx-ml-b", "description": "TB", "available": 0.5 }
+            ]
+          },
+          {
+            "id": "fx-sp",
+            "type": "SPREAD",
+            "strike": 2.5,
+            "status": "OPEN",
+            "player": null,
+            "outcomes": [
+              { "id": "fx-sp-a", "description": "TA -2.5", "available": 0.47 },
+              { "id": "fx-sp-b", "description": "TB +2.5", "available": 0.56 }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+}

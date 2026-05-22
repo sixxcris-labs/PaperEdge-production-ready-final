@@ -44,6 +44,42 @@ describe("detectEdgeSignals", () => {
     expect(signals.some((s) => s.type === "same_line_opposite_side" && s.severity === "candidate")).toBe(true);
   });
 
+  it("creates same-line opposite-side candidate for cross-book moneyline (team sides)", () => {
+    const signals = detectEdgeSignals(
+      [
+        market({ source: "novig", market_type: "moneyline", player: null, side: "OKC", line: null, odds_american: 116 }),
+        market({ source: "bovada", market_type: "moneyline", player: null, side: "SAS", line: null, odds_american: -135 }),
+      ],
+      { createdAt: CREATED_AT },
+    );
+
+    expect(signals.some((s) => s.type === "same_line_opposite_side" && s.severity === "candidate")).toBe(true);
+  });
+
+  it("creates same-line opposite-side candidate for cross-book mirror-line spread", () => {
+    const signals = detectEdgeSignals(
+      [
+        market({ source: "novig", market_type: "spread", player: null, side: "OKC", line: -2.5, odds_american: 123 }),
+        market({ source: "bovada", market_type: "spread", player: null, side: "SAS", line: 2.5, odds_american: -170 }),
+      ],
+      { createdAt: CREATED_AT },
+    );
+
+    expect(signals.some((s) => s.type === "same_line_opposite_side" && s.severity === "candidate")).toBe(true);
+  });
+
+  it("does not create a candidate for the same team across books", () => {
+    const signals = detectEdgeSignals(
+      [
+        market({ source: "novig", market_type: "moneyline", player: null, side: "OKC", line: null, odds_american: 116 }),
+        market({ source: "bovada", market_type: "moneyline", player: null, side: "OKC", line: null, odds_american: 120 }),
+      ],
+      { createdAt: CREATED_AT },
+    );
+
+    expect(signals.some((s) => s.severity === "candidate")).toBe(false);
+  });
+
   it("creates line-split middle candidate for over 27.5 vs under 28.5", () => {
     const signals = detectEdgeSignals(
       [

@@ -4,6 +4,7 @@ import {
   assessMarketRelationship,
   decimalToAmerican,
   isOppositeSide,
+  normalizePeriod,
   normalizeText,
   probabilityToAmerican,
   type NormalizedMarket,
@@ -39,6 +40,15 @@ describe("market-normalization", () => {
     expect(neg).not.toBeNull();
     expect(pos!).toBeCloseTo(0.4, 6);
     expect(neg!).toBeCloseTo(0.666666, 5);
+  });
+
+  it("maps full-game period aliases (incl. 4c's 'Full Time') to full_game", () => {
+    expect(normalizePeriod("Full Time")).toBe("full_game");
+    expect(normalizePeriod("fulltime")).toBe("full_game");
+    expect(normalizePeriod("FT")).toBe("full_game");
+    expect(normalizePeriod("full game")).toBe("full_game");
+    expect(normalizePeriod("1st half")).toBe("first_half");
+    expect(normalizePeriod("", "full_game")).toBe("full_game");
   });
 
   it("converts probability price to American odds", () => {
@@ -96,6 +106,38 @@ describe("market-normalization", () => {
       buildMarket({ side: "Over", line: 27.5 }),
     );
     expect(assessment.kind).toBe("same_side");
+    expect(assessment.comparable).toBe(false);
+  });
+
+  it("treats two distinct teams as opposite sides and the same team as not", () => {
+    expect(isOppositeSide(buildMarket({ side: "OKC" }), buildMarket({ side: "SAS" }))).toBe(true);
+    expect(isOppositeSide(buildMarket({ side: "OKC" }), buildMarket({ side: "OKC" }))).toBe(false);
+  });
+
+  it("classifies moneyline opposite teams (no line) as same-line opposite-side", () => {
+    const assessment = assessMarketRelationship(
+      buildMarket({ market_type: "moneyline", player: null, side: "OKC", line: null }),
+      buildMarket({ market_type: "moneyline", player: null, side: "SAS", line: null }),
+    );
+    expect(assessment.kind).toBe("same_line_opposite_side");
+    expect(assessment.comparable).toBe(true);
+  });
+
+  it("classifies mirror-line spreads as same-line opposite-side", () => {
+    const assessment = assessMarketRelationship(
+      buildMarket({ market_type: "spread", player: null, side: "OKC", line: -2.5 }),
+      buildMarket({ market_type: "spread", player: null, side: "SAS", line: 2.5 }),
+    );
+    expect(assessment.kind).toBe("same_line_opposite_side");
+    expect(assessment.comparable).toBe(true);
+  });
+
+  it("does not treat non-mirror team spreads as same-line opposite-side", () => {
+    const assessment = assessMarketRelationship(
+      buildMarket({ market_type: "spread", player: null, side: "OKC", line: -2.5 }),
+      buildMarket({ market_type: "spread", player: null, side: "SAS", line: 3.5 }),
+    );
+    expect(assessment.kind).not.toBe("same_line_opposite_side");
     expect(assessment.comparable).toBe(false);
   });
 

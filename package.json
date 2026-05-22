@@ -16,6 +16,11 @@
     "test:watch": "vitest",
     "db:seed": "tsx packages/database/prisma/seed.ts",
     "db:backfill-money-cents": "node --import tsx packages/database/prisma/backfill-money-cents.ts",
+    "ingest": "tsx scripts/watch-ingest.ts --once",
+    "ingest:watch": "tsx scripts/watch-ingest.ts",
+    "ingest:pipeline": "tsx scripts/watch-ingest.ts --once --pipeline",
+    "edges:fairvalue": "tsx scripts/fair-value-report.ts",
+    "edges:arbs": "tsx scripts/arbs-report.ts",
     "dev:dashboard": "npm --workspace @paperedge/dashboard run dev",
     "dev:verifier": "echo \"Verifier is disabled by ADR-002 (dashboard-only runtime).\"",
     "build:all": "npm run build",
@@ -48,6 +53,7 @@
     "zod": "^4.4.3"
   },
   "devDependencies": {
+    "@rolldown/binding-win32-x64-msvc": "^1.0.2",
     "@tailwindcss/postcss": "^4",
     "@types/better-sqlite3": "^7.6.13",
     "@types/node": "^20",

@@ -35,7 +35,7 @@ export type EdgeSignalEngineOptions = {
 };
 
 const EXCHANGE_SOURCES = new Set<NormalizedMarket["source"]>(["novig", "prophetx", "kalshi"]);
-const SOFT_BOOK_SOURCES = new Set<NormalizedMarket["source"]>(["bovada"]);
+const SOFT_BOOK_SOURCES = new Set<NormalizedMarket["source"]>(["bovada", "rebet", "4c"]);
 
 const SAME_LINE_NOTES = [
   "Verify same event.",

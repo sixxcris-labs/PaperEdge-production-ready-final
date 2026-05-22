@@ -45,3 +45,5 @@ export {
 export * from "./adapters";
 export * from "./edge-signal-engine";
 export * from "./edge-signal-import";
+export * from "./normalized-market.schema";
+export * from "./fair-value";

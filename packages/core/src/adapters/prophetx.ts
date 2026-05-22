@@ -46,6 +46,21 @@ function asRecordArray(value: unknown): UnknownRecord[] {
   return value.filter(isRecord);
 }
 
+function asSelectionRecordArray(value: unknown): UnknownRecord[] {
+  if (!Array.isArray(value)) return [];
+  const flattened: UnknownRecord[] = [];
+  for (const item of value) {
+    if (isRecord(item)) {
+      flattened.push(item);
+      continue;
+    }
+    if (Array.isArray(item)) {
+      flattened.push(...item.filter(isRecord));
+    }
+  }
+  return flattened;
+}
+
 function firstNonEmptyText(...values: unknown[]): string | null {
   for (const value of values) {
     if (typeof value !== "string") continue;
@@ -96,39 +111,45 @@ function deriveEntries(raw: ProphetXRawMarket | ProphetXRawMarket[]): ProphetXEn
   const roots = Array.isArray(raw) ? raw : [raw];
   const entries: ProphetXEntry[] = [];
 
-  for (const rootCandidate of roots) {
-    if (!isRecord(rootCandidate)) continue;
-    const root = rootCandidate;
+  for (const containerCandidate of roots) {
+    if (!isRecord(containerCandidate)) continue;
 
-    const nestedMarket = isRecord(root.market) ? root.market : null;
-    const listMarkets = asRecordArray(root.markets);
-
-    if (nestedMarket) {
-      const selections =
-        asRecordArray(nestedMarket.selections).length > 0
-          ? asRecordArray(nestedMarket.selections)
-          : asRecordArray(root.selections);
-      entries.push({ root, market: nestedMarket, selections });
-      continue;
+    const rootCandidates: UnknownRecord[] = [containerCandidate];
+    if (isRecord(containerCandidate.data)) {
+      rootCandidates.push(containerCandidate.data);
     }
 
-    if (listMarkets.length > 0) {
-      for (const market of listMarkets) {
+    for (const root of rootCandidates) {
+      const nestedMarket = isRecord(root.market) ? root.market : null;
+      const listMarkets = asRecordArray(root.markets);
+
+      if (nestedMarket) {
         const selections =
-          asRecordArray(market.selections).length > 0
-            ? asRecordArray(market.selections)
-            : asRecordArray(root.selections);
-        entries.push({ root, market, selections });
+          asSelectionRecordArray(nestedMarket.selections).length > 0
+            ? asSelectionRecordArray(nestedMarket.selections)
+            : asSelectionRecordArray(root.selections);
+        entries.push({ root, market: nestedMarket, selections });
+        continue;
       }
-      continue;
-    }
 
-    if (asRecordArray(root.selections).length > 0) {
-      entries.push({
-        root,
-        market: root,
-        selections: asRecordArray(root.selections),
-      });
+      if (listMarkets.length > 0) {
+        for (const market of listMarkets) {
+          const selections =
+            asSelectionRecordArray(market.selections).length > 0
+              ? asSelectionRecordArray(market.selections)
+              : asSelectionRecordArray(root.selections);
+          entries.push({ root, market, selections });
+        }
+        continue;
+      }
+
+      if (asSelectionRecordArray(root.selections).length > 0) {
+        entries.push({
+          root,
+          market: root,
+          selections: asSelectionRecordArray(root.selections),
+        });
+      }
     }
   }
 
@@ -168,13 +189,13 @@ export function normalizeProphetXMarkets(
       eventId,
     )!;
     const marketType = normalizeMarketType(
-      options?.marketType ?? market.displayName ?? market.name ?? market.type,
+      options?.marketType ?? market.type ?? market.displayName ?? market.name,
     );
     const liveRaw =
       typeof options?.live === "boolean"
         ? options.live
         : Boolean(root.live ?? market.live ?? false);
-    const period = normalizePeriod(options?.period ?? market.period, "full_game");
+    const period = normalizePeriod(options?.period ?? market.period ?? market.subType, "full_game");
 
     for (const selection of selections) {
       const oddsAmerican = parseAmericanLike(selection.displayOdds ?? selection.odds);

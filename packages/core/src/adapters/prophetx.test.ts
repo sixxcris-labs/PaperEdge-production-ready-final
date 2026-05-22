@@ -109,4 +109,48 @@ describe("normalizeProphetXMarkets", () => {
     expect(raw).not.toHaveProperty("market");
     expect(raw.selection).not.toHaveProperty("selections");
   });
+
+  it("supports captured data.markets wrapper with selections as nested arrays", () => {
+    const rows = normalizeProphetXMarkets({
+      data: {
+        markets: [
+          {
+            id: 64,
+            name: "First Half Moneyline",
+            type: "moneyline",
+            subType: "first_half_moneyline",
+            sportEventId: 20023807,
+            selections: [
+              [
+                {
+                  id: 4,
+                  name: "San Antonio Spurs -140",
+                  displayOdds: "-140",
+                  odds: -140,
+                  line: 0,
+                  stake: 83.33,
+                  lineID: "line-home",
+                },
+              ],
+              [
+                {
+                  id: 5,
+                  name: "Oklahoma City Thunder -107",
+                  displayOdds: "-107",
+                  odds: -107,
+                  line: 0,
+                  stake: 96.62,
+                  lineID: "line-away",
+                },
+              ],
+            ],
+          },
+        ],
+      },
+    });
+
+    expect(rows.length).toBe(2);
+    expect(rows[0].source).toBe("prophetx");
+    expect(rows[0].market_type).toBe("moneyline");
+  });
 });

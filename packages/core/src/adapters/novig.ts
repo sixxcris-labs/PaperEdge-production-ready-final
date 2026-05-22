@@ -200,10 +200,188 @@ function resolveStatus(ladder: UnknownRecord, outcome: UnknownRecord, market: Un
   return normalizeStatus(ladder.status ?? outcome.status ?? market.status);
 }
 
+// ---------------------------------------------------------------------------
+// Captured GraphQL event-markets shape
+//   { data: { event: [ { id, description, game, markets: [ { type, strike,
+//     description, status, player, outcomes: [ { id, description, available } ]
+//   } ] } ] } }
+// Prices live on `outcome.available` as an implied probability. This shape has
+// no order book, so liquidity is null. Handled as a separate path so the
+// existing ladder-based normalization is left untouched.
+// ---------------------------------------------------------------------------
+
+const NOVIG_MARKET_TYPE_MAP: Record<string, string> = {
+  MONEY: "moneyline",
+  MONEY_1H: "moneyline",
+  SPREAD: "spread",
+  SPREAD_1H: "spread",
+  TOTAL: "total",
+  TOTAL_1H: "total",
+  TEAM_TOTAL: "team_total",
+  POINTS: "player_points",
+  REBOUNDS: "player_rebounds",
+  ASSISTS: "player_assists",
+  POINTS_REBOUNDS: "player_points_rebounds",
+  POINTS_ASSISTS: "player_points_assists",
+  REBOUNDS_ASSISTS: "player_rebounds_assists",
+  POINTS_REBOUNDS_ASSISTS: "player_points_rebounds_assists",
+  THREE_POINTERS_MADE: "player_threes_made",
+  STEALS: "player_steals",
+  BLOCKS: "player_blocks",
+  DOUBLE_DOUBLE: "double_double",
+  TRIPLE_DOUBLE: "triple_double",
+  FIRST_BASKET: "first_basket",
+};
+
+function eventMarketType(type: unknown): string {
+  const raw = typeof type === "string" ? type.trim() : "";
+  if (!raw) return "unknown";
+  const mapped = NOVIG_MARKET_TYPE_MAP[raw.toUpperCase()];
+  if (mapped) return mapped;
+  return raw.toLowerCase().replace(/\s+/g, "_");
+}
+
+function eventPeriodFromType(type: unknown): string {
+  const raw = typeof type === "string" ? type.toUpperCase() : "";
+  if (raw.endsWith("_1H")) return "first_half";
+  if (raw.endsWith("_2H")) return "second_half";
+  if (raw.endsWith("_1Q")) return "first_quarter";
+  if (raw.endsWith("_2Q")) return "second_quarter";
+  if (raw.endsWith("_3Q")) return "third_quarter";
+  if (raw.endsWith("_4Q")) return "fourth_quarter";
+  return "full_game";
+}
+
+function isMoneyType(type: unknown): boolean {
+  const raw = typeof type === "string" ? type.toUpperCase() : "";
+  return raw === "MONEY" || raw.startsWith("MONEY_") || raw.startsWith("MONEY");
+}
+
+function eventPlayerName(market: UnknownRecord): string | null {
+  const player = market.player;
+  if (isRecord(player)) return firstString(player.full_name, player.name, player.description);
+  if (typeof player === "string") return normalizeText(player) || null;
+  return null;
+}
+
+function eventSide(outcome: UnknownRecord): string {
+  const text = normalizeText(firstString(outcome.description, outcome.name));
+  if (!text) return "unknown";
+  if (text === "over" || text.startsWith("over ")) return "over";
+  if (text === "under" || text.startsWith("under ")) return "under";
+  if (text === "yes" || text.startsWith("yes ")) return "yes";
+  if (text === "no" || text.startsWith("no ")) return "no";
+  return normalizeSide(text) || text;
+}
+
+type EventMarketPair = { event: UnknownRecord; market: UnknownRecord };
+
+/**
+ * Detect and flatten the captured GraphQL shape into (event, market) pairs.
+ * Returns null when `raw` is not that shape so the caller falls back to the
+ * existing ladder-based path.
+ */
+function extractEventMarketPairs(raw: unknown): EventMarketPair[] | null {
+  if (!isRecord(raw)) return null;
+  const data = isRecord(raw.data) ? raw.data : null;
+  if (!data) return null;
+
+  const events = toRecordArray(data.event);
+  if (events.length > 0) {
+    const pairs: EventMarketPair[] = [];
+    for (const event of events) {
+      for (const market of toRecordArray(event.markets)) {
+        pairs.push({ event, market });
+      }
+    }
+    if (pairs.length > 0) return pairs;
+  }
+
+  // Single-market query: each market carries its own nested `event`.
+  const markets = toRecordArray(data.market);
+  if (markets.length > 0) {
+    return markets.map((market) => ({
+      event: isRecord(market.event) ? market.event : {},
+      market,
+    }));
+  }
+
+  return null;
+}
+
+function buildEventRow(
+  event: UnknownRecord,
+  market: UnknownRecord,
+  outcome: UnknownRecord,
+  options?: NovigNormalizeOptions,
+): NormalizedMarket {
+  const game = isRecord(event.game) ? event.game : {};
+  const away = isRecord(game.awayTeam) ? game.awayTeam : {};
+  const home = isRecord(game.homeTeam) ? game.homeTeam : {};
+
+  const available = toNumber(outcome.available);
+  const impliedProbability = available !== null && available > 0 && available < 1 ? available : null;
+  const oddsAmerican = impliedProbability !== null ? probabilityToAmerican(impliedProbability) : null;
+
+  const strike = toNumber(market.strike);
+  const line = isMoneyType(market.type) ? null : strike;
+
+  const eventName =
+    firstString(options?.eventName, event.description) ??
+    (firstString(away.name) && firstString(home.name)
+      ? `${firstString(away.name)} @ ${firstString(home.name)}`
+      : null) ??
+    firstString(event.id) ??
+    "unknown";
+
+  const liveText = normalizeText(firstString(event.status, game.status));
+  const live = /live|in[_ ]?progress|in[_ ]?play/.test(liveText);
+
+  return {
+    source: "novig",
+    sourceEventId: firstString(event.id),
+    sourceMarketId: firstString(market.id),
+    sourceOutcomeId: firstString(outcome.id),
+    event_id: firstString(event.id) ?? "unknown",
+    event_name: eventName,
+    sport: firstString(options?.sport, game.sport) ?? "unknown",
+    league: firstString(options?.league, game.league) ?? "unknown",
+    market_type: firstString(options?.marketType) ?? eventMarketType(market.type),
+    player: eventPlayerName(market),
+    side: eventSide(outcome),
+    line,
+    odds_american: oddsAmerican,
+    implied_probability: impliedProbability,
+    liquidity: null,
+    timestamp: firstString(options?.receivedAt) ?? new Date().toISOString(),
+    status: normalizeStatus(market.status ?? outcome.status),
+    live: typeof options?.live === "boolean" ? options.live : live,
+    period: options?.period ? normalizePeriod(options.period, "full_game") : eventPeriodFromType(market.type),
+    raw: {
+      eventId: firstString(event.id),
+      marketId: firstString(market.id),
+      outcome,
+    },
+  };
+}
+
 export function normalizeNovigMarkets(
   raw: NovigBatchBookResponse,
   options?: NovigNormalizeOptions,
 ): NormalizedMarket[] {
+  // Captured GraphQL event-markets shape (price via outcome.available).
+  const eventPairs = extractEventMarketPairs(raw);
+  if (eventPairs) {
+    const rows: NormalizedMarket[] = [];
+    for (const { event, market } of eventPairs) {
+      for (const outcome of toRecordArray(market.outcomes)) {
+        rows.push(buildEventRow(event, market, outcome, options));
+      }
+    }
+    return rows;
+  }
+
+  // Order-book / batch-book shape (price via ladder entries).
   const entries = extractEntries(raw);
   const normalized: NormalizedMarket[] = [];
 

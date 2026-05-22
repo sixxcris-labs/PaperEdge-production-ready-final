@@ -31,7 +31,6 @@ export const ACTIVE_BOOKS = [
 
 export const ARCHIVED_DEFAULT_BOOK_NAMES = [
   "7Stacks",
-  "Bet105",
   "BetAnySports",
   "BetNow",
   "BetOnline",
