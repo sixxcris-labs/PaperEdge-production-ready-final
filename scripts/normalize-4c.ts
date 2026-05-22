@@ -10,11 +10,16 @@ import { dirname, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 
 import { normalizeFourCMarkets } from "../packages/core/src/adapters/fourc";
+import { resolveLatestJsonInput } from "./lib/latest-json-input";
 
 const scriptDir = dirname(fileURLToPath(import.meta.url));
 const repoRoot = resolve(scriptDir, "..");
 
-const DEFAULT_INPUT = resolve(repoRoot, "raw_data", "4c.json");
+const DEFAULT_INPUT = resolveLatestJsonInput({
+  repoRoot,
+  bookDirName: "4c",
+  fallbackFileName: "4c.json",
+});
 
 const inputArg = process.argv[2];
 const INPUT_PATH = inputArg ? resolve(repoRoot, inputArg) : DEFAULT_INPUT;

@@ -1,83 +1,32 @@
-/**
- * Cross-book arbitrage / best-price report.
- *
- * For every two-way market (moneyline, spread, total) it takes the BEST price
- * available for each side across all books, then checks whether backing both
- * best sides locks in a profit:
- *   combined = bestImplied(sideA) + bestImplied(sideB)
- *   combined < 1.0  =>  arbitrage; ROI = 1/combined - 1
- *
- * One row per market (not per book-pair), ranked by combined implied %.
- * This is the "give me the arbs" view; for +EV-vs-consensus value use
- * fair-value-report.ts instead.
- *
- * Run from repo root (WSL):
- *   TMPDIR=/tmp npx tsx scripts/arbs-report.ts                 # all 5 books
- *   TMPDIR=/tmp npx tsx scripts/arbs-report.ts --max=1.02      # only combined <= 102%
- */
 import { existsSync, mkdirSync, readFileSync, writeFileSync } from "node:fs";
 import { dirname, relative, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
-
 import type { NormalizedMarket } from "../packages/core/src/market-normalization";
-
+import { assessMarketRelationship, impliedFromAmerican, marketComparisonKey } from "../packages/core/src/market-normalization";
 const scriptDir = dirname(fileURLToPath(import.meta.url));
 const repoRoot = resolve(scriptDir, "..");
 const BOOKS = ["bovada", "novig", "4c", "rebet", "prophetx"];
 const DEFAULT_INPUTS = BOOKS.map((b) => resolve(repoRoot, "normalized_data", `${b}_normalized.jsonl`));
 const CSV_OUT = resolve(repoRoot, "normalized_data", "cross_book_arbs.csv");
-
-const TEAM_ALIASES: Record<string, string> = {
-  "oklahoma city thunder": "okc",
-  okc: "okc",
-  thunder: "okc",
-  "san antonio spurs": "sas",
-  sas: "sas",
-  sa: "sas",
-  spurs: "sas",
+type PairReport = {
+  classification: "true_arb_candidate" | "not_arb" | "middle_candidate" | "reject";
+  event: string;
+  sport: string;
+  league: string;
+  market: string;
+  player: string;
+  period: string;
+  lineA: number | null;
+  sideA: string;
+  bookA: string;
+  oddsA: number;
+  lineB: number | null;
+  sideB: string;
+  bookB: string;
+  oddsB: number;
+  combinedImplied: number | null;
+  reason: string;
 };
-
-function teamOf(side: string): string {
-  const cleaned = side
-    .toLowerCase()
-    .replace(/\s*-\s*[12][hq]$/, "")
-    .replace(/\s*[-+]?\d+(\.\d+)?$/, "")
-    .trim();
-  if (TEAM_ALIASES[cleaned]) return TEAM_ALIASES[cleaned];
-  for (const alias of Object.keys(TEAM_ALIASES)) {
-    if (cleaned.includes(alias)) return TEAM_ALIASES[alias];
-  }
-  return cleaned;
-}
-
-function marketClass(type: string): "moneyline" | "spread" | "total" | null {
-  const s = type.toLowerCase();
-  if (/moneyline|^money(_|$)/.test(s)) return "moneyline";
-  if (/spread/.test(s)) return "spread";
-  if (/^total$|^total points$/.test(s)) return "total";
-  return null;
-}
-
-function periodOf(row: NormalizedMarket): string {
-  if (row.period && row.period !== "full_game" && row.period !== "unknown") return row.period;
-  const s = (row.side || "").toLowerCase();
-  if (/\b1h\b|first half|- 1h/.test(s)) return "first_half";
-  if (/\b2h\b|second half|- 2h/.test(s)) return "second_half";
-  return "full_game";
-}
-
-function signedSpread(row: NormalizedMarket): number | null {
-  const m = (row.side || "").toLowerCase().match(/[-+]?\d+(\.\d+)?$/);
-  return m ? Number(m[0]) : (row.line ?? null);
-}
-
-function overUnder(side: string): "over" | "under" | null {
-  const s = side.toLowerCase();
-  if (s.startsWith("over")) return "over";
-  if (s.startsWith("under")) return "under";
-  return null;
-}
-
 function readJsonl(path: string): NormalizedMarket[] {
   if (!existsSync(path)) {
     console.warn(`(skip) missing input: ${relative(repoRoot, path)}`);
@@ -90,142 +39,124 @@ function readJsonl(path: string): NormalizedMarket[] {
     try {
       rows.push(JSON.parse(t) as NormalizedMarket);
     } catch {
-      /* skip */
     }
   }
   return rows;
 }
-
-function homeTeam(rows: NormalizedMarket[]): string | null {
-  const named = rows.find((r) => (r.event_name || "").includes(" @ "));
-  if (!named) return null;
-  const home = named.event_name.split(" @ ")[1];
-  return home ? teamOf(home) : null;
+function usableOdds(row: NormalizedMarket): row is NormalizedMarket & { odds_american: number } {
+  return typeof row.odds_american === "number" && Number.isFinite(row.odds_american) && row.odds_american !== 0;
 }
-
-type Quote = { source: string; american: number; implied: number };
-
 function fmtAm(a: number): string {
   return a > 0 ? `+${a}` : `${a}`;
 }
-
+function pairKey(a: NormalizedMarket, b: NormalizedMarket): string {
+  return [
+    marketComparisonKey(a),
+    a.line ?? "",
+    b.line ?? "",
+    a.source,
+    b.source,
+    a.side,
+    b.side,
+    a.odds_american ?? "",
+    b.odds_american ?? "",
+  ].join("|");
+}
+function quoteReport(a: NormalizedMarket & { odds_american: number }, b: NormalizedMarket & { odds_american: number }): PairReport {
+  const relationship = assessMarketRelationship(a, b);
+  const combinedImplied = impliedFromAmerican(a.odds_american) + impliedFromAmerican(b.odds_american);
+  let classification: PairReport["classification"] = "reject";
+  if (relationship.kind === "same_line_opposite_side") classification = combinedImplied < 1 ? "true_arb_candidate" : "not_arb";
+  if (relationship.kind === "middle_line_split") classification = "middle_candidate";
+  return {
+    classification,
+    event: a.event_name,
+    sport: a.sport,
+    league: a.league,
+    market: a.market_type,
+    player: a.player ?? "",
+    period: a.period,
+    lineA: a.line ?? null,
+    sideA: a.side,
+    bookA: a.source,
+    oddsA: a.odds_american,
+    lineB: b.line ?? null,
+    sideB: b.side,
+    bookB: b.source,
+    oddsB: b.odds_american,
+    combinedImplied: relationship.kind === "same_line_opposite_side" ? combinedImplied : null,
+    reason: relationship.reason,
+  };
+}
 function main(): void {
   const maxArg = process.argv.find((a) => a.startsWith("--max="));
   const maxCombined = maxArg ? Number(maxArg.split("=")[1]) : Number.POSITIVE_INFINITY;
   const fileArgs = process.argv.slice(2).filter((a) => !a.startsWith("--"));
   const inputs = fileArgs.length > 0 ? fileArgs.map((p) => resolve(repoRoot, p)) : DEFAULT_INPUTS;
-
-  const rows = inputs.flatMap(readJsonl);
-  const home = homeTeam(rows);
-
-  // market -> outcome -> { best quote, rows-per-source }
-  // perSource counts let us drop ambiguous markets: if one book lists the same
-  // side more than once at the same key, distinct markets were collapsed
-  // (e.g. rebet labels team/quarter/derivative totals all as "total") and we
-  // can't trust which over pairs with which under.
-  type Cell = { best: Quote; perSource: Map<string, number> };
-  const markets = new Map<string, Map<string, Cell>>();
-  const labels = new Map<string, string>(); // market -> human label
-  for (const row of rows) {
-    const implied = row.implied_probability;
-    const american = row.odds_american;
-    if (implied === null || implied === undefined || !(implied > 0 && implied < 1)) continue;
-    if (american === null || american === undefined) continue;
-
-    const cls = marketClass(row.market_type);
-    if (!cls) continue;
-    const period = periodOf(row);
-
-    let market: string;
-    let outcome: string;
-    let label: string;
-    if (cls === "moneyline") {
-      outcome = teamOf(row.side);
-      market = `ml|${period}`;
-      label = `moneyline${period === "full_game" ? "" : " " + period}`;
-    } else if (cls === "total") {
-      const ou = overUnder(row.side);
-      if (!ou || row.line === null || row.line === undefined) continue;
-      outcome = ou;
-      market = `total|${period}|${row.line}`;
-      label = `total ${row.line}`;
-    } else {
-      const team = teamOf(row.side);
-      const signed = signedSpread(row);
-      if (signed === null) continue;
-      const homeLine = home && team === home ? signed : home ? -signed : signed;
-      outcome = team;
-      market = `spread|${period}|${homeLine}`;
-      label = `spread ${homeLine > 0 ? "+" : ""}${homeLine}`;
+  const rows = inputs.flatMap(readJsonl).filter(usableOdds);
+  const reports: PairReport[] = [];
+  const seen = new Set<string>();
+  for (let i = 0; i < rows.length; i += 1) {
+    for (let j = i + 1; j < rows.length; j += 1) {
+      const a = rows[i];
+      const b = rows[j];
+      if (marketComparisonKey(a) !== marketComparisonKey(b)) continue;
+      const relationship = assessMarketRelationship(a, b);
+      if (relationship.kind !== "same_line_opposite_side" && relationship.kind !== "middle_line_split") continue;
+      const key = pairKey(a, b);
+      if (seen.has(key)) continue;
+      seen.add(key);
+      reports.push(quoteReport(a, b));
     }
-
-    labels.set(market, label);
-    const byOutcome = markets.get(market) ?? new Map<string, Cell>();
-    let cell = byOutcome.get(outcome);
-    if (!cell) {
-      cell = { best: { source: row.source, american, implied }, perSource: new Map() };
-      byOutcome.set(outcome, cell);
-    }
-    cell.perSource.set(row.source, (cell.perSource.get(row.source) ?? 0) + 1);
-    if (implied < cell.best.implied) cell.best = { source: row.source, american, implied };
-    markets.set(market, byOutcome);
   }
-
-  type Opp = {
-    market: string;
-    label: string;
-    sideA: string;
-    sideB: string;
-    a: Quote;
-    b: Quote;
-    combined: number;
-  };
-  const opps: Opp[] = [];
-  let ambiguous = 0;
-  for (const [market, byOutcome] of markets) {
-    if (byOutcome.size !== 2) continue; // clean two-way only
-    const cells = [...byOutcome.values()];
-    // skip if any book contributed more than one row to a side (collapsed markets)
-    if (cells.some((c) => [...c.perSource.values()].some((n) => n > 1))) {
-      ambiguous += 1;
-      continue;
-    }
-    const [sideA, sideB] = [...byOutcome.keys()];
-    const a = byOutcome.get(sideA)!.best;
-    const b = byOutcome.get(sideB)!.best;
-    opps.push({ market, label: labels.get(market) ?? market, sideA, sideB, a, b, combined: a.implied + b.implied });
-  }
-  opps.sort((x, y) => x.combined - y.combined);
-
-  const arbs = opps.filter((o) => o.combined < 1);
-  const shown = opps.filter((o) => o.combined <= maxCombined);
-
-  console.log("=== Cross-book best-price / arbitrage report ===");
+  reports.sort((x, y) => (x.combinedImplied ?? 99) - (y.combinedImplied ?? 99));
+  const arbs = reports.filter((o) => o.classification === "true_arb_candidate");
+  const middles = reports.filter((o) => o.classification === "middle_candidate");
+  const shown = reports.filter((o) => o.combinedImplied === null || o.combinedImplied <= maxCombined);
+  console.log("=== Cross-book same-market arb/middle report ===");
   console.log(`Books:        ${[...new Set(rows.map((r) => r.source))].join(", ")}`);
-  console.log(`Two-way markets: ${opps.length}   Arbitrage (<100%): ${arbs.length}   Skipped (ambiguous/under-labeled): ${ambiguous}`);
+  console.log(`Pairs checked: ${reports.length}   True arb candidates: ${arbs.length}   Middles: ${middles.length}`);
+  console.log("Imported implied_probability is ignored; combined implied is recomputed from odds_american.");
   console.log("");
   const head =
-    "market".padEnd(20) + "sideA (best book)".padEnd(22) + "sideB (best book)".padEnd(22) + "combined  ROI";
+    "classification".padEnd(24) + "market".padEnd(26) + "sideA".padEnd(18) + "sideB".padEnd(18) + "combined";
   console.log(head);
   console.log("-".repeat(head.length));
-  for (const o of shown.slice(0, 60)) {
-    const aStr = `${o.sideA} ${fmtAm(o.a.american)}@${o.a.source}`;
-    const bStr = `${o.sideB} ${fmtAm(o.b.american)}@${o.b.source}`;
-    const roi = o.combined < 1 ? `+${((1 / o.combined - 1) * 100).toFixed(1)}%` : "—";
-    const tag = o.combined < 1 ? "  <== ARB" : "";
-    console.log(o.label.padEnd(20) + aStr.padEnd(22) + bStr.padEnd(22) + `${(o.combined * 100).toFixed(1)}%`.padEnd(9) + roi + tag);
+  for (const o of shown.slice(0, 80)) {
+    const aStr = `${o.sideA}${o.lineA === null ? "" : " " + o.lineA} ${fmtAm(o.oddsA)}@${o.bookA}`;
+    const bStr = `${o.sideB}${o.lineB === null ? "" : " " + o.lineB} ${fmtAm(o.oddsB)}@${o.bookB}`;
+    const combined = o.combinedImplied === null ? "middle" : `${(o.combinedImplied * 100).toFixed(2)}%`;
+    const market = `${o.market}${o.player ? " " + o.player : ""}`;
+    console.log(o.classification.padEnd(24) + market.slice(0, 25).padEnd(26) + aStr.padEnd(18) + bStr.padEnd(18) + combined);
   }
-
   mkdirSync(dirname(CSV_OUT), { recursive: true });
   const csv = [
-    "market,side_a,book_a,odds_a,side_b,book_b,odds_b,combined_implied,roi_pct,is_arb",
-    ...opps.map((o) => {
-      const roi = o.combined < 1 ? ((1 / o.combined - 1) * 100).toFixed(2) : "";
-      return `${o.label},${o.sideA},${o.a.source},${o.a.american},${o.sideB},${o.b.source},${o.b.american},${o.combined.toFixed(4)},${roi},${o.combined < 1}`;
-    }),
+    "classification,sport,league,event,market,player,period,side_a,line_a,book_a,odds_a,side_b,line_b,book_b,odds_b,combined_implied,reason",
+    ...reports.map((o) =>
+      [
+        o.classification,
+        o.sport,
+        o.league,
+        o.event,
+        o.market,
+        o.player,
+        o.period,
+        o.sideA,
+        o.lineA ?? "",
+        o.bookA,
+        o.oddsA,
+        o.sideB,
+        o.lineB ?? "",
+        o.bookB,
+        o.oddsB,
+        o.combinedImplied === null ? "" : o.combinedImplied.toFixed(6),
+        o.reason,
+      ]
+        .map((value) => `"${String(value).replace(/"/g, '""')}"`)
+        .join(","),
+    ),
   ].join("\n");
   writeFileSync(CSV_OUT, `${csv}\n`, "utf8");
-  console.log(`\n${opps.length} markets, ${arbs.length} arbs. Full ranked list: ${CSV_OUT}`);
+  console.log(`\n${reports.length} evaluated pairs, ${arbs.length} true arb candidates. Full list: ${CSV_OUT}`);
 }
-
 main();

@@ -13,11 +13,16 @@ import { dirname, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 
 import { normalizeProphetXMarkets } from "../packages/core/src/adapters/prophetx";
+import { resolveLatestJsonInput } from "./lib/latest-json-input";
 
 const scriptDir = dirname(fileURLToPath(import.meta.url));
 const repoRoot = resolve(scriptDir, "..");
 
-const DEFAULT_INPUT = resolve(repoRoot, "raw_data", "prophetx.json");
+const DEFAULT_INPUT = resolveLatestJsonInput({
+  repoRoot,
+  bookDirName: "prophetx",
+  fallbackFileName: "prophetx.json",
+});
 
 const inputArg = process.argv[2];
 const INPUT_PATH = inputArg ? resolve(repoRoot, inputArg) : DEFAULT_INPUT;

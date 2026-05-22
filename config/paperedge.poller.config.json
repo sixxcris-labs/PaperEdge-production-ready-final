@@ -1,0 +1,38 @@
+{
+  "enabledBooks": ["bovada", "novig"],
+  "sport": "mlb",
+  "league": "mlb",
+  "pollIntervalSeconds": 30,
+  "outputDirectories": {
+    "raw": "raw_data",
+    "normalized": "normalized_data",
+    "logs": "logs"
+  },
+  "detection": {
+    "maxFreshnessSeconds": 60,
+    "signalsFile": "edge_signals.jsonl",
+    "reviewFile": "review_candidates.jsonl"
+  },
+  "books": {
+    "bovada": {
+      "enabled": true,
+      "requests": [
+        {
+          "id": "replace-with-bovada-event-id",
+          "url": "https://example.invalid/bovada/event-or-market-api-url",
+          "eventName": "Away Team @ Home Team"
+        }
+      ]
+    },
+    "novig": {
+      "enabled": true,
+      "requests": [
+        {
+          "id": "replace-with-novig-event-or-market-id",
+          "url": "https://example.invalid/novig/event-or-market-api-url",
+          "eventName": "Away Team @ Home Team"
+        }
+      ]
+    }
+  }
+}

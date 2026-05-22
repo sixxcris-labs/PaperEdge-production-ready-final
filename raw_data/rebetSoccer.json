@@ -1,0 +1,1904 @@
+{
+    "message": "Data retrieved successfully.",
+    "data": {
+        "events": [
+            {
+                "id": "sr:match:66456904",
+                "sport_id": "sr:sport:1",
+                "sport_name": "Soccer",
+                "tournament_id": "sr:tournament:16",
+                "league_name": "FIFA World Cup",
+                "product": "3",
+                "is_live": false,
+                "is_sgp_available": true,
+                "scheduled_ts": "1781204400.0",
+                "competitors": [
+                    {
+                        "id": "sr:competitor:4781",
+                        "name": "Mexico",
+                        "qualifier": "home",
+                        "abbreviation": "MEX",
+                        "country": "Mexico",
+                        "country_code": "MX",
+                        "gender": "male",
+                        "jersey": {
+                            "base": "#e3eeea",
+                            "number": "#000000"
+                        },
+                        "display_order": 1,
+                        "logo_type": "country",
+                        "logo": "https://d2qu4js9gdp9gw.cloudfront.net/team-logos/country-flag-icons/mx.png"
+                    },
+                    {
+                        "id": "sr:competitor:4736",
+                        "name": "South Africa",
+                        "qualifier": "away",
+                        "abbreviation": "RSA",
+                        "country": "South Africa",
+                        "country_code": "ZA",
+                        "gender": "male",
+                        "jersey": {
+                            "base": "#0c7343",
+                            "number": "#ffffff"
+                        },
+                        "display_order": 2,
+                        "logo_type": "country",
+                        "logo": "https://d2qu4js9gdp9gw.cloudfront.net/team-logos/country-flag-icons/za.png"
+                    }
+                ],
+                "odds": {
+                    "market": [
+                        {
+                            "id": "1",
+                            "name": "1x2",
+                            "status": "1",
+                            "outcome": [
+                                {
+                                    "id": "1",
+                                    "name": "Mexico",
+                                    "odds": "1.481",
+                                    "probabilities": "0.646117",
+                                    "active": "1",
+                                    "display_odds": {
+                                        "decimal": "1.48",
+                                        "american": "-208",
+                                        "fractional": "38/79"
+                                    }
+                                },
+                                {
+                                    "id": "2",
+                                    "name": "draw",
+                                    "odds": "4.2",
+                                    "probabilities": "0.216785",
+                                    "active": "1",
+                                    "display_odds": {
+                                        "decimal": "4.20",
+                                        "american": "+320",
+                                        "fractional": "16/5"
+                                    }
+                                },
+                                {
+                                    "id": "3",
+                                    "name": "South Africa",
+                                    "odds": "6.5",
+                                    "probabilities": "0.137108",
+                                    "active": "1",
+                                    "display_odds": {
+                                        "decimal": "6.50",
+                                        "american": "+550",
+                                        "fractional": "11/2"
+                                    }
+                                }
+                            ],
+                            "tab_name": "Popular"
+                        }
+                    ]
+                },
+                "country": "International",
+                "is_c_odds": false
+            },
+            {
+                "id": "sr:match:66456906",
+                "sport_id": "sr:sport:1",
+                "sport_name": "Soccer",
+                "tournament_id": "sr:tournament:16",
+                "league_name": "FIFA World Cup",
+                "product": "3",
+                "is_live": false,
+                "is_sgp_available": true,
+                "scheduled_ts": "1781229600.0",
+                "competitors": [
+                    {
+                        "id": "sr:competitor:4735",
+                        "name": "Korea Republic",
+                        "qualifier": "home",
+                        "abbreviation": "KOR",
+                        "country": "Republic of Korea",
+                        "country_code": "KOR",
+                        "gender": "male",
+                        "jersey": {
+                            "base": "#dfd6eb",
+                            "number": "#ffffff"
+                        },
+                        "display_order": 1,
+                        "logo_type": "team"
+                    },
+                    {
+                        "id": "sr:competitor:4714",
+                        "name": "Czechia",
+                        "qualifier": "away",
+                        "abbreviation": "CZE",
+                        "country": "Czechia",
+                        "country_code": "CZ",
+                        "gender": "male",
+                        "jersey": {
+                            "base": "#fefefe",
+                            "number": "#b30305"
+                        },
+                        "display_order": 2,
+                        "logo_type": "country",
+                        "logo": "https://d2qu4js9gdp9gw.cloudfront.net/team-logos/country-flag-icons/cz.png"
+                    }
+                ],
+                "odds": {
+                    "market": [
+                        {
+                            "id": "1",
+                            "name": "1x2",
+                            "status": "1",
+                            "outcome": [
+                                {
+                                    "id": "1",
+                                    "name": "Korea Republic",
+                                    "odds": "2.67",
+                                    "probabilities": "0.350258",
+                                    "active": "1",
+                                    "display_odds": {
+                                        "decimal": "2.67",
+                                        "american": "+167",
+                                        "fractional": "167/100"
+                                    }
+                                },
+                                {
+                                    "id": "2",
+                                    "name": "draw",
+                                    "odds": "3.12",
+                                    "probabilities": "0.298264",
+                                    "active": "1",
+                                    "display_odds": {
+                                        "decimal": "3.12",
+                                        "american": "+212",
+                                        "fractional": "53/25"
+                                    }
+                                },
+                                {
+                                    "id": "3",
+                                    "name": "Czechia",
+                                    "odds": "2.66",
+                                    "probabilities": "0.351487",
+                                    "active": "1",
+                                    "display_odds": {
+                                        "decimal": "2.66",
+                                        "american": "+166",
+                                        "fractional": "83/50"
+                                    }
+                                }
+                            ],
+                            "tab_name": "Popular"
+                        }
+                    ]
+                },
+                "country": "International",
+                "is_c_odds": false
+            },
+            {
+                "id": "sr:match:66456916",
+                "sport_id": "sr:sport:1",
+                "sport_name": "Soccer",
+                "tournament_id": "sr:tournament:16",
+                "league_name": "FIFA World Cup",
+                "product": "3",
+                "is_live": false,
+                "is_sgp_available": true,
+                "scheduled_ts": "1781290800.0",
+                "competitors": [
+                    {
+                        "id": "sr:competitor:4752",
+                        "name": "Canada",
+                        "qualifier": "home",
+                        "abbreviation": "CAN",
+                        "country": "Canada",
+                        "country_code": "CA",
+                        "gender": "male",
+                        "jersey": {
+                            "base": "#383838",
+                            "number": "#dddddd"
+                        },
+                        "display_order": 1,
+                        "logo_type": "country",
+                        "logo": "https://d2qu4js9gdp9gw.cloudfront.net/team-logos/country-flag-icons/ca.png"
+                    },
+                    {
+                        "id": "sr:competitor:4479",
+                        "name": "Bosnia and Herzegovina",
+                        "qualifier": "away",
+                        "abbreviation": "BIH",
+                        "country": "Bosnia & Herzegovina",
+                        "country_code": "BIH",
+                        "gender": "male",
+                        "jersey": {
+                            "base": "#1752a7",
+                            "number": "#f7d712"
+                        },
+                        "display_order": 2,
+                        "logo_type": "team"
+                    }
+                ],
+                "odds": {
+                    "market": [
+                        {
+                            "id": "1",
+                            "name": "1x2",
+                            "status": "1",
+                            "outcome": [
+                                {
+                                    "id": "1",
+                                    "name": "Canada",
+                                    "odds": "1.787",
+                                    "probabilities": "0.531075",
+                                    "active": "1",
+                                    "display_odds": {
+                                        "decimal": "1.79",
+                                        "american": "-127",
+                                        "fractional": "48/61"
+                                    }
+                                },
+                                {
+                                    "id": "2",
+                                    "name": "draw",
+                                    "odds": "3.6",
+                                    "probabilities": "0.256538",
+                                    "active": "1",
+                                    "display_odds": {
+                                        "decimal": "3.60",
+                                        "american": "+260",
+                                        "fractional": "13/5"
+                                    }
+                                },
+                                {
+                                    "id": "3",
+                                    "name": "Bosnia and Herzegovina",
+                                    "odds": "4.3",
+                                    "probabilities": "0.212385",
+                                    "active": "1",
+                                    "display_odds": {
+                                        "decimal": "4.30",
+                                        "american": "+330",
+                                        "fractional": "33/10"
+                                    }
+                                }
+                            ],
+                            "tab_name": "Popular"
+                        }
+                    ]
+                },
+                "country": "International",
+                "is_c_odds": false
+            },
+            {
+                "id": "sr:match:66456940",
+                "sport_id": "sr:sport:1",
+                "sport_name": "Soccer",
+                "tournament_id": "sr:tournament:16",
+                "league_name": "FIFA World Cup",
+                "product": "3",
+                "is_live": false,
+                "is_sgp_available": true,
+                "scheduled_ts": "1781312400.0",
+                "competitors": [
+                    {
+                        "id": "sr:competitor:4724",
+                        "name": "USA",
+                        "qualifier": "home",
+                        "abbreviation": "USA",
+                        "country": "USA",
+                        "country_code": "US",
+                        "gender": "male",
+                        "jersey": {
+                            "base": "#053475",
+                            "number": "#ffffff"
+                        },
+                        "display_order": 1,
+                        "logo_type": "country",
+                        "logo": "https://d2qu4js9gdp9gw.cloudfront.net/team-logos/country-flag-icons/us.png"
+                    },
+                    {
+                        "id": "sr:competitor:4789",
+                        "name": "Paraguay",
+                        "qualifier": "away",
+                        "abbreviation": "PAR",
+                        "country": "Paraguay",
+                        "country_code": "PY",
+                        "gender": "male",
+                        "jersey": {
+                            "base": "#3069c5",
+                            "number": "#ffffff"
+                        },
+                        "display_order": 2,
+                        "logo_type": "country",
+                        "logo": "https://d2qu4js9gdp9gw.cloudfront.net/team-logos/country-flag-icons/py.png"
+                    }
+                ],
+                "odds": {
+                    "market": [
+                        {
+                            "id": "1",
+                            "name": "1x2",
+                            "status": "1",
+                            "outcome": [
+                                {
+                                    "id": "1",
+                                    "name": "USA",
+                                    "odds": "1.99",
+                                    "probabilities": "0.475618",
+                                    "active": "1",
+                                    "display_odds": {
+                                        "decimal": "1.99",
+                                        "american": "-101",
+                                        "fractional": "99/100"
+                                    }
+                                },
+                                {
+                                    "id": "2",
+                                    "name": "draw",
+                                    "odds": "3.42",
+                                    "probabilities": "0.270429",
+                                    "active": "1",
+                                    "display_odds": {
+                                        "decimal": "3.42",
+                                        "american": "+242",
+                                        "fractional": "121/50"
+                                    }
+                                },
+                                {
+                                    "id": "3",
+                                    "name": "Paraguay",
+                                    "odds": "3.65",
+                                    "probabilities": "0.253956",
+                                    "active": "1",
+                                    "display_odds": {
+                                        "decimal": "3.65",
+                                        "american": "+265",
+                                        "fractional": "53/20"
+                                    }
+                                }
+                            ],
+                            "tab_name": "Popular"
+                        }
+                    ]
+                },
+                "country": "International",
+                "is_c_odds": false
+            },
+            {
+                "id": "sr:match:66456918",
+                "sport_id": "sr:sport:1",
+                "sport_name": "Soccer",
+                "tournament_id": "sr:tournament:16",
+                "league_name": "FIFA World Cup",
+                "product": "3",
+                "is_live": false,
+                "is_sgp_available": true,
+                "scheduled_ts": "1781377200.0",
+                "competitors": [
+                    {
+                        "id": "sr:competitor:4792",
+                        "name": "Qatar",
+                        "qualifier": "home",
+                        "abbreviation": "QAT",
+                        "country": "Qatar",
+                        "country_code": "QA",
+                        "gender": "male",
+                        "jersey": {
+                            "base": "#d4d1ca",
+                            "number": "#c81e1e"
+                        },
+                        "display_order": 1,
+                        "logo_type": "country",
+                        "logo": "https://d2qu4js9gdp9gw.cloudfront.net/team-logos/country-flag-icons/qa.png"
+                    },
+                    {
+                        "id": "sr:competitor:4699",
+                        "name": "Switzerland",
+                        "qualifier": "away",
+                        "abbreviation": "SUI",
+                        "country": "Switzerland",
+                        "country_code": "CH",
+                        "gender": "male",
+                        "jersey": {
+                            "base": "#de152f",
+                            "number": "#ffffff"
+                        },
+                        "display_order": 2,
+                        "logo_type": "country",
+                        "logo": "https://d2qu4js9gdp9gw.cloudfront.net/team-logos/country-flag-icons/ch.png"
+                    }
+                ],
+                "odds": {
+                    "market": [
+                        {
+                            "id": "1",
+                            "name": "1x2",
+                            "status": "1",
+                            "outcome": [
+                                {
+                                    "id": "1",
+                                    "name": "Qatar",
+                                    "odds": "9.6",
+                                    "probabilities": "0.0890977",
+                                    "active": "1",
+                                    "display_odds": {
+                                        "decimal": "9.60",
+                                        "american": "+860",
+                                        "fractional": "43/5"
+                                    }
+                                },
+                                {
+                                    "id": "2",
+                                    "name": "draw",
+                                    "odds": "5.5",
+                                    "probabilities": "0.157588",
+                                    "active": "1",
+                                    "display_odds": {
+                                        "decimal": "5.50",
+                                        "american": "+450",
+                                        "fractional": "9/2"
+                                    }
+                                },
+                                {
+                                    "id": "3",
+                                    "name": "Switzerland",
+                                    "odds": "1.278",
+                                    "probabilities": "0.753308",
+                                    "active": "1",
+                                    "display_odds": {
+                                        "decimal": "1.28",
+                                        "american": "-360",
+                                        "fractional": "5/18"
+                                    }
+                                }
+                            ],
+                            "tab_name": "Popular"
+                        }
+                    ]
+                },
+                "country": "International",
+                "is_c_odds": false
+            },
+            {
+                "id": "sr:match:66456928",
+                "sport_id": "sr:sport:1",
+                "sport_name": "Soccer",
+                "tournament_id": "sr:tournament:16",
+                "league_name": "FIFA World Cup",
+                "product": "3",
+                "is_live": false,
+                "is_sgp_available": true,
+                "scheduled_ts": "1781388000.0",
+                "competitors": [
+                    {
+                        "id": "sr:competitor:4748",
+                        "name": "Brazil",
+                        "qualifier": "home",
+                        "abbreviation": "BRA",
+                        "country": "Brazil",
+                        "country_code": "BR",
+                        "gender": "male",
+                        "jersey": {
+                            "base": "#313a97",
+                            "number": "#f8df40"
+                        },
+                        "display_order": 1,
+                        "logo_type": "country",
+                        "logo": "https://d2qu4js9gdp9gw.cloudfront.net/team-logos/country-flag-icons/br.png"
+                    },
+                    {
+                        "id": "sr:competitor:4778",
+                        "name": "Morocco",
+                        "qualifier": "away",
+                        "abbreviation": "MAR",
+                        "country": "Morocco",
+                        "country_code": "MA",
+                        "gender": "male",
+                        "jersey": {
+                            "base": "#e60000",
+                            "number": "#ffffff"
+                        },
+                        "display_order": 2,
+                        "logo_type": "country",
+                        "logo": "https://d2qu4js9gdp9gw.cloudfront.net/team-logos/country-flag-icons/ma.png"
+                    }
+                ],
+                "odds": {
+                    "market": [
+                        {
+                            "id": "1",
+                            "name": "1x2",
+                            "status": "1",
+                            "outcome": [
+                                {
+                                    "id": "1",
+                                    "name": "Brazil",
+                                    "odds": "1.592",
+                                    "probabilities": "0.598489",
+                                    "active": "1",
+                                    "display_odds": {
+                                        "decimal": "1.59",
+                                        "american": "-169",
+                                        "fractional": "45/76"
+                                    }
+                                },
+                                {
+                                    "id": "2",
+                                    "name": "draw",
+                                    "odds": "3.95",
+                                    "probabilities": "0.230849",
+                                    "active": "1",
+                                    "display_odds": {
+                                        "decimal": "3.95",
+                                        "american": "+295",
+                                        "fractional": "59/20"
+                                    }
+                                },
+                                {
+                                    "id": "3",
+                                    "name": "Morocco",
+                                    "odds": "5.3",
+                                    "probabilities": "0.170658",
+                                    "active": "1",
+                                    "display_odds": {
+                                        "decimal": "5.30",
+                                        "american": "+430",
+                                        "fractional": "43/10"
+                                    }
+                                }
+                            ],
+                            "tab_name": "Popular"
+                        }
+                    ]
+                },
+                "country": "International",
+                "is_c_odds": false
+            },
+            {
+                "id": "sr:match:66456930",
+                "sport_id": "sr:sport:1",
+                "sport_name": "Soccer",
+                "tournament_id": "sr:tournament:16",
+                "league_name": "FIFA World Cup",
+                "product": "3",
+                "is_live": false,
+                "is_sgp_available": true,
+                "scheduled_ts": "1781398800.0",
+                "competitors": [
+                    {
+                        "id": "sr:competitor:7229",
+                        "name": "Haiti",
+                        "qualifier": "home",
+                        "abbreviation": "HTI",
+                        "country": "Haiti",
+                        "country_code": "HT",
+                        "gender": "male",
+                        "jersey": {
+                            "base": "#3300ff",
+                            "number": "#ffffff"
+                        },
+                        "display_order": 1,
+                        "logo_type": "country",
+                        "logo": "https://d2qu4js9gdp9gw.cloudfront.net/team-logos/country-flag-icons/ht.png"
+                    },
+                    {
+                        "id": "sr:competitor:4695",
+                        "name": "Scotland",
+                        "qualifier": "away",
+                        "abbreviation": "SCO",
+                        "country": "Scotland",
+                        "country_code": null,
+                        "gender": "male",
+                        "jersey": {
+                            "base": "#e2eeee",
+                            "number": "#5346ce"
+                        },
+                        "display_order": 2,
+                        "logo_type": "country"
+                    }
+                ],
+                "odds": {
+                    "market": [
+                        {
+                            "id": "1",
+                            "name": "1x2",
+                            "status": "1",
+                            "outcome": [
+                                {
+                                    "id": "1",
+                                    "name": "Haiti",
+                                    "odds": "6.8",
+                                    "probabilities": "0.129371",
+                                    "active": "1",
+                                    "display_odds": {
+                                        "decimal": "6.80",
+                                        "american": "+580",
+                                        "fractional": "29/5"
+                                    }
+                                },
+                                {
+                                    "id": "2",
+                                    "name": "draw",
+                                    "odds": "4.6",
+                                    "probabilities": "0.193905",
+                                    "active": "1",
+                                    "display_odds": {
+                                        "decimal": "4.60",
+                                        "american": "+360",
+                                        "fractional": "18/5"
+                                    }
+                                },
+                                {
+                                    "id": "3",
+                                    "name": "Scotland",
+                                    "odds": "1.413",
+                                    "probabilities": "0.676721",
+                                    "active": "1",
+                                    "display_odds": {
+                                        "decimal": "1.41",
+                                        "american": "-242",
+                                        "fractional": "19/46"
+                                    }
+                                }
+                            ],
+                            "tab_name": "Popular"
+                        }
+                    ]
+                },
+                "country": "International",
+                "is_c_odds": false
+            },
+            {
+                "id": "sr:match:66456942",
+                "sport_id": "sr:sport:1",
+                "sport_name": "Soccer",
+                "tournament_id": "sr:tournament:16",
+                "league_name": "FIFA World Cup",
+                "product": "3",
+                "is_live": false,
+                "is_sgp_available": true,
+                "scheduled_ts": "1781409600.0",
+                "competitors": [
+                    {
+                        "id": "sr:competitor:4741",
+                        "name": "Australia",
+                        "qualifier": "home",
+                        "abbreviation": "AUS",
+                        "country": "Australia",
+                        "country_code": "AU",
+                        "gender": "male",
+                        "jersey": {
+                            "base": "#20666c",
+                            "number": "#a6d6ca"
+                        },
+                        "display_order": 1,
+                        "logo_type": "country",
+                        "logo": "https://d2qu4js9gdp9gw.cloudfront.net/team-logos/country-flag-icons/au.png"
+                    },
+                    {
+                        "id": "sr:competitor:4700",
+                        "name": "Turkiye",
+                        "qualifier": "away",
+                        "abbreviation": "TUR",
+                        "country": "Turkiye",
+                        "country_code": "TR",
+                        "gender": "male",
+                        "jersey": {
+                            "base": "#dd0232",
+                            "number": "#fafafa"
+                        },
+                        "display_order": 2,
+                        "logo_type": "country",
+                        "logo": "https://d2qu4js9gdp9gw.cloudfront.net/team-logos/country-flag-icons/tr.png"
+                    }
+                ],
+                "odds": {
+                    "market": [
+                        {
+                            "id": "1",
+                            "name": "1x2",
+                            "status": "1",
+                            "outcome": [
+                                {
+                                    "id": "1",
+                                    "name": "Australia",
+                                    "odds": "4.2",
+                                    "probabilities": "0.218977",
+                                    "active": "1",
+                                    "display_odds": {
+                                        "decimal": "4.20",
+                                        "american": "+320",
+                                        "fractional": "16/5"
+                                    }
+                                },
+                                {
+                                    "id": "2",
+                                    "name": "draw",
+                                    "odds": "3.55",
+                                    "probabilities": "0.25852",
+                                    "active": "1",
+                                    "display_odds": {
+                                        "decimal": "3.55",
+                                        "american": "+255",
+                                        "fractional": "51/20"
+                                    }
+                                },
+                                {
+                                    "id": "3",
+                                    "name": "Turkiye",
+                                    "odds": "1.82",
+                                    "probabilities": "0.522507",
+                                    "active": "1",
+                                    "display_odds": {
+                                        "decimal": "1.82",
+                                        "american": "-122",
+                                        "fractional": "41/50"
+                                    }
+                                }
+                            ],
+                            "tab_name": "Popular"
+                        }
+                    ]
+                },
+                "country": "International",
+                "is_c_odds": false
+            },
+            {
+                "id": "sr:match:66457070",
+                "sport_id": "sr:sport:1",
+                "sport_name": "Soccer",
+                "tournament_id": "sr:tournament:16",
+                "league_name": "FIFA World Cup",
+                "product": "3",
+                "is_live": false,
+                "is_sgp_available": true,
+                "scheduled_ts": "1781456400.0",
+                "competitors": [
+                    {
+                        "id": "sr:competitor:4711",
+                        "name": "Germany",
+                        "qualifier": "home",
+                        "abbreviation": "GER",
+                        "country": "Germany",
+                        "country_code": "DE",
+                        "gender": "male",
+                        "jersey": {
+                            "base": "#322c84",
+                            "number": "#ffffff"
+                        },
+                        "display_order": 1,
+                        "logo_type": "country",
+                        "logo": "https://d2qu4js9gdp9gw.cloudfront.net/team-logos/country-flag-icons/de.png"
+                    },
+                    {
+                        "id": "sr:competitor:55827",
+                        "name": "Curacao",
+                        "qualifier": "away",
+                        "abbreviation": "CUW",
+                        "country": "Curacao",
+                        "country_code": "CW",
+                        "gender": "male",
+                        "jersey": {
+                            "base": "#0000ff",
+                            "number": "#ffffff"
+                        },
+                        "display_order": 2,
+                        "logo_type": "country",
+                        "logo": "https://d2qu4js9gdp9gw.cloudfront.net/team-logos/country-flag-icons/cw.png"
+                    }
+                ],
+                "odds": {
+                    "market": [
+                        {
+                            "id": "1",
+                            "name": "1x2",
+                            "status": "1",
+                            "outcome": [
+                                {
+                                    "id": "1",
+                                    "name": "Germany",
+                                    "odds": "1.02",
+                                    "probabilities": "0.958332",
+                                    "active": "1",
+                                    "display_odds": {
+                                        "decimal": "1.02",
+                                        "american": "-5000",
+                                        "fractional": "1/50"
+                                    }
+                                },
+                                {
+                                    "id": "2",
+                                    "name": "draw",
+                                    "odds": "16.0",
+                                    "probabilities": "0.0293455",
+                                    "active": "1",
+                                    "display_odds": {
+                                        "decimal": "16.00",
+                                        "american": "+1500",
+                                        "fractional": "15/1"
+                                    }
+                                },
+                                {
+                                    "id": "3",
+                                    "name": "Curacao",
+                                    "odds": "37.0",
+                                    "probabilities": "0.0123183",
+                                    "active": "1",
+                                    "display_odds": {
+                                        "decimal": "37.00",
+                                        "american": "+3600",
+                                        "fractional": "36/1"
+                                    }
+                                }
+                            ],
+                            "tab_name": "Popular"
+                        }
+                    ]
+                },
+                "country": "International",
+                "is_c_odds": false
+            },
+            {
+                "id": "sr:match:66456968",
+                "sport_id": "sr:sport:1",
+                "sport_name": "Soccer",
+                "tournament_id": "sr:tournament:16",
+                "league_name": "FIFA World Cup",
+                "product": "3",
+                "is_live": false,
+                "is_sgp_available": true,
+                "scheduled_ts": "1781467200.0",
+                "competitors": [
+                    {
+                        "id": "sr:competitor:4705",
+                        "name": "Netherlands",
+                        "qualifier": "home",
+                        "abbreviation": "NED",
+                        "country": "Netherlands",
+                        "country_code": "NL",
+                        "gender": "male",
+                        "jersey": {
+                            "base": "#2c3777",
+                            "number": "#ffffff"
+                        },
+                        "display_order": 1,
+                        "logo_type": "country",
+                        "logo": "https://d2qu4js9gdp9gw.cloudfront.net/team-logos/country-flag-icons/nl.png"
+                    },
+                    {
+                        "id": "sr:competitor:4770",
+                        "name": "Japan",
+                        "qualifier": "away",
+                        "abbreviation": "JPN",
+                        "country": "Japan",
+                        "country_code": "JP",
+                        "gender": "male",
+                        "jersey": {
+                            "base": "#233251",
+                            "number": "#ffffff"
+                        },
+                        "display_order": 2,
+                        "logo_type": "country",
+                        "logo": "https://d2qu4js9gdp9gw.cloudfront.net/team-logos/country-flag-icons/jp.png"
+                    }
+                ],
+                "odds": {
+                    "market": [
+                        {
+                            "id": "1",
+                            "name": "1x2",
+                            "status": "1",
+                            "outcome": [
+                                {
+                                    "id": "1",
+                                    "name": "Netherlands",
+                                    "odds": "2.01",
+                                    "probabilities": "0.469886",
+                                    "active": "1",
+                                    "display_odds": {
+                                        "decimal": "2.01",
+                                        "american": "+101",
+                                        "fractional": "101/100"
+                                    }
+                                },
+                                {
+                                    "id": "2",
+                                    "name": "draw",
+                                    "odds": "3.55",
+                                    "probabilities": "0.261796",
+                                    "active": "1",
+                                    "display_odds": {
+                                        "decimal": "3.55",
+                                        "american": "+255",
+                                        "fractional": "51/20"
+                                    }
+                                },
+                                {
+                                    "id": "3",
+                                    "name": "Japan",
+                                    "odds": "3.44",
+                                    "probabilities": "0.268316",
+                                    "active": "1",
+                                    "display_odds": {
+                                        "decimal": "3.44",
+                                        "american": "+244",
+                                        "fractional": "61/25"
+                                    }
+                                }
+                            ],
+                            "tab_name": "Popular"
+                        }
+                    ]
+                },
+                "country": "International",
+                "is_c_odds": false
+            },
+            {
+                "id": "sr:match:66457072",
+                "sport_id": "sr:sport:1",
+                "sport_name": "Soccer",
+                "tournament_id": "sr:tournament:16",
+                "league_name": "FIFA World Cup",
+                "product": "3",
+                "is_live": false,
+                "is_sgp_available": true,
+                "scheduled_ts": "1781478000.0",
+                "competitors": [
+                    {
+                        "id": "sr:competitor:4768",
+                        "name": "Ivory Coast",
+                        "qualifier": "home",
+                        "abbreviation": "CIV",
+                        "country": "Cote d\u2019Ivoire",
+                        "country_code": "CIV",
+                        "gender": "male",
+                        "jersey": {
+                            "base": "#ff7c0a",
+                            "number": "#ffffff"
+                        },
+                        "display_order": 1,
+                        "logo_type": "team"
+                    },
+                    {
+                        "id": "sr:competitor:4757",
+                        "name": "Ecuador",
+                        "qualifier": "away",
+                        "abbreviation": "ECU",
+                        "country": "Ecuador",
+                        "country_code": "EC",
+                        "gender": "male",
+                        "jersey": {
+                            "base": "#022239",
+                            "number": "#ffffff"
+                        },
+                        "display_order": 2,
+                        "logo_type": "country",
+                        "logo": "https://d2qu4js9gdp9gw.cloudfront.net/team-logos/country-flag-icons/ec.png"
+                    }
+                ],
+                "odds": {
+                    "market": [
+                        {
+                            "id": "1",
+                            "name": "1x2",
+                            "status": "1",
+                            "outcome": [
+                                {
+                                    "id": "1",
+                                    "name": "Ivory Coast",
+                                    "odds": "3.2",
+                                    "probabilities": "0.291362",
+                                    "active": "1",
+                                    "display_odds": {
+                                        "decimal": "3.20",
+                                        "american": "+220",
+                                        "fractional": "11/5"
+                                    }
+                                },
+                                {
+                                    "id": "2",
+                                    "name": "draw",
+                                    "odds": "3.04",
+                                    "probabilities": "0.306539",
+                                    "active": "1",
+                                    "display_odds": {
+                                        "decimal": "3.04",
+                                        "american": "+204",
+                                        "fractional": "51/25"
+                                    }
+                                },
+                                {
+                                    "id": "3",
+                                    "name": "Ecuador",
+                                    "odds": "2.34",
+                                    "probabilities": "0.402106",
+                                    "active": "1",
+                                    "display_odds": {
+                                        "decimal": "2.34",
+                                        "american": "+134",
+                                        "fractional": "67/50"
+                                    }
+                                }
+                            ],
+                            "tab_name": "Popular"
+                        }
+                    ]
+                },
+                "country": "International",
+                "is_c_odds": false
+            },
+            {
+                "id": "sr:match:66456970",
+                "sport_id": "sr:sport:1",
+                "sport_name": "Soccer",
+                "tournament_id": "sr:tournament:16",
+                "league_name": "FIFA World Cup",
+                "product": "3",
+                "is_live": false,
+                "is_sgp_available": true,
+                "scheduled_ts": "1781488800.0",
+                "competitors": [
+                    {
+                        "id": "sr:competitor:4688",
+                        "name": "Sweden",
+                        "qualifier": "home",
+                        "abbreviation": "SWE",
+                        "country": "Sweden",
+                        "country_code": "SE",
+                        "gender": "male",
+                        "jersey": {
+                            "base": "#021e46",
+                            "number": "#f4e65c"
+                        },
+                        "display_order": 1,
+                        "logo_type": "country",
+                        "logo": "https://d2qu4js9gdp9gw.cloudfront.net/team-logos/country-flag-icons/se.png"
+                    },
+                    {
+                        "id": "sr:competitor:4729",
+                        "name": "Tunisia",
+                        "qualifier": "away",
+                        "abbreviation": "TUN",
+                        "country": "Tunisia",
+                        "country_code": "TN",
+                        "gender": "male",
+                        "jersey": {
+                            "base": "#fafafa",
+                            "number": "#ed0707"
+                        },
+                        "display_order": 2,
+                        "logo_type": "country",
+                        "logo": "https://d2qu4js9gdp9gw.cloudfront.net/team-logos/country-flag-icons/tn.png"
+                    }
+                ],
+                "odds": {
+                    "market": [
+                        {
+                            "id": "1",
+                            "name": "1x2",
+                            "status": "1",
+                            "outcome": [
+                                {
+                                    "id": "1",
+                                    "name": "Sweden",
+                                    "odds": "1.952",
+                                    "probabilities": "0.484582",
+                                    "active": "1",
+                                    "display_odds": {
+                                        "decimal": "1.95",
+                                        "american": "-105",
+                                        "fractional": "79/83"
+                                    }
+                                },
+                                {
+                                    "id": "2",
+                                    "name": "draw",
+                                    "odds": "3.28",
+                                    "probabilities": "0.281548",
+                                    "active": "1",
+                                    "display_odds": {
+                                        "decimal": "3.28",
+                                        "american": "+228",
+                                        "fractional": "57/25"
+                                    }
+                                },
+                                {
+                                    "id": "3",
+                                    "name": "Tunisia",
+                                    "odds": "3.95",
+                                    "probabilities": "0.23387",
+                                    "active": "1",
+                                    "display_odds": {
+                                        "decimal": "3.95",
+                                        "american": "+295",
+                                        "fractional": "59/20"
+                                    }
+                                }
+                            ],
+                            "tab_name": "Popular"
+                        }
+                    ]
+                },
+                "country": "International",
+                "is_c_odds": false
+            },
+            {
+                "id": "sr:match:66456994",
+                "sport_id": "sr:sport:1",
+                "sport_name": "Soccer",
+                "tournament_id": "sr:tournament:16",
+                "league_name": "FIFA World Cup",
+                "product": "3",
+                "is_live": false,
+                "is_sgp_available": true,
+                "scheduled_ts": "1781539200.0",
+                "competitors": [
+                    {
+                        "id": "sr:competitor:4698",
+                        "name": "Spain",
+                        "qualifier": "home",
+                        "abbreviation": "ESP",
+                        "country": "Spain",
+                        "country_code": "ES",
+                        "gender": "male",
+                        "jersey": {
+                            "base": "#dfe1ba",
+                            "number": "#db0626"
+                        },
+                        "display_order": 1,
+                        "logo_type": "country",
+                        "logo": "https://d2qu4js9gdp9gw.cloudfront.net/team-logos/country-flag-icons/es.png"
+                    },
+                    {
+                        "id": "sr:competitor:4753",
+                        "name": "Cape Verde",
+                        "qualifier": "away",
+                        "abbreviation": "CPV",
+                        "country": "Cape Verde",
+                        "country_code": "CV",
+                        "gender": "male",
+                        "jersey": {
+                            "base": "#0a478a",
+                            "number": "#f0de14"
+                        },
+                        "display_order": 2,
+                        "logo_type": "country",
+                        "logo": "https://d2qu4js9gdp9gw.cloudfront.net/team-logos/country-flag-icons/cv.png"
+                    }
+                ],
+                "odds": {
+                    "market": [
+                        {
+                            "id": "1",
+                            "name": "1x2",
+                            "status": "1",
+                            "outcome": [
+                                {
+                                    "id": "1",
+                                    "name": "Spain",
+                                    "odds": "1.077",
+                                    "probabilities": "0.897874",
+                                    "active": "1",
+                                    "display_odds": {
+                                        "decimal": "1.08",
+                                        "american": "-1299",
+                                        "fractional": "1/13"
+                                    }
+                                },
+                                {
+                                    "id": "2",
+                                    "name": "draw",
+                                    "odds": "9.8",
+                                    "probabilities": "0.0731569",
+                                    "active": "1",
+                                    "display_odds": {
+                                        "decimal": "9.80",
+                                        "american": "+880",
+                                        "fractional": "44/5"
+                                    }
+                                },
+                                {
+                                    "id": "3",
+                                    "name": "Cape Verde",
+                                    "odds": "24.0",
+                                    "probabilities": "0.0289664",
+                                    "active": "1",
+                                    "display_odds": {
+                                        "decimal": "24.00",
+                                        "american": "+2300",
+                                        "fractional": "23/1"
+                                    }
+                                }
+                            ],
+                            "tab_name": "Popular"
+                        }
+                    ]
+                },
+                "country": "International",
+                "is_c_odds": false
+            },
+            {
+                "id": "sr:match:66456982",
+                "sport_id": "sr:sport:1",
+                "sport_name": "Soccer",
+                "tournament_id": "sr:tournament:16",
+                "league_name": "FIFA World Cup",
+                "product": "3",
+                "is_live": false,
+                "is_sgp_available": true,
+                "scheduled_ts": "1781550000.0",
+                "competitors": [
+                    {
+                        "id": "sr:competitor:4717",
+                        "name": "Belgium",
+                        "qualifier": "home",
+                        "abbreviation": "BEL",
+                        "country": "Belgium",
+                        "country_code": "BE",
+                        "gender": "male",
+                        "jersey": {
+                            "base": "#8ec9e7",
+                            "number": "#ffffff"
+                        },
+                        "display_order": 1,
+                        "logo_type": "country",
+                        "logo": "https://d2qu4js9gdp9gw.cloudfront.net/team-logos/country-flag-icons/be.png"
+                    },
+                    {
+                        "id": "sr:competitor:4758",
+                        "name": "Egypt",
+                        "qualifier": "away",
+                        "abbreviation": "EGY",
+                        "country": "Egypt",
+                        "country_code": "EG",
+                        "gender": "male",
+                        "jersey": {
+                            "base": "#ff0000",
+                            "number": "#ffffff"
+                        },
+                        "display_order": 2,
+                        "logo_type": "country",
+                        "logo": "https://d2qu4js9gdp9gw.cloudfront.net/team-logos/country-flag-icons/eg.png"
+                    }
+                ],
+                "odds": {
+                    "market": [
+                        {
+                            "id": "1",
+                            "name": "1x2",
+                            "status": "1",
+                            "outcome": [
+                                {
+                                    "id": "1",
+                                    "name": "Belgium",
+                                    "odds": "1.633",
+                                    "probabilities": "0.583622",
+                                    "active": "1",
+                                    "display_odds": {
+                                        "decimal": "1.63",
+                                        "american": "-158",
+                                        "fractional": "50/79"
+                                    }
+                                },
+                                {
+                                    "id": "2",
+                                    "name": "draw",
+                                    "odds": "3.95",
+                                    "probabilities": "0.231944",
+                                    "active": "1",
+                                    "display_odds": {
+                                        "decimal": "3.95",
+                                        "american": "+295",
+                                        "fractional": "59/20"
+                                    }
+                                },
+                                {
+                                    "id": "3",
+                                    "name": "Egypt",
+                                    "odds": "4.9",
+                                    "probabilities": "0.184429",
+                                    "active": "1",
+                                    "display_odds": {
+                                        "decimal": "4.90",
+                                        "american": "+390",
+                                        "fractional": "39/10"
+                                    }
+                                }
+                            ],
+                            "tab_name": "Popular"
+                        }
+                    ]
+                },
+                "country": "International",
+                "is_c_odds": false
+            },
+            {
+                "id": "sr:match:66456996",
+                "sport_id": "sr:sport:1",
+                "sport_name": "Soccer",
+                "tournament_id": "sr:tournament:16",
+                "league_name": "FIFA World Cup",
+                "product": "3",
+                "is_live": false,
+                "is_sgp_available": true,
+                "scheduled_ts": "1781560800.0",
+                "competitors": [
+                    {
+                        "id": "sr:competitor:4834",
+                        "name": "Saudi Arabia",
+                        "qualifier": "home",
+                        "abbreviation": "KSA",
+                        "country": "Saudi Arabia",
+                        "country_code": "SA",
+                        "gender": "male",
+                        "jersey": {
+                            "base": "#f9faf9",
+                            "number": "#083a30"
+                        },
+                        "display_order": 1,
+                        "logo_type": "country",
+                        "logo": "https://d2qu4js9gdp9gw.cloudfront.net/team-logos/country-flag-icons/sa.png"
+                    },
+                    {
+                        "id": "sr:competitor:4725",
+                        "name": "Uruguay",
+                        "qualifier": "away",
+                        "abbreviation": "URU",
+                        "country": "Uruguay",
+                        "country_code": "UY",
+                        "gender": "male",
+                        "jersey": {
+                            "base": "#66ccff",
+                            "number": "#000000"
+                        },
+                        "display_order": 2,
+                        "logo_type": "country",
+                        "logo": "https://d2qu4js9gdp9gw.cloudfront.net/team-logos/country-flag-icons/uy.png"
+                    }
+                ],
+                "odds": {
+                    "market": [
+                        {
+                            "id": "1",
+                            "name": "1x2",
+                            "status": "1",
+                            "outcome": [
+                                {
+                                    "id": "1",
+                                    "name": "Saudi Arabia",
+                                    "odds": "6.2",
+                                    "probabilities": "0.143518",
+                                    "active": "1",
+                                    "display_odds": {
+                                        "decimal": "6.20",
+                                        "american": "+520",
+                                        "fractional": "26/5"
+                                    }
+                                },
+                                {
+                                    "id": "2",
+                                    "name": "draw",
+                                    "odds": "4.2",
+                                    "probabilities": "0.214126",
+                                    "active": "1",
+                                    "display_odds": {
+                                        "decimal": "4.20",
+                                        "american": "+320",
+                                        "fractional": "16/5"
+                                    }
+                                },
+                                {
+                                    "id": "3",
+                                    "name": "Uruguay",
+                                    "odds": "1.49",
+                                    "probabilities": "0.642357",
+                                    "active": "1",
+                                    "display_odds": {
+                                        "decimal": "1.49",
+                                        "american": "-204",
+                                        "fractional": "49/100"
+                                    }
+                                }
+                            ],
+                            "tab_name": "Popular"
+                        }
+                    ]
+                },
+                "country": "International",
+                "is_c_odds": false
+            },
+            {
+                "id": "sr:match:66456984",
+                "sport_id": "sr:sport:1",
+                "sport_name": "Soccer",
+                "tournament_id": "sr:tournament:16",
+                "league_name": "FIFA World Cup",
+                "product": "3",
+                "is_live": false,
+                "is_sgp_available": true,
+                "scheduled_ts": "1781571600.0",
+                "competitors": [
+                    {
+                        "id": "sr:competitor:4766",
+                        "name": "IR Iran",
+                        "qualifier": "home",
+                        "abbreviation": "IRI",
+                        "country": "Iran",
+                        "country_code": "IRN",
+                        "gender": "male",
+                        "jersey": {
+                            "base": "#cc0000",
+                            "number": "#ffffff"
+                        },
+                        "display_order": 1,
+                        "logo_type": "team"
+                    },
+                    {
+                        "id": "sr:competitor:4784",
+                        "name": "New Zealand",
+                        "qualifier": "away",
+                        "abbreviation": "NZL",
+                        "country": "New Zealand",
+                        "country_code": "NZ",
+                        "gender": "male",
+                        "jersey": {
+                            "base": "#cb9be9",
+                            "number": "#ffffff"
+                        },
+                        "display_order": 2,
+                        "logo_type": "country",
+                        "logo": "https://d2qu4js9gdp9gw.cloudfront.net/team-logos/country-flag-icons/nz.png"
+                    }
+                ],
+                "odds": {
+                    "market": [
+                        {
+                            "id": "1",
+                            "name": "1x2",
+                            "status": "1",
+                            "outcome": [
+                                {
+                                    "id": "1",
+                                    "name": "IR Iran",
+                                    "odds": "1.82",
+                                    "probabilities": "0.522192",
+                                    "active": "1",
+                                    "display_odds": {
+                                        "decimal": "1.82",
+                                        "american": "-122",
+                                        "fractional": "41/50"
+                                    }
+                                },
+                                {
+                                    "id": "2",
+                                    "name": "draw",
+                                    "odds": "3.5",
+                                    "probabilities": "0.263739",
+                                    "active": "1",
+                                    "display_odds": {
+                                        "decimal": "3.50",
+                                        "american": "+250",
+                                        "fractional": "5/2"
+                                    }
+                                },
+                                {
+                                    "id": "3",
+                                    "name": "New Zealand",
+                                    "odds": "4.3",
+                                    "probabilities": "0.214066",
+                                    "active": "1",
+                                    "display_odds": {
+                                        "decimal": "4.30",
+                                        "american": "+330",
+                                        "fractional": "33/10"
+                                    }
+                                }
+                            ],
+                            "tab_name": "Popular"
+                        }
+                    ]
+                },
+                "country": "International",
+                "is_c_odds": false
+            },
+            {
+                "id": "sr:match:66457006",
+                "sport_id": "sr:sport:1",
+                "sport_name": "Soccer",
+                "tournament_id": "sr:tournament:16",
+                "league_name": "FIFA World Cup",
+                "product": "3",
+                "is_live": false,
+                "is_sgp_available": true,
+                "scheduled_ts": "1781636400.0",
+                "competitors": [
+                    {
+                        "id": "sr:competitor:4481",
+                        "name": "France",
+                        "qualifier": "home",
+                        "abbreviation": "FRA",
+                        "country": "France",
+                        "country_code": "FR",
+                        "gender": "male",
+                        "jersey": {
+                            "base": "#d2eae7",
+                            "number": "#0f0f10"
+                        },
+                        "display_order": 1,
+                        "logo_type": "country",
+                        "logo": "https://d2qu4js9gdp9gw.cloudfront.net/team-logos/country-flag-icons/fr.png"
+                    },
+                    {
+                        "id": "sr:competitor:4739",
+                        "name": "Senegal",
+                        "qualifier": "away",
+                        "abbreviation": "SEN",
+                        "country": "Senegal",
+                        "country_code": "SN",
+                        "gender": "male",
+                        "jersey": {
+                            "base": "#048f7c",
+                            "number": "#fbe56b"
+                        },
+                        "display_order": 2,
+                        "logo_type": "country",
+                        "logo": "https://d2qu4js9gdp9gw.cloudfront.net/team-logos/country-flag-icons/sn.png"
+                    }
+                ],
+                "odds": {
+                    "market": [
+                        {
+                            "id": "1",
+                            "name": "1x2",
+                            "status": "1",
+                            "outcome": [
+                                {
+                                    "id": "1",
+                                    "name": "France",
+                                    "odds": "1.446",
+                                    "probabilities": "0.662324",
+                                    "active": "1",
+                                    "display_odds": {
+                                        "decimal": "1.45",
+                                        "american": "-224",
+                                        "fractional": "33/74"
+                                    }
+                                },
+                                {
+                                    "id": "2",
+                                    "name": "draw",
+                                    "odds": "4.4",
+                                    "probabilities": "0.20345",
+                                    "active": "1",
+                                    "display_odds": {
+                                        "decimal": "4.40",
+                                        "american": "+340",
+                                        "fractional": "17/5"
+                                    }
+                                },
+                                {
+                                    "id": "3",
+                                    "name": "Senegal",
+                                    "odds": "6.6",
+                                    "probabilities": "0.134232",
+                                    "active": "1",
+                                    "display_odds": {
+                                        "decimal": "6.60",
+                                        "american": "+560",
+                                        "fractional": "28/5"
+                                    }
+                                }
+                            ],
+                            "tab_name": "Popular"
+                        }
+                    ]
+                },
+                "country": "International",
+                "is_c_odds": false
+            },
+            {
+                "id": "sr:match:66457008",
+                "sport_id": "sr:sport:1",
+                "sport_name": "Soccer",
+                "tournament_id": "sr:tournament:16",
+                "league_name": "FIFA World Cup",
+                "product": "3",
+                "is_live": false,
+                "is_sgp_available": true,
+                "scheduled_ts": "1781647200.0",
+                "competitors": [
+                    {
+                        "id": "sr:competitor:4767",
+                        "name": "Iraq",
+                        "qualifier": "home",
+                        "abbreviation": "IRQ",
+                        "country": "Iraq",
+                        "country_code": "IQ",
+                        "gender": "male",
+                        "jersey": {
+                            "base": "#47a46d",
+                            "number": "#ffffff"
+                        },
+                        "display_order": 1,
+                        "logo_type": "country",
+                        "logo": "https://d2qu4js9gdp9gw.cloudfront.net/team-logos/country-flag-icons/iq.png"
+                    },
+                    {
+                        "id": "sr:competitor:4475",
+                        "name": "Norway",
+                        "qualifier": "away",
+                        "abbreviation": "NOR",
+                        "country": "Norway",
+                        "country_code": "NO",
+                        "gender": "male",
+                        "jersey": {
+                            "base": "#0d0d0d",
+                            "number": "#121212"
+                        },
+                        "display_order": 2,
+                        "logo_type": "country",
+                        "logo": "https://d2qu4js9gdp9gw.cloudfront.net/team-logos/country-flag-icons/no.png"
+                    }
+                ],
+                "odds": {
+                    "market": [
+                        {
+                            "id": "1",
+                            "name": "1x2",
+                            "status": "1",
+                            "outcome": [
+                                {
+                                    "id": "1",
+                                    "name": "Iraq",
+                                    "odds": "10.7",
+                                    "probabilities": "0.0787605",
+                                    "active": "1",
+                                    "display_odds": {
+                                        "decimal": "10.70",
+                                        "american": "+970",
+                                        "fractional": "97/10"
+                                    }
+                                },
+                                {
+                                    "id": "2",
+                                    "name": "draw",
+                                    "odds": "5.9",
+                                    "probabilities": "0.14618",
+                                    "active": "1",
+                                    "display_odds": {
+                                        "decimal": "5.90",
+                                        "american": "+490",
+                                        "fractional": "49/10"
+                                    }
+                                },
+                                {
+                                    "id": "3",
+                                    "name": "Norway",
+                                    "odds": "1.244",
+                                    "probabilities": "0.775054",
+                                    "active": "1",
+                                    "display_odds": {
+                                        "decimal": "1.24",
+                                        "american": "-410",
+                                        "fractional": "10/41"
+                                    }
+                                }
+                            ],
+                            "tab_name": "Popular"
+                        }
+                    ]
+                },
+                "country": "International",
+                "is_c_odds": false
+            },
+            {
+                "id": "sr:match:66457018",
+                "sport_id": "sr:sport:1",
+                "sport_name": "Soccer",
+                "tournament_id": "sr:tournament:16",
+                "league_name": "FIFA World Cup",
+                "product": "3",
+                "is_live": false,
+                "is_sgp_available": true,
+                "scheduled_ts": "1781658000.0",
+                "competitors": [
+                    {
+                        "id": "sr:competitor:4819",
+                        "name": "Argentina",
+                        "qualifier": "home",
+                        "abbreviation": "ARG",
+                        "country": "Argentina",
+                        "country_code": "AR",
+                        "gender": "male",
+                        "jersey": {
+                            "base": "#263e92",
+                            "number": "#ffffff"
+                        },
+                        "display_order": 1,
+                        "logo_type": "country",
+                        "logo": "https://d2qu4js9gdp9gw.cloudfront.net/team-logos/country-flag-icons/ar.png"
+                    },
+                    {
+                        "id": "sr:competitor:4691",
+                        "name": "Algeria",
+                        "qualifier": "away",
+                        "abbreviation": "DZA",
+                        "country": "Algeria",
+                        "country_code": "DZ",
+                        "gender": "male",
+                        "jersey": {
+                            "base": "#329f8e",
+                            "number": "#ffffff"
+                        },
+                        "display_order": 2,
+                        "logo_type": "country",
+                        "logo": "https://d2qu4js9gdp9gw.cloudfront.net/team-logos/country-flag-icons/dz.png"
+                    }
+                ],
+                "odds": {
+                    "market": [
+                        {
+                            "id": "1",
+                            "name": "1x2",
+                            "status": "1",
+                            "outcome": [
+                                {
+                                    "id": "1",
+                                    "name": "Argentina",
+                                    "odds": "1.4",
+                                    "probabilities": "0.68429",
+                                    "active": "1",
+                                    "display_odds": {
+                                        "decimal": "1.40",
+                                        "american": "-250",
+                                        "fractional": "2/5"
+                                    }
+                                },
+                                {
+                                    "id": "2",
+                                    "name": "draw",
+                                    "odds": "4.5",
+                                    "probabilities": "0.198985",
+                                    "active": "1",
+                                    "display_odds": {
+                                        "decimal": "4.50",
+                                        "american": "+350",
+                                        "fractional": "7/2"
+                                    }
+                                },
+                                {
+                                    "id": "3",
+                                    "name": "Algeria",
+                                    "odds": "7.6",
+                                    "probabilities": "0.116733",
+                                    "active": "1",
+                                    "display_odds": {
+                                        "decimal": "7.60",
+                                        "american": "+660",
+                                        "fractional": "33/5"
+                                    }
+                                }
+                            ],
+                            "tab_name": "Popular"
+                        }
+                    ]
+                },
+                "country": "International",
+                "is_c_odds": false
+            },
+            {
+                "id": "sr:match:66457020",
+                "sport_id": "sr:sport:1",
+                "sport_name": "Soccer",
+                "tournament_id": "sr:tournament:16",
+                "league_name": "FIFA World Cup",
+                "product": "3",
+                "is_live": false,
+                "is_sgp_available": true,
+                "scheduled_ts": "1781668800.0",
+                "competitors": [
+                    {
+                        "id": "sr:competitor:4718",
+                        "name": "Austria",
+                        "qualifier": "home",
+                        "abbreviation": "AUT",
+                        "country": "Austria",
+                        "country_code": "AT",
+                        "gender": "male",
+                        "jersey": {
+                            "base": "#e3eaeb",
+                            "number": "#000000"
+                        },
+                        "display_order": 1,
+                        "logo_type": "country",
+                        "logo": "https://d2qu4js9gdp9gw.cloudfront.net/team-logos/country-flag-icons/at.png"
+                    },
+                    {
+                        "id": "sr:competitor:4771",
+                        "name": "Jordan",
+                        "qualifier": "away",
+                        "abbreviation": "JOR",
+                        "country": "Jordan",
+                        "country_code": "JO",
+                        "gender": "male",
+                        "jersey": {
+                            "base": "#ff0000",
+                            "number": "#ffffff"
+                        },
+                        "display_order": 2,
+                        "logo_type": "country",
+                        "logo": "https://d2qu4js9gdp9gw.cloudfront.net/team-logos/country-flag-icons/jo.png"
+                    }
+                ],
+                "odds": {
+                    "market": [
+                        {
+                            "id": "1",
+                            "name": "1x2",
+                            "status": "1",
+                            "outcome": [
+                                {
+                                    "id": "1",
+                                    "name": "Austria",
+                                    "odds": "1.333",
+                                    "probabilities": "0.721256",
+                                    "active": "1",
+                                    "display_odds": {
+                                        "decimal": "1.33",
+                                        "american": "-300",
+                                        "fractional": "1/3"
+                                    }
+                                },
+                                {
+                                    "id": "2",
+                                    "name": "draw",
+                                    "odds": "5.2",
+                                    "probabilities": "0.170087",
+                                    "active": "1",
+                                    "display_odds": {
+                                        "decimal": "5.20",
+                                        "american": "+420",
+                                        "fractional": "21/5"
+                                    }
+                                },
+                                {
+                                    "id": "3",
+                                    "name": "Jordan",
+                                    "odds": "8.0",
+                                    "probabilities": "0.108653",
+                                    "active": "1",
+                                    "display_odds": {
+                                        "decimal": "8.00",
+                                        "american": "+700",
+                                        "fractional": "7/1"
+                                    }
+                                }
+                            ],
+                            "tab_name": "Popular"
+                        }
+                    ]
+                },
+                "country": "International",
+                "is_c_odds": false
+            }
+        ],
+        "last_evaluated_key": "eyJpZCI6ICJzcjptYXRjaDo2NjQ1NzAyMCIsICJ0b3VybmFtZW50X2lkX2FjdGl2ZSI6ICJzcjp0b3VybmFtZW50OjE2XzEiLCAic2NoZWR1bGVkX3RzIjogIjE3ODE2Njg4MDAuMCJ9"
+    },
+    "success": true
+}

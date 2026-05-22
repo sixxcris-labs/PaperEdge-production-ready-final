@@ -357,7 +357,7 @@ Checks Needed:
 PaperEdge currently runs as a dashboard-only app for this phase.
 
 - `apps/dashboard` is the active runtime surface.
-- `apps/verifier` is disabled in default runtime workflows unless explicitly reactivated by a future ADR.
+- Verifier runtime code has been removed from this repository.
 
 Keep shared logic portable where possible:
 

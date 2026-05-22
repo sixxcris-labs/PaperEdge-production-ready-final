@@ -127,59 +127,66 @@ function collectEntries(raw: FourCRawMarket | FourCRawMarket[]): FourCEntry[] {
     if (!isRecord(containerCandidate)) continue;
 
     const data = isRecord(containerCandidate.data) ? containerCandidate.data : containerCandidate;
-    const game = isRecord(data.game) ? data.game : data;
-    const participantNames = mapParticipantNames(game);
+    const gameCandidates: UnknownRecord[] = isRecord(data.game)
+      ? [data.game]
+      : asRecordArray(data.games).length > 0
+        ? asRecordArray(data.games)
+        : [data];
 
-    for (const offer of asRecordArray(game.awayMoneylines)) {
-      const side =
-        participantNames.get(firstString(offer.participantID, offer.participantId) ?? "") ??
-        firstString(game.awayTeamName, game.awayTeam, "away") ??
-        "away";
+    for (const game of gameCandidates) {
+      const participantNames = mapParticipantNames(game);
 
-      entries.push({
-        game,
-        offer,
-        marketType: "moneyline",
-        side,
-        line: null,
-        marketId: "moneyline",
-      });
-    }
+      for (const offer of asRecordArray(game.awayMoneylines)) {
+        const side =
+          participantNames.get(firstString(offer.participantID, offer.participantId) ?? "") ??
+          firstString(game.awayTeamName, game.awayTeam, "away") ??
+          "away";
 
-    for (const offer of asRecordArray(game.homeMoneylines)) {
-      const side =
-        participantNames.get(firstString(offer.participantID, offer.participantId) ?? "") ??
-        firstString(game.homeTeamName, game.homeTeam, "home") ??
-        "home";
+        entries.push({
+          game,
+          offer,
+          marketType: "moneyline",
+          side,
+          line: null,
+          marketId: "moneyline",
+        });
+      }
 
-      entries.push({
-        game,
-        offer,
-        marketType: "moneyline",
-        side,
-        line: null,
-        marketId: "moneyline",
-      });
-    }
+      for (const offer of asRecordArray(game.homeMoneylines)) {
+        const side =
+          participantNames.get(firstString(offer.participantID, offer.participantId) ?? "") ??
+          firstString(game.homeTeamName, game.homeTeam, "home") ??
+          "home";
 
-    if (isRecord(game.awaySpreads)) {
-      entries.push(
-        ...collectFromLineMap(game, game.awaySpreads, "spread", firstString(game.awayTeamName, "away") ?? "away", participantNames),
-      );
-    }
+        entries.push({
+          game,
+          offer,
+          marketType: "moneyline",
+          side,
+          line: null,
+          marketId: "moneyline",
+        });
+      }
 
-    if (isRecord(game.homeSpreads)) {
-      entries.push(
-        ...collectFromLineMap(game, game.homeSpreads, "spread", firstString(game.homeTeamName, "home") ?? "home", participantNames),
-      );
-    }
+      if (isRecord(game.awaySpreads)) {
+        entries.push(
+          ...collectFromLineMap(game, game.awaySpreads, "spread", firstString(game.awayTeamName, "away") ?? "away", participantNames),
+        );
+      }
 
-    if (isRecord(game.over)) {
-      entries.push(...collectFromLineMap(game, game.over, "total", "over", participantNames));
-    }
+      if (isRecord(game.homeSpreads)) {
+        entries.push(
+          ...collectFromLineMap(game, game.homeSpreads, "spread", firstString(game.homeTeamName, "home") ?? "home", participantNames),
+        );
+      }
 
-    if (isRecord(game.under)) {
-      entries.push(...collectFromLineMap(game, game.under, "total", "under", participantNames));
+      if (isRecord(game.over)) {
+        entries.push(...collectFromLineMap(game, game.over, "total", "over", participantNames));
+      }
+
+      if (isRecord(game.under)) {
+        entries.push(...collectFromLineMap(game, game.under, "total", "under", participantNames));
+      }
     }
   }
 

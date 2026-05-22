@@ -1,0 +1,6 @@
+book,market,outcome,offered_prob,fair_prob,edge,reference_books
+"4c","basketball|nba|oklahoma city thunder vs san antonio spurs|total||full_game|218","under",0.5000,0.5063,0.0126,1
+"4c","basketball|nba|oklahoma city thunder vs san antonio spurs|total||full_game|218.5","under",0.5050,0.5090,0.0081,2
+"4c","basketball|nba|oklahoma city thunder vs san antonio spurs|total||full_game|216.5","under",0.4717,0.4737,0.0042,1
+"4c","basketball|nba|oklahoma city thunder vs san antonio spurs|total||full_game|215.5","under",0.4484,0.4496,0.0027,1
+"4c","basketball|nba|oklahoma city thunder vs san antonio spurs|total||full_game|216","under",0.4587,0.4589,0.0003,1

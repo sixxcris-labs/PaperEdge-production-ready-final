@@ -16,7 +16,6 @@ export * from "./verify";
 export * from "./verification-gates";
 export * from "./scores";
 export * from "./trade-text-import";
-
 export function coreWorkspaceStatus(): string {
   return "PaperEdge core workspace linked";
 }
@@ -32,6 +31,8 @@ export {
   normalizeSide,
   normalizePeriod,
   normalizeMarketType,
+  normalizeEventKey,
+  impliedFromAmerican,
   americanToImpliedProbability,
   probabilityToAmerican,
   marketComparisonKey,
@@ -46,4 +47,5 @@ export * from "./adapters";
 export * from "./edge-signal-engine";
 export * from "./edge-signal-import";
 export * from "./normalized-market.schema";
+export * from "./player-props";
 export * from "./fair-value";

@@ -34,6 +34,7 @@
     "./adapters/bovada": "./src/adapters/bovada.ts",
     "./adapters/kalshi": "./src/adapters/kalshi.ts",
     "./adapters/rebet": "./src/adapters/rebet.ts",
-    "./adapters/fourc": "./src/adapters/fourc.ts"
+    "./adapters/fourc": "./src/adapters/fourc.ts",
+    "./player-props": "./src/player-props.ts"
   }
 }

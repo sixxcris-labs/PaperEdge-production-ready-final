@@ -390,6 +390,16 @@ Status values: `Not Started`, `In Progress`, `Blocked`, `Done`
   - Synced `AGENTS.md` current product direction to dashboard-only runtime.
   - Updated latest evidence date/counts in `docs/QUALITY_GATES.md`.
 
+### 2026-05-22 — Codex verifier runtime removal (single-surface repo)
+- User-directed removal of split runtime architecture.
+- Removed verifier app code:
+  - deleted `apps/verifier/`
+- Updated runtime scripts/docs to match single-surface dashboard architecture:
+  - `package.json` (removed `build:verifier` and `dev:verifier` scripts)
+  - `README.md`
+  - `AGENTS.md`
+  - `docs/active/ADR-002-split-app-route-ownership.md`
+
 ## Notes for Future Agents
 - P0/P1 engineering baseline is complete; continue tracker/session maintenance (`P2-01`).
 - Preserve paper-trading-only boundaries from `AGENTS.md`.

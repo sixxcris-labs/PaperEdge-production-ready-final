@@ -1,0 +1,117 @@
+{
+  "enabledBooks": [
+    "bovada",
+    "novig",
+    "4c",
+    "rebet",
+    "prophetx"
+  ],
+  "sport": "basketball",
+  "league": "nba",
+  "pollIntervalSeconds": 30,
+  "outputDirectories": {
+    "rawData": "raw_data",
+    "normalizedData": "normalized_data",
+    "logs": "logs"
+  },
+  "books": {
+    "bovada": {
+      "enabled": true,
+      "headers": {
+        "accept": "application/json,text/plain,*/*"
+      },
+      "requests": [
+        {
+          "id": "replace-with-bovada-event-or-coupon-name",
+          "url": "https://example.invalid/replace-with-authorized-bovada-json-endpoint",
+          "sport": "basketball",
+          "league": "nba",
+          "period": "full_game",
+          "live": false
+        }
+      ]
+    },
+    "novig": {
+      "enabled": true,
+      "headers": {
+        "accept": "application/json,text/plain,*/*"
+      },
+      "requests": [
+        {
+          "id": "novig-nba-market-file",
+          "filePath": "C:\\Users\\Cristian\\Downloads\\PaperEdge-production-ready-final\\raw_data\\novig_marketNBA.json",
+          "sport": "basketball",
+          "league": "nba",
+          "period": "full_game",
+          "live": false
+        },
+        {
+          "id": "novig-mlb-market-file",
+          "filePath": "C:\\Users\\Cristian\\Downloads\\PaperEdge-production-ready-final\\raw_data\\novigMLB.json",
+          "sport": "baseball",
+          "league": "mlb",
+          "period": "full_game",
+          "live": false
+        },
+        {
+          "id": "novig-soccer-market-file",
+          "filePath": "C:\\Users\\Cristian\\Downloads\\PaperEdge-production-ready-final\\raw_data\\novigSoccer.json",
+          "sport": "soccer",
+          "league": "soccer",
+          "period": "full_game",
+          "live": false
+        }
+      ]
+    },
+    "4c": {
+      "enabled": true,
+      "headers": {
+        "accept": "application/json,text/plain,*/*",
+        "referer": "https://4cx.io/"
+      },
+      "requests": [
+        {
+          "id": "4c-nba-orderbook",
+          "url": "https://api.4cx.io/exchange/getOrderbookPaginated?leagueRequested=nba&sportRequested=basketball&limit=20&timeZone=America%2FChicago",
+          "sport": "basketball",
+          "league": "nba",
+          "period": "full_game",
+          "live": false
+        }
+      ]
+    },
+    "rebet": {
+      "enabled": true,
+      "headers": {
+        "accept": "application/json,text/plain,*/*"
+      },
+      "requests": [
+        {
+          "id": "rebet-nba-events",
+          "url": "https://d18egz9kdmewpc.cloudfront.net/sportsbook/v3/events?tab=MKT&sport_id=sr%3Asport%3A3&item_id=GAMES&league_id=sr%3Atournament%3A109&user_id=815be5f0-3001-70f2-4589-4a386757c444",
+          "sport": "basketball",
+          "league": "nba",
+          "period": "full_game",
+          "live": false
+        }
+      ]
+    },
+    "prophetx": {
+      "enabled": true,
+      "headers": {
+        "accept": "application/json,text/plain,*/*",
+        "referer": "https://www.prophetx.co/"
+      },
+      "requests": [
+        {
+          "id": "prophetx-event-20023807",
+          "url": "https://www.prophetx.co/trade/public/api/v2/events/20023807/markets",
+          "sport": "basketball",
+          "league": "nba",
+          "period": "full_game",
+          "live": false
+        }
+      ]
+    }
+  }
+}

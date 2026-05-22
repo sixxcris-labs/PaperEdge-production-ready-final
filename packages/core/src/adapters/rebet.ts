@@ -209,10 +209,8 @@ function collectEntries(raw: RebetRawMarket | RebetRawMarket[]): RebetEntry[] {
   const containers = Array.isArray(raw) ? raw : [raw];
   const entries: RebetEntry[] = [];
 
-  for (const rootCandidate of containers) {
-    if (!isRecord(rootCandidate)) continue;
-
-    const root = isRecord(rootCandidate.data) ? rootCandidate.data : rootCandidate;
+  const pushEntriesFromRoot = (root: UnknownRecord): void => {
+    // Legacy/event-market payload.
     const marketData = asRecordArray(root.market_data);
     for (const marketDataRow of marketData) {
       for (const card of asRecordArray(marketDataRow.cards)) {
@@ -223,6 +221,31 @@ function collectEntries(raw: RebetRawMarket | RebetRawMarket[]): RebetEntry[] {
         }
       }
     }
+
+    // Rebet sportsbook list payload: odds.market where market is keyed object.
+    const odds = isRecord(root.odds) ? root.odds : null;
+    const oddsMarket = odds?.market;
+    const marketRows = asRecordArray(oddsMarket);
+    const mappedRows =
+      marketRows.length > 0 ? marketRows : isRecord(oddsMarket) ? Object.values(oddsMarket).filter(isRecord) : [];
+    for (const market of mappedRows) {
+      for (const outcome of asRecordArray(market.outcome)) {
+        entries.push({ root, market, outcome });
+      }
+    }
+  };
+
+  for (const rootCandidate of containers) {
+    if (!isRecord(rootCandidate)) continue;
+
+    const root = isRecord(rootCandidate.data) ? rootCandidate.data : rootCandidate;
+    const eventRoots = asRecordArray(root.events);
+    if (eventRoots.length > 0) {
+      for (const eventRoot of eventRoots) pushEntriesFromRoot(eventRoot);
+      continue;
+    }
+
+    pushEntriesFromRoot(root);
   }
 
   return entries;
@@ -236,9 +259,9 @@ export function normalizeRebetMarkets(
 
   return entries.map(({ root, market, outcome }) => {
     const oddsAmerican = parseAmerican(outcome);
-    const impliedProbability =
-      parseNumber(outcome.probabilities) ??
-      (oddsAmerican === null ? null : americanToImpliedProbability(oddsAmerican));
+    // outcome.probabilities is Rebet's internal no-vig fair prob, not the
+    // vig-included market price. Always derive from the displayed American odds.
+    const impliedProbability = oddsAmerican === null ? null : americanToImpliedProbability(oddsAmerican);
 
     const sideAndLine = deriveSideAndLine(outcome);
     const derived = options?.marketType

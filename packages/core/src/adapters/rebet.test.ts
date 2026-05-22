@@ -87,10 +87,11 @@ describe("normalizeRebetMarkets", () => {
     expect(row.sourceOutcomeId).toBe("5");
   });
 
-  it("parses American odds and implied probability", () => {
+  it("parses American odds and implied probability from American odds (not outcome.probabilities)", () => {
     const [row] = normalizeRebetMarkets(raw);
     expect(row.odds_american).toBe(102);
-    expect(row.implied_probability).toBeCloseTo(0.470136, 6);
+    // +102 => 100 / (102 + 100) ≈ 0.4950, NOT Rebet's internal fair prob 0.4701
+    expect(row.implied_probability).toBeCloseTo(100 / 202, 5);
   });
 
   it("extracts over/under side and line from outcome label", () => {

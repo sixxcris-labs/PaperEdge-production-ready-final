@@ -10,11 +10,16 @@ import { dirname, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 
 import { normalizeRebetMarkets } from "../packages/core/src/adapters/rebet";
+import { resolveLatestJsonInput } from "./lib/latest-json-input";
 
 const scriptDir = dirname(fileURLToPath(import.meta.url));
 const repoRoot = resolve(scriptDir, "..");
 
-const DEFAULT_INPUT = resolve(repoRoot, "raw_data", "rebet.json");
+const DEFAULT_INPUT = resolveLatestJsonInput({
+  repoRoot,
+  bookDirName: "rebet",
+  fallbackFileName: "rebet.json",
+});
 
 const inputArg = process.argv[2];
 const INPUT_PATH = inputArg ? resolve(repoRoot, inputArg) : DEFAULT_INPUT;

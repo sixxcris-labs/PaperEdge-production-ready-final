@@ -10,14 +10,12 @@ PaperEdge is **not** a betting bot. It does not place bets, log into sportsbooks
 paperedge/
 ├─ app/                         # Root redirect entrypoint
 ├─ apps/
-│  ├─ dashboard/                # Active app: P&L, locked trades, settlement, mistakes, books, settings
-│  └─ verifier/                 # Disabled in current runtime scope (retained as inactive code)
+│  └─ dashboard/                # Active app: P&L, locked trades, settlement, mistakes, books, settings
 ├─ components/                  # Shared UI components
 ├─ lib/                         # App-specific services and server helpers
 ├─ packages/
 │  ├─ core/                     # Calculators, status helpers, metrics, parser, verification analytics
 │  └─ database/                 # Prisma schema, generated client, SQLite adapter, seed data
-└─ extensions/paperedge-verifier/ # Chrome verifier extension
 ```
 
 The important data split is:
@@ -98,15 +96,22 @@ npm run build:dashboard
 
 `npm run validate` runs typecheck, tests, and the active dashboard build path.
 
-## Chrome verifier extension
+## Scanner workflows
 
-The extension is located at:
+Scanners capture and normalize market snapshots only (no bet placement/execution):
 
-```text
-extensions/paperedge-verifier/
+```bash
+npm run scan:market-data:once
+npm run scan:market-data -- --config config/paperedge.scanner.config.json
+npm run scan:markets
+npm run scan:markets:watch
 ```
 
-Install it in Chrome developer mode with **Load unpacked**. The verifier app is disabled in this phase, so extension flows are inactive unless verifier runtime is explicitly re-enabled by a future ADR.
+To configure scanner-only polling, copy:
+
+```bash
+cp config/paperedge.scanner.config.example.json config/paperedge.scanner.config.json
+```
 
 ## Safety boundaries
 
