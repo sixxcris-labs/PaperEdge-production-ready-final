@@ -96,6 +96,7 @@ export function Sidebar() {
       <nav className="nav">
         <div className="nav-section">Workspace</div>
         <NavItem href="/" label="Dashboard" icon={ICONS.dashboard} exactMatch />
+        <NavItem href="/scan" label="Market Scan" icon={ICONS.search} />
         <NavItem href="/trades/new" label="Add Paper Trade" icon={ICONS.plus} />
         <NavItem href="/trades/import" label="Import Trades" icon={ICONS.download} />
         <NavItem href="/trades" label="Locked Trades" icon={ICONS.lock} />

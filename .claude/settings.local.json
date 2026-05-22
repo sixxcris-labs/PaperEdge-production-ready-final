@@ -119,7 +119,11 @@
       "Bash(TMPDIR=/tmp npx tsx scripts/normalize-rebet.ts)",
       "Bash(TMPDIR=/tmp npx tsx scripts/arbs-report.ts)",
       "Bash(TMPDIR=/tmp npx tsx scripts/fair-value-report.ts)",
-      "Bash(TMPDIR=/tmp npx tsx scripts/detect-edges.ts)"
+      "Bash(TMPDIR=/tmp npx tsx scripts/detect-edges.ts)",
+      "Bash(npx vitest *)",
+      "PowerShell(Get-Process -Name node -ErrorAction SilentlyContinue | Select-Object Id, StartTime, @{n='Cmd';e={\\(Get-CimInstance Win32_Process -Filter \"ProcessId=$\\($_.Id\\)\"\\).CommandLine}} | Format-Table -Wrap -AutoSize)",
+      "PowerShell(taskkill /PID 53895 /F)",
+      "PowerShell($c = Get-NetTCPConnection -LocalPort 3000 -State Listen -ErrorAction SilentlyContinue; if \\($c\\) { \"PORT 3000 IN USE by PID\\(s\\): \" + \\($c.OwningProcess -join ','\\) } else { \"PORT 3000 FREE\" })"
     ]
   }
 }

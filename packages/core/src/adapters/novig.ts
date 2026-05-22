@@ -82,6 +82,68 @@ function normalizeStatus(value: unknown): NormalizedMarketStatus {
   return "unknown";
 }
 
+function isLikelyLadderRow(value: UnknownRecord): boolean {
+  return (
+    toNumber(value.price) !== null ||
+    toNumber(value.qty) !== null ||
+    firstString(value.outcomeId, value.marketId, value.id) !== null
+  );
+}
+
+function ladderDedupKey(value: UnknownRecord): string {
+  return firstString(value.id)
+    ?? [
+      firstString(value.outcomeId) ?? "",
+      firstString(value.marketId) ?? "",
+      String(toNumber(value.price) ?? ""),
+      String(toNumber(value.qty) ?? ""),
+      firstString(value.timestamp, value.updatedAt, value.createdAt) ?? "",
+      String(toBoolean(value.isBid) ?? ""),
+    ].join("|");
+}
+
+function dedupeLadderRows(rows: UnknownRecord[]): UnknownRecord[] {
+  const seen = new Set<string>();
+  const unique: UnknownRecord[] = [];
+
+  for (const row of rows) {
+    const key = ladderDedupKey(row);
+    if (seen.has(key)) continue;
+    seen.add(key);
+    unique.push(row);
+  }
+
+  return unique;
+}
+
+function extractLadderRows(value: unknown): UnknownRecord[] {
+  if (Array.isArray(value)) {
+    return dedupeLadderRows(value.filter(isRecord));
+  }
+
+  if (!isRecord(value)) return [];
+
+  const rows: UnknownRecord[] = [];
+  if (isLikelyLadderRow(value)) rows.push(value);
+
+  rows.push(...toRecordArray(value.bids));
+  rows.push(...toRecordArray(value.asks));
+  rows.push(...toRecordArray(value.ladders));
+
+  for (const nested of Object.values(value)) {
+    if (Array.isArray(nested)) {
+      rows.push(...toRecordArray(nested));
+      continue;
+    }
+    if (!isRecord(nested)) continue;
+    if (isLikelyLadderRow(nested)) rows.push(nested);
+    rows.push(...toRecordArray(nested.bids));
+    rows.push(...toRecordArray(nested.asks));
+  }
+
+  return dedupeLadderRows(rows);
+}
+
 function buildEntry(marketCandidate: unknown, root: UnknownRecord): NovigEntry | null {
   if (!isRecord(marketCandidate)) return null;
   const market = marketCandidate;
@@ -89,11 +151,13 @@ function buildEntry(marketCandidate: unknown, root: UnknownRecord): NovigEntry |
   const rootOutcomes = toRecordArray(root.outcomes);
   const outcomes = marketOutcomes.length > 0 ? marketOutcomes : rootOutcomes;
 
-  const directLadders = toRecordArray(root.ladders).concat(toRecordArray(market.ladders));
-  const outcomeLadders = outcomes.flatMap((outcome) => toRecordArray(outcome.ladders));
-  const bids = outcomes.flatMap((outcome) => toRecordArray(outcome.bids));
-  const asks = outcomes.flatMap((outcome) => toRecordArray(outcome.asks));
-  const ladders = directLadders.length > 0 ? directLadders : [...outcomeLadders, ...bids, ...asks];
+  const directLadders = extractLadderRows(root.ladders).concat(extractLadderRows(market.ladders));
+  const outcomeLadders = outcomes.flatMap((outcome) => extractLadderRows(outcome.ladders));
+  const bids = outcomes.flatMap((outcome) => extractLadderRows(outcome.bids));
+  const asks = outcomes.flatMap((outcome) => extractLadderRows(outcome.asks));
+  const ladders = dedupeLadderRows(
+    directLadders.length > 0 ? directLadders : [...outcomeLadders, ...bids, ...asks],
+  );
 
   return { market, outcomes, ladders, root };
 }

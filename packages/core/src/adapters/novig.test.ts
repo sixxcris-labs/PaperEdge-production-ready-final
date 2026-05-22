@@ -154,6 +154,66 @@ describe("normalizeNovigMarkets", () => {
     expect(raw).not.toHaveProperty("market");
     expect(raw.outcome).not.toHaveProperty("outcomes");
   });
+
+  it("flattens object-mapped ladders (outcomeId -> bids/asks) into rows", () => {
+    const rows = normalizeNovigMarkets([
+      {
+        market: {
+          id: "mkt-map-1",
+          description: "team a",
+          type: "MONEY",
+          outcomes: [
+            { id: "out-a", description: "team a", marketId: "mkt-map-1" },
+            { id: "out-b", description: "team b", marketId: "mkt-map-1" },
+          ],
+        },
+        ladders: {
+          "out-a": {
+            bids: [
+              {
+                id: "bid-a-1",
+                outcomeId: "out-a",
+                marketId: "mkt-map-1",
+                price: 0.455,
+                qty: 1000,
+                timestamp: "2026-05-22T13:31:59.289Z",
+                status: "OPEN",
+              },
+            ],
+            asks: [
+              {
+                id: "ask-a-1",
+                outcomeId: "out-a",
+                marketId: "mkt-map-1",
+                price: 0.457,
+                qty: 1200,
+                timestamp: "2026-05-22T13:32:59.289Z",
+                status: "OPEN",
+              },
+            ],
+          },
+          "out-b": {
+            bids: [
+              {
+                id: "bid-b-1",
+                outcomeId: "out-b",
+                marketId: "mkt-map-1",
+                price: 0.543,
+                qty: 800,
+                timestamp: "2026-05-22T13:33:59.289Z",
+                status: "OPEN",
+              },
+            ],
+          },
+        },
+      },
+    ]);
+
+    expect(rows.length).toBe(3);
+    expect(rows.every((r) => r.source === "novig")).toBe(true);
+    expect(rows.map((r) => r.sourceOutcomeId).sort()).toEqual(["out-a", "out-a", "out-b"]);
+    expect(rows.map((r) => r.sourceMarketId)).toEqual(["mkt-map-1", "mkt-map-1", "mkt-map-1"]);
+  });
 });
 
 const eventShapeRaw = {

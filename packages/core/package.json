@@ -35,6 +35,7 @@
     "./adapters/kalshi": "./src/adapters/kalshi.ts",
     "./adapters/rebet": "./src/adapters/rebet.ts",
     "./adapters/fourc": "./src/adapters/fourc.ts",
-    "./player-props": "./src/player-props.ts"
+    "./player-props": "./src/player-props.ts",
+    "./scan-findings": "./src/scan-findings.ts"
   }
 }
