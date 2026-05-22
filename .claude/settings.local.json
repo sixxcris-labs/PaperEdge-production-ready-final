@@ -124,7 +124,21 @@
       "PowerShell(Get-Process -Name node -ErrorAction SilentlyContinue | Select-Object Id, StartTime, @{n='Cmd';e={\\(Get-CimInstance Win32_Process -Filter \"ProcessId=$\\($_.Id\\)\"\\).CommandLine}} | Format-Table -Wrap -AutoSize)",
       "PowerShell(taskkill /PID 53895 /F)",
       "PowerShell($c = Get-NetTCPConnection -LocalPort 3000 -State Listen -ErrorAction SilentlyContinue; if \\($c\\) { \"PORT 3000 IN USE by PID\\(s\\): \" + \\($c.OwningProcess -join ','\\) } else { \"PORT 3000 FREE\" })",
-      "Bash(grep -rniE \"/mnt/|wsl|tmpdir|/tmp|\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\?\\\\\\\\\\\\\\\\\" --include=*.ts --include=*.tsx --include=*.json --include=*.md --include=*.mjs .)"
+      "Bash(grep -rniE \"/mnt/|wsl|tmpdir|/tmp|\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\?\\\\\\\\\\\\\\\\\" --include=*.ts --include=*.tsx --include=*.json --include=*.md --include=*.mjs .)",
+      "Bash(python -c \"import json;d=json.load\\(open\\('raw_data/novig_marketNBA.json'\\)\\);print\\(type\\(d\\).__name__, list\\(d.keys\\(\\)\\)[:6] if isinstance\\(d,dict\\) else len\\(d\\)\\)\")",
+      "Bash(python -c \"import json;d=json.load\\(open\\('raw_data/prophetx.json'\\)\\);print\\(type\\(d\\).__name__, list\\(d.keys\\(\\)\\)[:6] if isinstance\\(d,dict\\) else len\\(d\\)\\)\")",
+      "Bash(python -c \"import json;d=json.load\\(open\\('raw_data/rebet.json'\\)\\);print\\(type\\(d\\).__name__, list\\(d.keys\\(\\)\\)[:6] if isinstance\\(d,dict\\) else len\\(d\\)\\)\")",
+      "Bash(python -c \"import json;d=json.load\\(open\\('raw_data/4c.json'\\)\\);print\\(type\\(d\\).__name__, list\\(d.keys\\(\\)\\)[:6] if isinstance\\(d,dict\\) else len\\(d\\)\\)\")",
+      "Bash(python -c ' *)",
+      "Bash(rm -f scripts/_probe.ts scripts/_probe2.ts)",
+      "Bash(git ls-files *)",
+      "Bash(ls -1 logs/)",
+      "Bash(ls -1 archive/)",
+      "Bash(rm -f normalized_data/4c_normalized.jsonl normalized_data/bovada_normalized.jsonl normalized_data/novig_normalized.jsonl normalized_data/prophetx_normalized.jsonl normalized_data/rebet_normalized.jsonl normalized_data/scanner_normalized.jsonl normalized_data/cross_book_arbs.csv normalized_data/fair_value_edges.csv normalized_data/book_comparison.csv normalized_data/edge_signals.jsonl normalized_data/review_candidates.jsonl)",
+      "Bash(rm -f logs/market_data_poll_log.jsonl logs/market_data_etags.json)",
+      "Bash(rm -rf archive/final-comparison)",
+      "Bash(cat)",
+      "Bash(rm -f scripts/_evprobe.ts)"
     ]
   }
 }

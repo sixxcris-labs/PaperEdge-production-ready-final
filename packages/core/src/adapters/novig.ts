@@ -373,6 +373,47 @@ function extractEventMarketPairs(raw: unknown): EventMarketPair[] | null {
   return null;
 }
 
+/**
+ * Detect the live-event-ticker shape ({ liveEvents, upcomingEvents }) and the
+ * featured-markets shape ({ markets: [{ ..., event, outcomes }] }). Both price
+ * via `outcome.available` like the GraphQL event shape, so they reuse
+ * buildEventRow. Returns null when `raw` is neither so the caller falls back.
+ */
+function extractAvailabilityPairs(raw: unknown): EventMarketPair[] | null {
+  if (!isRecord(raw)) return null;
+
+  // live-event-ticker: events grouped under liveEvents / upcomingEvents.
+  if ("liveEvents" in raw || "upcomingEvents" in raw) {
+    const events = [...toRecordArray(raw.liveEvents), ...toRecordArray(raw.upcomingEvents)];
+    const pairs: EventMarketPair[] = [];
+    for (const event of events) {
+      for (const market of toRecordArray(event.markets)) {
+        pairs.push({ event, market });
+      }
+    }
+    return pairs;
+  }
+
+  // featured-markets: top-level markets carrying their own nested event and
+  // outcomes priced via `available`.
+  const markets = toRecordArray(raw.markets);
+  if (
+    markets.length > 0 &&
+    markets.some(
+      (market) =>
+        isRecord(market.event) &&
+        toRecordArray(market.outcomes).some((outcome) => toNumber(outcome.available) !== null),
+    )
+  ) {
+    return markets.map((market) => ({
+      event: isRecord(market.event) ? market.event : {},
+      market,
+    }));
+  }
+
+  return null;
+}
+
 function buildEventRow(
   event: UnknownRecord,
   market: UnknownRecord,
@@ -390,16 +431,37 @@ function buildEventRow(
   const strike = toNumber(market.strike);
   const line = isMoneyType(market.type) ? null : strike;
 
+  const awayName = firstString(away.name, away.shortName, away.symbol);
+  const homeName = firstString(home.name, home.shortName, home.symbol);
   const eventName =
     firstString(options?.eventName, event.description) ??
-    (firstString(away.name) && firstString(home.name)
-      ? `${firstString(away.name)} @ ${firstString(home.name)}`
-      : null) ??
+    (awayName && homeName ? `${awayName} @ ${homeName}` : null) ??
     firstString(event.id) ??
     "unknown";
 
   const liveText = normalizeText(firstString(event.status, game.status));
   const live = /live|in[_ ]?progress|in[_ ]?play/.test(liveText);
+
+  // Two-outcome markets without an explicit type are moneylines.
+  const rawMarketType = firstString(options?.marketType) ?? eventMarketType(market.type);
+  const marketType =
+    rawMarketType === "unknown" && toRecordArray(market.outcomes).length === 2
+      ? "moneyline"
+      : rawMarketType;
+
+  // Some shapes (live-event-ticker) carry no per-outcome description; fall back
+  // to the home/away team for the outcome's index (index 0 = home, 1 = away).
+  let side = eventSide(outcome);
+  if (side === "unknown") {
+    const idx = toNumber(outcome.index);
+    const team = idx === 0 ? home : idx === 1 ? away : {};
+    const teamSide = firstString(team.shortName, team.symbol, team.name);
+    if (teamSide) side = normalizeSide(teamSide) || normalizeText(teamSide) || "unknown";
+  }
+
+  const statusText = normalizeText(firstString(market.status, outcome.status, event.status, game.status));
+  let status = normalizeStatus(statusText);
+  if (status === "unknown" && statusText.includes("open")) status = "open";
 
   return {
     source: "novig",
@@ -408,17 +470,17 @@ function buildEventRow(
     sourceOutcomeId: firstString(outcome.id),
     event_id: firstString(event.id) ?? "unknown",
     event_name: eventName,
-    sport: firstString(options?.sport, game.sport) ?? "unknown",
-    league: firstString(options?.league, game.league) ?? "unknown",
-    market_type: firstString(options?.marketType) ?? eventMarketType(market.type),
+    sport: firstString(options?.sport, game.sport, event.sport) ?? "unknown",
+    league: firstString(options?.league, game.league, event.league) ?? "unknown",
+    market_type: marketType,
     player: eventPlayerName(market),
-    side: eventSide(outcome),
+    side,
     line,
     odds_american: oddsAmerican,
     implied_probability: impliedProbability,
     liquidity: null,
     timestamp: firstString(options?.receivedAt) ?? new Date().toISOString(),
-    status: normalizeStatus(market.status ?? outcome.status),
+    status,
     live: typeof options?.live === "boolean" ? options.live : live,
     period: options?.period ? normalizePeriod(options.period, "full_game") : eventPeriodFromType(market.type),
     raw: {
@@ -434,7 +496,7 @@ export function normalizeNovigMarkets(
   options?: NovigNormalizeOptions,
 ): NormalizedMarket[] {
   // Captured GraphQL event-markets shape (price via outcome.available).
-  const eventPairs = extractEventMarketPairs(raw);
+  const eventPairs = extractEventMarketPairs(raw) ?? extractAvailabilityPairs(raw);
   if (eventPairs) {
     const rows: NormalizedMarket[] = [];
     for (const { event, market } of eventPairs) {

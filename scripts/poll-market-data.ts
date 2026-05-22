@@ -207,9 +207,33 @@ function writeCache(cachePath: string, cache: CacheState): void {
   writeJson(cachePath, cache);
 }
 
+/**
+ * The captured "filtered_lines_only" files map each scraped market URL to its
+ * JSON response: { "https://...": <response>, ... }. Detect that shape and
+ * return the per-URL response payloads so each is normalized independently.
+ * Anything else is returned as a single payload, unchanged.
+ */
+function splitUrlMap(raw: unknown): unknown[] {
+  if (
+    raw !== null &&
+    typeof raw === "object" &&
+    !Array.isArray(raw) &&
+    Object.keys(raw as Record<string, unknown>).length > 0 &&
+    Object.keys(raw as Record<string, unknown>).every((key) => /^https?:\/\//i.test(key))
+  ) {
+    return Object.values(raw as Record<string, unknown>);
+  }
+  return [raw];
+}
+
 function normalizeRows(source: ScannerBook, raw: unknown, request: MarketRequest, config: ScannerConfig, receivedAt: string): NormalizedMarket[] {
   if (request.normalize === false) return [];
+  return splitUrlMap(raw).flatMap((payload) =>
+    normalizeOnePayload(source, payload, request, config, receivedAt),
+  );
+}
 
+function normalizeOnePayload(source: ScannerBook, raw: unknown, request: MarketRequest, config: ScannerConfig, receivedAt: string): NormalizedMarket[] {
   switch (source) {
     case "bovada":
       return normalizeBovadaMarkets(raw, {

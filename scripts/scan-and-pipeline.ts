@@ -178,8 +178,10 @@ async function runScanCycle(configPath: string): Promise<boolean> {
     }
   }
 
+  // One quick scan: capture → compare → arbs → fair-value. The heavy
+  // detect:edges step (edge_signals.jsonl / review_candidates.jsonl, hundreds
+  // of MB) is intentionally omitted — nothing in the /scan flow reads it.
   const steps: Array<{ label: string; args: string[] }> = [
-    { label: "detect:edges", args: ["--import", "tsx", "scripts/detect-edges.ts"] },
     { label: "compare:books", args: ["--import", "tsx", "scripts/compare-books.ts"] },
     { label: "edges:arbs", args: ["--import", "tsx", "scripts/arbs-report.ts"] },
     { label: "edges:fairvalue", args: ["--import", "tsx", "scripts/fair-value-report.ts"] },

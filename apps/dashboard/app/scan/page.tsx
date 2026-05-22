@@ -106,7 +106,7 @@ export default function ScanPage() {
           sub={`${summary.middles} middle${summary.middles === 1 ? "" : "s"} also found`}
           up={summary.arbs > 0}
         />
-        <KPI label="+EV Edges" value={summary.value} sub="priced above fair value" />
+        <KPI label="+EV Edges" value={summary.value} sub="expected value vs no-vig fair price" />
         <KPI
           label="Best Edge"
           value={summary.topEdge > 0 ? `${(summary.topEdge * 100).toFixed(2)}%` : "—"}
@@ -212,7 +212,7 @@ export default function ScanPage() {
                     <th>Event</th>
                     <th>Market</th>
                     <th>Legs</th>
-                    <th className="num">Edge</th>
+                    <th className="num">Edge / EV</th>
                     <th className="num">Score</th>
                   </tr>
                 </thead>
@@ -222,6 +222,12 @@ export default function ScanPage() {
                   ))}
                 </tbody>
               </table>
+            </div>
+            <div className="card-pad hint" style={{ padding: "10px 16px", borderTop: "1px solid var(--line)" }}>
+              <b>+EV</b> = expected value per $1 staked, using the no-vig fair price:{" "}
+              <span className="num">EV = P(win) × profit − P(lose) × stake</span>. A{" "}
+              <b>+EV</b> edge is a long-run advantage on one side — not a guaranteed win like an{" "}
+              <b>Arb</b> (which locks both sides). Positive EV still has outcome risk; it needs volume and bankroll discipline.
             </div>
           </div>
         </>

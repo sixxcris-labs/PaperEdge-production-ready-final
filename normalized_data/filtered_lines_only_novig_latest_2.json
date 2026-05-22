@@ -1,0 +1,2480 @@
+
+{
+  "https://api.novig.us/nbx/v1/live-event-ticker?liveLeagues=NFL%2CNBA%2CMLB%2CNHL%2CNCAAF%2CNCAAB%2CWNBA": {
+    "liveEvents": [],
+    "upcomingEvents": [
+      {
+        "id": "3072c99a-09a5-4793-9436-3b79ac4a0291",
+        "status": "OPEN_PREGAME",
+        "league": "NBA",
+        "scheduledStart": "2026-05-23T00:35:00.000Z",
+        "game": {
+          "id": "4a7c1a74-da8a-440f-9e72-d0ddaf03446e",
+          "sport": "Basketball",
+          "period": null,
+          "timeRemaining": null,
+          "homeScore": null,
+          "awayScore": null,
+          "homeTeam": {
+            "id": "8e9cfeaf-188a-4c1c-9e0c-e3cf21f2d9ea",
+            "symbol": "SA",
+            "shortName": "SAS",
+            "primaryColor": "#BAC3C9",
+            "secondaryColor": "#061922",
+            "swishId": "24nba",
+            "opticOddsId": "E89F51275352",
+            "ranking": null,
+            "country": "USA"
+          },
+          "awayTeam": {
+            "id": "90741970-9213-4b12-955b-f70c134c4ab2",
+            "symbol": "OKC",
+            "shortName": "OKC",
+            "primaryColor": "#007DC3",
+            "secondaryColor": "#F05133",
+            "swishId": "25nba",
+            "opticOddsId": "D8EC6878976A",
+            "ranking": null,
+            "country": "USA"
+          }
+        },
+        "markets": [
+          {
+            "id": "8ec65dab-9a94-4df5-a5ec-6ddf4aa5b62a",
+            "outcomes": [
+              {
+                "id": "b27a5b61-9610-4248-9cb6-283c0ca51d2d",
+                "index": 0,
+                "available": 0.537
+              },
+              {
+                "id": "c9ae07c0-7946-475e-898e-7661d630ae24",
+                "index": 1,
+                "available": 0.466
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "9ddd77c9-b4b9-4143-a3d4-1d92f8114a5e",
+        "status": "OPEN_PREGAME",
+        "league": "MLB",
+        "scheduledStart": "2026-05-22T18:20:00.000Z",
+        "game": {
+          "id": "9f04868b-ad64-4ba7-b394-23a011aa3260",
+          "sport": "Baseball",
+          "period": null,
+          "timeRemaining": null,
+          "homeScore": null,
+          "awayScore": null,
+          "homeTeam": {
+            "id": "818d7c0d-bff7-4971-b4dd-b98d7a345616",
+            "symbol": "CHI",
+            "shortName": "CHC",
+            "primaryColor": "#0E3386",
+            "secondaryColor": "#0E3386",
+            "swishId": "112mlb",
+            "opticOddsId": "5045D954DFF8",
+            "ranking": null,
+            "country": "USA"
+          },
+          "awayTeam": {
+            "id": "a3865dd0-0b29-4196-b8b9-b076f4fee96e",
+            "symbol": "HOU",
+            "shortName": "HOU",
+            "primaryColor": "#002D62",
+            "secondaryColor": "#EB6E1F",
+            "swishId": "117mlb",
+            "opticOddsId": "4F11A5896C24",
+            "ranking": null,
+            "country": "USA"
+          }
+        },
+        "markets": [
+          {
+            "id": "5383749d-5b46-4066-af8f-4ae3eef8cb5e",
+            "outcomes": [
+              {
+                "id": "28c1711d-5281-49b8-bd97-4f54bd0147ca",
+                "index": 0,
+                "available": 0.573
+              },
+              {
+                "id": "fdadf963-1499-4e36-a516-d1dd923aca7c",
+                "index": 1,
+                "available": 0.431
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "eb424955-45b3-4410-be4c-c28a8b66bede",
+        "status": "OPEN_PREGAME",
+        "league": "MLB",
+        "scheduledStart": "2026-05-22T23:15:00.000Z",
+        "game": {
+          "id": "b5259970-79aa-49e6-b349-3d3b3ca8e4b3",
+          "sport": "Baseball",
+          "period": null,
+          "timeRemaining": null,
+          "homeScore": null,
+          "awayScore": null,
+          "homeTeam": {
+            "id": "bdad0d95-3eae-45a9-b6c3-8484253cb330",
+            "symbol": "ATL",
+            "shortName": "ATL",
+            "primaryColor": "#13274F",
+            "secondaryColor": "#CE1141",
+            "swishId": "144mlb",
+            "opticOddsId": "EDE73BDA9E4F",
+            "ranking": null,
+            "country": "USA"
+          },
+          "awayTeam": {
+            "id": "67a7b095-774f-412b-b619-abef68deff10",
+            "symbol": "WAS",
+            "shortName": "WAS",
+            "primaryColor": "#AB0003",
+            "secondaryColor": "#14225A",
+            "swishId": "120mlb",
+            "opticOddsId": "99DF68AB44BE",
+            "ranking": null,
+            "country": "USA"
+          }
+        },
+        "markets": [
+          {
+            "id": "b98a5efb-0ae3-41d8-897f-829fc59c90ce",
+            "outcomes": [
+              {
+                "id": "a9cd1a19-0d12-4a93-878d-aba8512bad4d",
+                "index": 0,
+                "available": 0.658
+              },
+              {
+                "id": "496bbad6-59c5-4469-b1d4-c8a3c8d32a1a",
+                "index": 1,
+                "available": 0.345
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "b947a178-05ba-4f20-95c8-ab204fb4489c",
+        "status": "OPEN_PREGAME",
+        "league": "MLB",
+        "scheduledStart": "2026-05-23T01:38:00.000Z",
+        "game": {
+          "id": "b21f03f3-892c-492f-82a0-be392ff7e591",
+          "sport": "Baseball",
+          "period": null,
+          "timeRemaining": null,
+          "homeScore": null,
+          "awayScore": null,
+          "homeTeam": {
+            "id": "d09c395d-4df0-4859-be9a-a11422d6367d",
+            "symbol": "LAA",
+            "shortName": "LAA",
+            "primaryColor": "#BA0021",
+            "secondaryColor": "#FFFFFF",
+            "swishId": "108mlb",
+            "opticOddsId": "7BB3C6DB321C",
+            "ranking": null,
+            "country": "USA"
+          },
+          "awayTeam": {
+            "id": "c700a31c-e05f-47ca-b05b-b8ce13c8db17",
+            "symbol": "TEX",
+            "shortName": "TEX",
+            "primaryColor": "#003278",
+            "secondaryColor": "#C0111F",
+            "swishId": "140mlb",
+            "opticOddsId": "B85216061897",
+            "ranking": null,
+            "country": "USA"
+          }
+        },
+        "markets": [
+          {
+            "id": "e9c736d5-5d6c-4e31-9b04-ba47e0d19bf3",
+            "outcomes": [
+              {
+                "id": "9edb2e7b-77d9-4b1a-ad6d-68cc3b65626b",
+                "index": 0,
+                "available": 0.405
+              },
+              {
+                "id": "e2e3be44-2b7b-4a19-8192-4566a4a7dd7f",
+                "index": 1,
+                "available": 0.597
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "0ea2e13d-3886-4e26-abb4-3542840a8785",
+        "status": "OPEN_PREGAME",
+        "league": "MLB",
+        "scheduledStart": "2026-05-22T23:05:00.000Z",
+        "game": {
+          "id": "819e9a64-7a6d-49ce-a39e-d07007ef290d",
+          "sport": "Baseball",
+          "period": null,
+          "timeRemaining": null,
+          "homeScore": null,
+          "awayScore": null,
+          "homeTeam": {
+            "id": "d13cdd0c-1306-4526-a0ba-91e3af6489f1",
+            "symbol": "NYY",
+            "shortName": "NYY",
+            "primaryColor": "#0C2340",
+            "secondaryColor": "#0C2340",
+            "swishId": "147mlb",
+            "opticOddsId": "121EBAED4535",
+            "ranking": null,
+            "country": "USA"
+          },
+          "awayTeam": {
+            "id": "ed06a009-1c69-427b-ab44-81ffb7f1f751",
+            "symbol": "TB",
+            "shortName": "TB",
+            "primaryColor": "#092C5C",
+            "secondaryColor": "#8FBCE6",
+            "swishId": "139mlb",
+            "opticOddsId": "FE07CF8C473A",
+            "ranking": null,
+            "country": "USA"
+          }
+        },
+        "markets": [
+          {
+            "id": "ede827a0-0349-48e1-a39e-6c8d13ee5469",
+            "outcomes": [
+              {
+                "id": "2a1f98b7-f4b5-46df-b6a5-fe6638ac0788",
+                "index": 0,
+                "available": 0.578
+              },
+              {
+                "id": "7cbd8032-8d45-42d4-8641-da549eabafdd",
+                "index": 1,
+                "available": 0.426
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "8f7592c3-59fc-46be-80b0-e24685a26f66",
+        "status": "OPEN_PREGAME",
+        "league": "MLB",
+        "scheduledStart": "2026-05-22T23:07:00.000Z",
+        "game": {
+          "id": "a1e59af6-1ef4-4b96-9a69-9aeb82ce3c56",
+          "sport": "Baseball",
+          "period": null,
+          "timeRemaining": null,
+          "homeScore": null,
+          "awayScore": null,
+          "homeTeam": {
+            "id": "1ffe4749-9868-4bdd-b460-1c8b378affc7",
+            "symbol": "TOR",
+            "shortName": "TOR",
+            "primaryColor": "#134A8E",
+            "secondaryColor": "#FFFFFF",
+            "swishId": "141mlb",
+            "opticOddsId": "118E9A57A501",
+            "ranking": null,
+            "country": "Canada"
+          },
+          "awayTeam": {
+            "id": "b1be9c37-2732-4a7c-a465-61cc33bbeb53",
+            "symbol": "PIT",
+            "shortName": "PIT",
+            "primaryColor": "#27251F",
+            "secondaryColor": "#FDB827",
+            "swishId": "134mlb",
+            "opticOddsId": "98CE61698342",
+            "ranking": null,
+            "country": "USA"
+          }
+        },
+        "markets": [
+          {
+            "id": "b71b6e16-e9df-449c-83e5-1c51d560b221",
+            "outcomes": [
+              {
+                "id": "390654da-6947-4963-a825-53f58c450478",
+                "index": 0,
+                "available": 0.592
+              },
+              {
+                "id": "4935afdf-0387-4f94-9d13-ca1812c372ef",
+                "index": 1,
+                "available": 0.41
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "24aab7b8-3b47-45b7-a3b6-6f99544af9bb",
+        "status": "OPEN_PREGAME",
+        "league": "MLB",
+        "scheduledStart": "2026-05-22T22:40:00.000Z",
+        "game": {
+          "id": "90c23593-cbbe-4578-a199-93d335300cc2",
+          "sport": "Baseball",
+          "period": null,
+          "timeRemaining": null,
+          "homeScore": null,
+          "awayScore": null,
+          "homeTeam": {
+            "id": "fadcf8c8-f612-459c-a291-b2774aadcb48",
+            "symbol": "PHI",
+            "shortName": "PHI",
+            "primaryColor": "#E81828",
+            "secondaryColor": "#E81828",
+            "swishId": "143mlb",
+            "opticOddsId": "AFBFE3E36032",
+            "ranking": null,
+            "country": "USA"
+          },
+          "awayTeam": {
+            "id": "36ad1bcc-d30f-40e5-8c8b-35aa977095ae",
+            "symbol": "CLE",
+            "shortName": "CLE",
+            "primaryColor": "#E31937",
+            "secondaryColor": "#012B48",
+            "swishId": "114mlb",
+            "opticOddsId": "D4F7181B2181",
+            "ranking": null,
+            "country": "USA"
+          }
+        },
+        "markets": [
+          {
+            "id": "318886a4-e4a1-4536-aa06-698d8b3db370",
+            "outcomes": [
+              {
+                "id": "685612f3-bb9d-4c3d-9bea-28c04440cf13",
+                "index": 0,
+                "available": 0.618
+              },
+              {
+                "id": "c69ec350-b858-4c17-9a93-5510156a1c42",
+                "index": 1,
+                "available": 0.383
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "6fd71f2c-f525-489a-8ac9-79e3af288d81",
+        "status": "OPEN_PREGAME",
+        "league": "MLB",
+        "scheduledStart": "2026-05-23T02:15:00.000Z",
+        "game": {
+          "id": "35c30733-5580-4b3a-94f4-4fdfc242e623",
+          "sport": "Baseball",
+          "period": null,
+          "timeRemaining": null,
+          "homeScore": null,
+          "awayScore": null,
+          "homeTeam": {
+            "id": "4e99ae20-f3b7-4316-bc87-09b06c99f6f4",
+            "symbol": "SF",
+            "shortName": "SF",
+            "primaryColor": "#27251F",
+            "secondaryColor": "#FD5A1E",
+            "swishId": "137mlb",
+            "opticOddsId": "806CF8213D38",
+            "ranking": null,
+            "country": "USA"
+          },
+          "awayTeam": {
+            "id": "8066c07c-5eea-437d-aa05-62022d079484",
+            "symbol": "CHI",
+            "shortName": "CWS",
+            "primaryColor": "#27251F",
+            "secondaryColor": "#27251F",
+            "swishId": "145mlb",
+            "opticOddsId": "97700EF0AC9B",
+            "ranking": null,
+            "country": "USA"
+          }
+        },
+        "markets": [
+          {
+            "id": "79131718-6105-477d-bb09-574072755266",
+            "outcomes": [
+              {
+                "id": "00f8db65-8ebe-4df2-8e81-9d8feca57f1f",
+                "index": 0,
+                "available": 0.498
+              },
+              {
+                "id": "313e62d6-7551-4e33-984c-46da11701e62",
+                "index": 1,
+                "available": 0.507
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "de8547fa-6512-4c19-9e37-09219cd41960",
+        "status": "OPEN_PREGAME",
+        "league": "MLB",
+        "scheduledStart": "2026-05-22T23:10:00.000Z",
+        "game": {
+          "id": "7890a3e4-c520-4a3b-b68f-6cf2009e6bb0",
+          "sport": "Baseball",
+          "period": null,
+          "timeRemaining": null,
+          "homeScore": null,
+          "awayScore": null,
+          "homeTeam": {
+            "id": "9b28411a-0dab-40a3-86ed-860e03fef019",
+            "symbol": "BOS",
+            "shortName": "BOS",
+            "primaryColor": "#BD3039",
+            "secondaryColor": "#0C2340",
+            "swishId": "111mlb",
+            "opticOddsId": "1232720C5D66",
+            "ranking": null,
+            "country": "USA"
+          },
+          "awayTeam": {
+            "id": "afd88f63-fb49-455b-9671-fbd3b6ae98b8",
+            "symbol": "MIN",
+            "shortName": "MIN",
+            "primaryColor": "#002B5C",
+            "secondaryColor": "#D31145",
+            "swishId": "142mlb",
+            "opticOddsId": "E8C4E6927B2D",
+            "ranking": null,
+            "country": "USA"
+          }
+        },
+        "markets": [
+          {
+            "id": "2afedb4a-7243-47a1-85a0-67b8ad9e1051",
+            "outcomes": [
+              {
+                "id": "7e888b3b-fd18-41f8-a971-340eff4506ea",
+                "index": 0,
+                "available": 0.574
+              },
+              {
+                "id": "f5b7180b-31b5-441f-8caa-d39e7efc0bc6",
+                "index": 1,
+                "available": 0.428
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "c50eb929-b367-4a1b-8c25-fc81670d202b",
+        "status": "OPEN_PREGAME",
+        "league": "WNBA",
+        "scheduledStart": "2026-05-22T23:30:00.000Z",
+        "game": {
+          "id": "3cf2bf9b-4515-4281-91f9-981502565fac",
+          "sport": "Basketball",
+          "period": null,
+          "timeRemaining": null,
+          "homeScore": null,
+          "awayScore": null,
+          "homeTeam": {
+            "id": "893a624e-4797-4980-8ebc-5d02f31d1730",
+            "symbol": "IND",
+            "shortName": "IND",
+            "primaryColor": "#E03A3E",
+            "secondaryColor": "#041E42",
+            "swishId": null,
+            "opticOddsId": "B07BB1FC875C",
+            "ranking": null,
+            "country": "USA"
+          },
+          "awayTeam": {
+            "id": "66c8262d-7593-486d-a3ec-eb152fb4303f",
+            "symbol": "GSV",
+            "shortName": "GSV",
+            "primaryColor": "#4F2D7F",
+            "secondaryColor": "#000000",
+            "swishId": null,
+            "opticOddsId": "1073022322B366B3",
+            "ranking": null,
+            "country": null
+          }
+        },
+        "markets": [
+          {
+            "id": "3bd21a61-78d5-4d90-980a-f7b83842e533",
+            "outcomes": [
+              {
+                "id": "6c646e8c-9102-4cdd-a13a-50045c17a52e",
+                "index": 0,
+                "available": 0.676
+              },
+              {
+                "id": "0c422b1c-7d54-4c33-862d-27eb49a03079",
+                "index": 1,
+                "available": 0.329
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "9b08f76d-49ce-41ad-a348-9a99c3a9e70a",
+        "status": "OPEN_PREGAME",
+        "league": "MLB",
+        "scheduledStart": "2026-05-22T23:40:00.000Z",
+        "game": {
+          "id": "392108c6-1810-4d89-95e1-eed284173025",
+          "sport": "Baseball",
+          "period": null,
+          "timeRemaining": null,
+          "homeScore": null,
+          "awayScore": null,
+          "homeTeam": {
+            "id": "1dc0a479-72c7-478a-a41e-f8e0bedb1fca",
+            "symbol": "KC",
+            "shortName": "KAN",
+            "primaryColor": "#004687",
+            "secondaryColor": "#FFFFFF",
+            "swishId": "118mlb",
+            "opticOddsId": "E970E2EDDCAE",
+            "ranking": null,
+            "country": "USA"
+          },
+          "awayTeam": {
+            "id": "e189f0cd-a983-4455-bcad-4769daea281a",
+            "symbol": "SEA",
+            "shortName": "SEA",
+            "primaryColor": "#0C2C56",
+            "secondaryColor": "#005C5C",
+            "swishId": "136mlb",
+            "opticOddsId": "F0FA2004385D",
+            "ranking": null,
+            "country": "USA"
+          }
+        },
+        "markets": [
+          {
+            "id": "e57fdd04-0090-4b68-abd4-83f13ba7a832",
+            "outcomes": [
+              {
+                "id": "99f75ba1-d0b1-4ad8-b313-a1a37b2f38cf",
+                "index": 0,
+                "available": 0.485
+              },
+              {
+                "id": "28f5fdf4-a8d8-4a95-9f95-76eadfd766ba",
+                "index": 1,
+                "available": 0.524
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "6cc68002-d527-42cf-b3e9-47219df0bb8a",
+        "status": "OPEN_PREGAME",
+        "league": "MLB",
+        "scheduledStart": "2026-05-22T23:10:00.000Z",
+        "game": {
+          "id": "a947bde2-97e0-4851-ad7f-b9535c3c86b8",
+          "sport": "Baseball",
+          "period": null,
+          "timeRemaining": null,
+          "homeScore": null,
+          "awayScore": null,
+          "homeTeam": {
+            "id": "7da7945a-89c6-4290-93ca-35784e41e9ce",
+            "symbol": "MIA",
+            "shortName": "MIA",
+            "primaryColor": "#1B1B1B",
+            "secondaryColor": "#00A3E0",
+            "swishId": "146mlb",
+            "opticOddsId": "DDBDBB162990",
+            "ranking": null,
+            "country": "USA"
+          },
+          "awayTeam": {
+            "id": "cd349610-9846-4b61-8f11-8792eaa18759",
+            "symbol": "NYM",
+            "shortName": "NYM",
+            "primaryColor": "#002D72",
+            "secondaryColor": "#002D72",
+            "swishId": "121mlb",
+            "opticOddsId": "925A76350359",
+            "ranking": null,
+            "country": "USA"
+          }
+        },
+        "markets": [
+          {
+            "id": "1ac5ae50-bd4b-4a8e-8d04-b24e723f109c",
+            "outcomes": [
+              {
+                "id": "2d2ba077-f14c-4a40-af16-3d83f0089073",
+                "index": 0,
+                "available": 0.517
+              },
+              {
+                "id": "6bf98711-55a9-49e8-a8de-fad4f54aa185",
+                "index": 1,
+                "available": 0.491
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "ee3566f3-c5ed-40e7-9374-20ba90181911",
+        "status": "OPEN_PREGAME",
+        "league": "MLB",
+        "scheduledStart": "2026-05-23T01:40:00.000Z",
+        "game": {
+          "id": "bf1971b2-f6e7-4a6d-b12c-4c8664e35827",
+          "sport": "Baseball",
+          "period": null,
+          "timeRemaining": null,
+          "homeScore": null,
+          "awayScore": null,
+          "homeTeam": {
+            "id": "136294b5-d1cd-4fc0-964c-87ade0368132",
+            "symbol": "ARI",
+            "shortName": "ARI",
+            "primaryColor": "#A71930",
+            "secondaryColor": "#000000",
+            "swishId": "109mlb",
+            "opticOddsId": "9CAFB55230E8",
+            "ranking": null,
+            "country": "USA"
+          },
+          "awayTeam": {
+            "id": "63d07ea8-8cab-4d81-9616-a35d586f0b63",
+            "symbol": "COL",
+            "shortName": "COL",
+            "primaryColor": "#33006F",
+            "secondaryColor": "#000000",
+            "swishId": "115mlb",
+            "opticOddsId": "E89B6AABD4C6",
+            "ranking": null,
+            "country": "USA"
+          }
+        },
+        "markets": [
+          {
+            "id": "cca62e38-6614-422f-9ece-682f5497187c",
+            "outcomes": [
+              {
+                "id": "bc86d99c-2b48-4231-8987-c8be2437bbac",
+                "index": 0,
+                "available": 0.669
+              },
+              {
+                "id": "2d498b37-d9bf-4e03-8f81-28cd5ae22d8e",
+                "index": 1,
+                "available": 0.342
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "85978276-4027-456f-9c58-641e073d988d",
+        "status": "OPEN_PREGAME",
+        "league": "MLB",
+        "scheduledStart": "2026-05-22T23:40:00.000Z",
+        "game": {
+          "id": "b885a860-d825-4e9a-83e0-e13de5dcbedf",
+          "sport": "Baseball",
+          "period": null,
+          "timeRemaining": null,
+          "homeScore": null,
+          "awayScore": null,
+          "homeTeam": {
+            "id": "eb0c9d78-6082-4527-9b70-44f68de884a1",
+            "symbol": "MIL",
+            "shortName": "MIL",
+            "primaryColor": "#12284B",
+            "secondaryColor": "#FFC52F",
+            "swishId": "158mlb",
+            "opticOddsId": "2B194AFDDF3B",
+            "ranking": null,
+            "country": "USA"
+          },
+          "awayTeam": {
+            "id": "27c001ab-1b6e-4a67-9b10-db41a0770f24",
+            "symbol": "LAD",
+            "shortName": "LAD",
+            "primaryColor": "#005A9C",
+            "secondaryColor": "#FFFFFF",
+            "swishId": "119mlb",
+            "opticOddsId": "8E80F9DD4C5E",
+            "ranking": null,
+            "country": "USA"
+          }
+        },
+        "markets": [
+          {
+            "id": "0d3558d3-8b02-4bca-ac01-f3ad0f03f03f",
+            "outcomes": [
+              {
+                "id": "a0fb9134-f90f-4d46-95ca-08188f3a6c26",
+                "index": 0,
+                "available": 0.507
+              },
+              {
+                "id": "7aad02ad-474e-4fe3-ae87-8d5e9793abbe",
+                "index": 1,
+                "available": 0.498
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "35023a42-e478-4558-ad2b-bf9236999b92",
+        "status": "OPEN_PREGAME",
+        "league": "NHL",
+        "scheduledStart": "2026-05-23T00:00:00.000Z",
+        "game": {
+          "id": "46e5f48c-d49d-494a-9b77-6ba8ef6a07d0",
+          "sport": "Ice Hockey",
+          "period": null,
+          "timeRemaining": null,
+          "homeScore": null,
+          "awayScore": null,
+          "homeTeam": {
+            "id": "b7f9148d-2f9d-4850-a58e-fa7cfdde2ecb",
+            "symbol": "COL",
+            "shortName": "COL",
+            "primaryColor": "#6F263D",
+            "secondaryColor": "#236192",
+            "swishId": "21nhl",
+            "opticOddsId": "7C307B636971",
+            "ranking": null,
+            "country": "USA"
+          },
+          "awayTeam": {
+            "id": "13098a33-8a8e-485f-815e-47a5e274399e",
+            "symbol": "VGK",
+            "shortName": "VGK",
+            "primaryColor": "#010101",
+            "secondaryColor": "#B4975A",
+            "swishId": "54nhl",
+            "opticOddsId": "11E615E70523",
+            "ranking": null,
+            "country": "USA"
+          }
+        },
+        "markets": [
+          {
+            "id": "c4fbec1c-f2bb-4c57-854a-2c10d86eaf38",
+            "outcomes": [
+              {
+                "id": "dd18cc14-b542-40c3-90e9-34013561cf85",
+                "index": 0,
+                "available": 0.619
+              },
+              {
+                "id": "33f962dd-9a93-4c5d-96aa-16a839148851",
+                "index": 1,
+                "available": 0.383
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "4aa5e954-bc5b-4324-92ac-c62ee97e2bb0",
+        "status": "OPEN_PREGAME",
+        "league": "MLB",
+        "scheduledStart": "2026-05-22T22:40:00.000Z",
+        "game": {
+          "id": "3e7b443c-3573-4320-b014-6781511c482a",
+          "sport": "Baseball",
+          "period": null,
+          "timeRemaining": null,
+          "homeScore": null,
+          "awayScore": null,
+          "homeTeam": {
+            "id": "686bf033-ca28-4581-af2e-2f63eab6c40e",
+            "symbol": "CIN",
+            "shortName": "CIN",
+            "primaryColor": "#C6011F",
+            "secondaryColor": "#FFFFFF",
+            "swishId": "113mlb",
+            "opticOddsId": "F30D0B9894E1",
+            "ranking": null,
+            "country": "USA"
+          },
+          "awayTeam": {
+            "id": "56efe53d-3dfc-4892-8f46-98441fd95427",
+            "symbol": "STL",
+            "shortName": "STL",
+            "primaryColor": "#C41E3A",
+            "secondaryColor": "#FEDB00",
+            "swishId": "138mlb",
+            "opticOddsId": "90D0F7C9AEC1",
+            "ranking": null,
+            "country": "USA"
+          }
+        },
+        "markets": [
+          {
+            "id": "eab75cad-cb1e-49d2-b181-997c1dfec84b",
+            "outcomes": [
+              {
+                "id": "be693253-0855-4623-929a-2c1ba631aab6",
+                "index": 0,
+                "available": 0.533
+              },
+              {
+                "id": "f1e0cae6-ece4-446e-9205-1084a787d552",
+                "index": 1,
+                "available": 0.475
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "6550efde-024c-4afa-b47d-aa99c64db426",
+        "status": "OPEN_PREGAME",
+        "league": "MLB",
+        "scheduledStart": "2026-05-22T23:15:00.000Z",
+        "game": {
+          "id": "a3475ef9-b7f1-40ec-96b0-af8c497ea653",
+          "sport": "Baseball",
+          "period": null,
+          "timeRemaining": null,
+          "homeScore": null,
+          "awayScore": null,
+          "homeTeam": {
+            "id": "82c244e9-9a6f-4a0b-9b0d-9bb2f714aa8a",
+            "symbol": "BAL",
+            "shortName": "BAL",
+            "primaryColor": "#DF4601",
+            "secondaryColor": "#000000",
+            "swishId": "110mlb",
+            "opticOddsId": "F146F7B07E72",
+            "ranking": null,
+            "country": "USA"
+          },
+          "awayTeam": {
+            "id": "356f2acb-3005-4dca-b48e-2646e76b8eeb",
+            "symbol": "DET",
+            "shortName": "DET",
+            "primaryColor": "#0C2340",
+            "secondaryColor": "#F05A28",
+            "swishId": "116mlb",
+            "opticOddsId": "BF57CF7C7E07",
+            "ranking": null,
+            "country": "USA"
+          }
+        },
+        "markets": [
+          {
+            "id": "62e3e5ec-1639-4d5a-a901-327600605078",
+            "outcomes": [
+              {
+                "id": "3f4321ee-13b3-447c-badc-63a949d23ea8",
+                "index": 0,
+                "available": 0.558
+              },
+              {
+                "id": "c9110935-0f3f-4f45-9e71-45a07cf83e9e",
+                "index": 1,
+                "available": 0.449
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "014c2bac-3ea2-46f7-8435-a7b34090c8f1",
+        "status": "OPEN_PREGAME",
+        "league": "WNBA",
+        "scheduledStart": "2026-05-22T23:30:00.000Z",
+        "game": {
+          "id": "6e42364e-cc9c-4302-acde-aecfdba492df",
+          "sport": "Basketball",
+          "period": null,
+          "timeRemaining": null,
+          "homeScore": null,
+          "awayScore": null,
+          "homeTeam": {
+            "id": "c0d35807-1cb1-4f33-8a85-9cc14596945c",
+            "symbol": "ATL",
+            "shortName": "ATL",
+            "primaryColor": "#E31837",
+            "secondaryColor": "#5091CD",
+            "swishId": null,
+            "opticOddsId": "3F1AB517B9B9",
+            "ranking": null,
+            "country": "USA"
+          },
+          "awayTeam": {
+            "id": "292f0b3e-7328-4d65-a4a3-b196e49f51f7",
+            "symbol": "DAL",
+            "shortName": "DAL",
+            "primaryColor": "#C4D600",
+            "secondaryColor": "#1F2D5C",
+            "swishId": null,
+            "opticOddsId": "064752C74AE1",
+            "ranking": null,
+            "country": "USA"
+          }
+        },
+        "markets": [
+          {
+            "id": "1bea9262-ffd1-445e-9bce-710042ff7fbc",
+            "outcomes": [
+              {
+                "id": "95e1d86a-ebc9-4e4c-a0ac-2a0498826706",
+                "index": 0,
+                "available": 0.669
+              },
+              {
+                "id": "bfe856ed-ff04-4fc8-9396-6e0299e72f3a",
+                "index": 1,
+                "available": 0.339
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "5557c2b9-f345-4a1b-9943-51ce9b255a0c",
+        "status": "OPEN_PREGAME",
+        "league": "MLB",
+        "scheduledStart": "2026-05-23T01:40:00.000Z",
+        "game": {
+          "id": "5d10eee5-901b-45a6-a665-d5bc0adf7106",
+          "sport": "Baseball",
+          "period": null,
+          "timeRemaining": null,
+          "homeScore": null,
+          "awayScore": null,
+          "homeTeam": {
+            "id": "9c8758e5-b5d9-41e5-8852-dc0bd3c49fc0",
+            "symbol": "SD",
+            "shortName": "SD",
+            "primaryColor": "#FFC425",
+            "secondaryColor": "#2F241D",
+            "swishId": "135mlb",
+            "opticOddsId": "51EF9899A7F5",
+            "ranking": null,
+            "country": "USA"
+          },
+          "awayTeam": {
+            "id": "5dc6e5ff-6823-4669-9e5a-93cf78b4004d",
+            "symbol": "OAK",
+            "shortName": "OAK",
+            "primaryColor": "#003831",
+            "secondaryColor": "#EFB21E",
+            "swishId": "133mlb",
+            "opticOddsId": "C4B26B4FAD20",
+            "ranking": null,
+            "country": "USA"
+          }
+        },
+        "markets": [
+          {
+            "id": "7b0d43c6-c2b6-46c7-a29d-c3bfcb8dc884",
+            "outcomes": [
+              {
+                "id": "33006a15-3313-4e23-b95f-061b8fa33af5",
+                "index": 0,
+                "available": 0.55
+              },
+              {
+                "id": "b2475881-c698-4935-afc0-08044396069b",
+                "index": 1,
+                "available": 0.459
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "908f406c-6a85-42a6-bc4b-bbb0c470e1e5",
+        "status": "OPEN_PREGAME",
+        "league": "WNBA",
+        "scheduledStart": "2026-05-23T02:00:00.000Z",
+        "game": {
+          "id": "34ef0dee-f1ba-431d-99de-4d56a152f197",
+          "sport": "Basketball",
+          "period": null,
+          "timeRemaining": null,
+          "homeScore": null,
+          "awayScore": null,
+          "homeTeam": {
+            "id": "e0afa035-12f0-41c8-820e-cda3e167fc36",
+            "symbol": "SEA",
+            "shortName": "SEA",
+            "primaryColor": "#2C5234",
+            "secondaryColor": "#FBE122",
+            "swishId": null,
+            "opticOddsId": "B0C939C8EC9A",
+            "ranking": null,
+            "country": "USA"
+          },
+          "awayTeam": {
+            "id": "ce1c8908-c426-4600-9260-60c29760652c",
+            "symbol": "CONN",
+            "shortName": "CONN",
+            "primaryColor": "#E03A3E",
+            "secondaryColor": "#0A2240",
+            "swishId": null,
+            "opticOddsId": "A73F9F4C590A",
+            "ranking": null,
+            "country": "USA"
+          }
+        },
+        "markets": [
+          {
+            "id": "1ad0c4f3-7aa5-4f4d-9f88-dbfe0c0c6277",
+            "outcomes": [
+              {
+                "id": "d81dc84e-3741-46cf-a3af-2eba4b461fbb",
+                "index": 0,
+                "available": 0.541
+              },
+              {
+                "id": "99776148-edb7-4d84-a147-dca1154f2e4e",
+                "index": 1,
+                "available": 0.469
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  "https://api.novig.us/nbx/v1/markets/trending-subcategories?limit=3&currency=CASH": {
+    "data": [
+      {
+        "league": "NBA",
+        "macrotype": "CHAMPIONSHIP_WINNER",
+        "volume": 865417.35,
+        "topMarkets": [
+          {
+            "createdAt": "2025-10-08T20:23:58.063Z",
+            "updatedAt": "2026-05-22T12:15:40.473Z",
+            "deletedAt": null,
+            "version": 484,
+            "id": "5fc6c687-5e00-4e33-81ac-3adfe116a31f",
+            "strike": 0,
+            "description": "Oklahoma City Thunder CHAMPIONSHIP_WINNER",
+            "isConsensus": true,
+            "status": "OPEN",
+            "type": "CHAMPIONSHIP_WINNER",
+            "volume": "352261.80000",
+            "settledAt": null,
+            "reSettledAt": null,
+            "event": {
+              "createdAt": "2025-10-08T19:42:10.076Z",
+              "updatedAt": "2026-05-22T17:01:51.321Z",
+              "deletedAt": null,
+              "version": 71415,
+              "id": "25a0d0c7-0603-4d17-bd83-1bfebfe1eaf6",
+              "type": "Future",
+              "status": "OPEN_PREGAME",
+              "league": "NBA",
+              "scheduledStart": "2026-06-05T23:05:00.000Z",
+              "description": "Championship Winner",
+              "game": null,
+              "gameId": null,
+              "parentEventId": null,
+              "lastRadarMessage": null,
+              "lastRadarProducer": null,
+              "isVisiblePregame": true,
+              "isVisibleLive": true,
+              "isStatusLocked": false,
+              "metabetId": null,
+              "unabatedId": null,
+              "jindoId": null,
+              "swishId": null,
+              "metabetPoints": null,
+              "betsApiId": null,
+              "opticOddsId": "type_championship_winner-sport_basketball-league_nba"
+            },
+            "eventId": "25a0d0c7-0603-4d17-bd83-1bfebfe1eaf6",
+            "outcomes": [
+              {
+                "createdAt": "2025-10-08T20:23:58.063Z",
+                "updatedAt": "2026-05-22T17:02:12.485Z",
+                "deletedAt": null,
+                "version": 7577,
+                "id": "05271c7e-b2c8-44e7-a9eb-90304bc36912",
+                "index": 0,
+                "status": "TBD",
+                "description": "Yes",
+                "type": "Over",
+                "last": "0.51500",
+                "available": "0.51500",
+                "altLast": "0.61700",
+                "altAvailable": "0.00000",
+                "marketId": "5fc6c687-5e00-4e33-81ac-3adfe116a31f",
+                "competitorId": null
+              },
+              {
+                "createdAt": "2025-10-08T20:23:58.063Z",
+                "updatedAt": "2026-05-22T17:02:12.485Z",
+                "deletedAt": null,
+                "version": 7577,
+                "id": "627a34d7-7acf-4db3-a93a-084f2e26d533",
+                "index": 1,
+                "status": "TBD",
+                "description": "No",
+                "type": "Under",
+                "last": "0.48500",
+                "available": "0.49800",
+                "altLast": "0.38300",
+                "altAvailable": "0.00000",
+                "marketId": "5fc6c687-5e00-4e33-81ac-3adfe116a31f",
+                "competitorId": null
+              }
+            ],
+            "playerId": null,
+            "competitor": {
+              "createdAt": "2023-12-29T23:42:35.805Z",
+              "updatedAt": "2026-05-21T04:39:55.071Z",
+              "deletedAt": null,
+              "version": 727,
+              "id": "90741970-9213-4b12-955b-f70c134c4ab2",
+              "name": "Oklahoma City Thunder",
+              "shortName": "OKC",
+              "symbol": "OKC",
+              "country": "USA",
+              "countryCode": "USA",
+              "league": "NBA",
+              "division": null,
+              "divisionName": "Northwest Division",
+              "conferenceName": "Western",
+              "state": "OK",
+              "gender": "male",
+              "metabetId": 15673,
+              "unabatedId": 83,
+              "jindoId": 550,
+              "swishId": "25nba",
+              "betsApiId": null,
+              "opticOddsId": "D8EC6878976A",
+              "mascot": "Thunder",
+              "ranking": null,
+              "wins": "1",
+              "draws": null,
+              "losses": "1",
+              "recent_form": null,
+              "points": null,
+              "primaryColor": "#007DC3",
+              "secondaryColor": "#F05133"
+            },
+            "competitorId": "90741970-9213-4b12-955b-f70c134c4ab2",
+            "league": "NBA"
+          },
+          {
+            "createdAt": "2025-10-08T20:23:58.943Z",
+            "updatedAt": "2026-05-22T02:43:47.905Z",
+            "deletedAt": null,
+            "version": 380,
+            "id": "8b664c9a-6123-48c5-8985-ee0577f09526",
+            "strike": 0,
+            "description": "San Antonio Spurs CHAMPIONSHIP_WINNER",
+            "isConsensus": true,
+            "status": "OPEN",
+            "type": "CHAMPIONSHIP_WINNER",
+            "volume": "156197.96000",
+            "settledAt": null,
+            "reSettledAt": null,
+            "event": {
+              "createdAt": "2025-10-08T19:42:10.076Z",
+              "updatedAt": "2026-05-22T17:01:51.321Z",
+              "deletedAt": null,
+              "version": 71415,
+              "id": "25a0d0c7-0603-4d17-bd83-1bfebfe1eaf6",
+              "type": "Future",
+              "status": "OPEN_PREGAME",
+              "league": "NBA",
+              "scheduledStart": "2026-06-05T23:05:00.000Z",
+              "description": "Championship Winner",
+              "game": null,
+              "gameId": null,
+              "parentEventId": null,
+              "lastRadarMessage": null,
+              "lastRadarProducer": null,
+              "isVisiblePregame": true,
+              "isVisibleLive": true,
+              "isStatusLocked": false,
+              "metabetId": null,
+              "unabatedId": null,
+              "jindoId": null,
+              "swishId": null,
+              "metabetPoints": null,
+              "betsApiId": null,
+              "opticOddsId": "type_championship_winner-sport_basketball-league_nba"
+            },
+            "eventId": "25a0d0c7-0603-4d17-bd83-1bfebfe1eaf6",
+            "outcomes": [
+              {
+                "createdAt": "2025-10-08T20:23:58.943Z",
+                "updatedAt": "2026-05-22T10:40:42.694Z",
+                "deletedAt": null,
+                "version": 9781,
+                "id": "3adeeea2-6660-4add-b683-b428a95efcdc",
+                "index": 0,
+                "status": "TBD",
+                "description": "Yes",
+                "type": "Over",
+                "last": "0.32800",
+                "available": "0.32400",
+                "altLast": "0.22500",
+                "altAvailable": "0.00000",
+                "marketId": "8b664c9a-6123-48c5-8985-ee0577f09526",
+                "competitorId": null
+              },
+              {
+                "createdAt": "2025-10-08T20:23:58.943Z",
+                "updatedAt": "2026-05-22T10:40:42.694Z",
+                "deletedAt": null,
+                "version": 9781,
+                "id": "580001ac-9c8f-4fbe-bd73-8270631ecc38",
+                "index": 1,
+                "status": "TBD",
+                "description": "No",
+                "type": "Under",
+                "last": "0.67200",
+                "available": "0.74900",
+                "altLast": "0.77500",
+                "altAvailable": "0.00000",
+                "marketId": "8b664c9a-6123-48c5-8985-ee0577f09526",
+                "competitorId": null
+              }
+            ],
+            "playerId": null,
+            "competitor": {
+              "createdAt": "2023-12-29T23:42:35.805Z",
+              "updatedAt": "2026-05-21T04:39:55.071Z",
+              "deletedAt": null,
+              "version": 300,
+              "id": "8e9cfeaf-188a-4c1c-9e0c-e3cf21f2d9ea",
+              "name": "San Antonio Spurs",
+              "shortName": "SAS",
+              "symbol": "SA",
+              "country": "USA",
+              "countryCode": "USA",
+              "league": "NBA",
+              "division": null,
+              "divisionName": "Southwest Division",
+              "conferenceName": "Western",
+              "state": "TX",
+              "gender": "male",
+              "metabetId": 10218,
+              "unabatedId": 89,
+              "jindoId": 538,
+              "swishId": "24nba",
+              "betsApiId": null,
+              "opticOddsId": "E89F51275352",
+              "mascot": "Spurs",
+              "ranking": null,
+              "wins": "1",
+              "draws": null,
+              "losses": "1",
+              "recent_form": null,
+              "points": null,
+              "primaryColor": "#BAC3C9",
+              "secondaryColor": "#061922"
+            },
+            "competitorId": "8e9cfeaf-188a-4c1c-9e0c-e3cf21f2d9ea",
+            "league": "NBA"
+          },
+          {
+            "createdAt": "2025-10-08T20:23:58.034Z",
+            "updatedAt": "2026-05-22T12:24:41.765Z",
+            "deletedAt": null,
+            "version": 170,
+            "id": "98734d09-eb4e-453b-a917-e3e04111c92d",
+            "strike": 0,
+            "description": "New York Knicks CHAMPIONSHIP_WINNER",
+            "isConsensus": true,
+            "status": "OPEN",
+            "type": "CHAMPIONSHIP_WINNER",
+            "volume": "326133.74000",
+            "settledAt": null,
+            "reSettledAt": null,
+            "event": {
+              "createdAt": "2025-10-08T19:42:10.076Z",
+              "updatedAt": "2026-05-22T17:01:51.321Z",
+              "deletedAt": null,
+              "version": 71415,
+              "id": "25a0d0c7-0603-4d17-bd83-1bfebfe1eaf6",
+              "type": "Future",
+              "status": "OPEN_PREGAME",
+              "league": "NBA",
+              "scheduledStart": "2026-06-05T23:05:00.000Z",
+              "description": "Championship Winner",
+              "game": null,
+              "gameId": null,
+              "parentEventId": null,
+              "lastRadarMessage": null,
+              "lastRadarProducer": null,
+              "isVisiblePregame": true,
+              "isVisibleLive": true,
+              "isStatusLocked": false,
+              "metabetId": null,
+              "unabatedId": null,
+              "jindoId": null,
+              "swishId": null,
+              "metabetPoints": null,
+              "betsApiId": null,
+              "opticOddsId": "type_championship_winner-sport_basketball-league_nba"
+            },
+            "eventId": "25a0d0c7-0603-4d17-bd83-1bfebfe1eaf6",
+            "outcomes": [
+              {
+                "createdAt": "2025-10-08T20:23:58.034Z",
+                "updatedAt": "2026-05-22T15:46:09.622Z",
+                "deletedAt": null,
+                "version": 4840,
+                "id": "02903c3d-0003-401a-abc4-6e13d2d34250",
+                "index": 0,
+                "status": "TBD",
+                "description": "Yes",
+                "type": "Over",
+                "last": "0.22500",
+                "available": "0.22200",
+                "altLast": "0.14800",
+                "altAvailable": "0.00000",
+                "marketId": "98734d09-eb4e-453b-a917-e3e04111c92d",
+                "competitorId": null
+              },
+              {
+                "createdAt": "2025-10-08T20:23:58.034Z",
+                "updatedAt": "2026-05-22T15:46:09.622Z",
+                "deletedAt": null,
+                "version": 4840,
+                "id": "42bb22f8-f0b4-4d52-ae2c-8c063deaf9da",
+                "index": 1,
+                "status": "TBD",
+                "description": "No",
+                "type": "Under",
+                "last": "0.77500",
+                "available": "0.80900",
+                "altLast": "0.85200",
+                "altAvailable": "0.00000",
+                "marketId": "98734d09-eb4e-453b-a917-e3e04111c92d",
+                "competitorId": null
+              }
+            ],
+            "playerId": null,
+            "competitor": {
+              "createdAt": "2023-12-29T23:42:35.805Z",
+              "updatedAt": "2026-05-22T03:59:39.710Z",
+              "deletedAt": null,
+              "version": 239,
+              "id": "dabca64e-e479-41fe-b99b-31485edfecf5",
+              "name": "New York Knicks",
+              "shortName": "NYK",
+              "symbol": "NYK",
+              "country": "USA",
+              "countryCode": "USA",
+              "league": "NBA",
+              "division": null,
+              "divisionName": "Atlantic Division",
+              "conferenceName": "Eastern",
+              "state": "NY",
+              "gender": "male",
+              "metabetId": 10212,
+              "unabatedId": 82,
+              "jindoId": 545,
+              "swishId": "18nba",
+              "betsApiId": null,
+              "opticOddsId": "6A36E386117E",
+              "mascot": "Knicks",
+              "ranking": null,
+              "wins": "2",
+              "draws": null,
+              "losses": "0",
+              "recent_form": null,
+              "points": null,
+              "primaryColor": "#006BB6",
+              "secondaryColor": "#F58426"
+            },
+            "competitorId": "dabca64e-e479-41fe-b99b-31485edfecf5",
+            "league": "NBA"
+          }
+        ]
+      },
+      {
+        "league": "PGA",
+        "macrotype": "WINNER",
+        "volume": 634868.7599999999,
+        "topMarkets": [
+          {
+            "createdAt": "2026-05-17T21:23:49.118Z",
+            "updatedAt": "2026-05-22T16:13:03.414Z",
+            "deletedAt": null,
+            "version": 175,
+            "id": "d09e91cb-cb34-48e8-aafb-323755481b1b",
+            "strike": 0,
+            "description": "Scottie Scheffler WINNER",
+            "isConsensus": true,
+            "status": "OPEN",
+            "type": "WINNER",
+            "volume": "47588.56000",
+            "settledAt": null,
+            "reSettledAt": null,
+            "event": {
+              "createdAt": "2026-05-17T20:43:55.300Z",
+              "updatedAt": "2026-05-22T17:01:54.832Z",
+              "deletedAt": null,
+              "version": 1556,
+              "id": "ced101d2-49a6-4d57-939b-06c47c006568",
+              "type": "Future",
+              "status": "OPEN_PREGAME",
+              "league": "PGA",
+              "scheduledStart": "2026-05-22T00:00:00.000Z",
+              "description": "THE CJ CUP Byron Nelson 2026 Winner",
+              "game": null,
+              "gameId": null,
+              "parentEventId": "1313d7b2-54cc-4d9a-83fc-6b7067f0ec33",
+              "lastRadarMessage": null,
+              "lastRadarProducer": null,
+              "isVisiblePregame": true,
+              "isVisibleLive": true,
+              "isStatusLocked": false,
+              "metabetId": null,
+              "unabatedId": null,
+              "jindoId": null,
+              "swishId": null,
+              "metabetPoints": null,
+              "betsApiId": null,
+              "opticOddsId": "type_the_cj_cup_byron_nelson_2026_winner-sport_golf-league_pga"
+            },
+            "eventId": "ced101d2-49a6-4d57-939b-06c47c006568",
+            "outcomes": [
+              {
+                "createdAt": "2026-05-17T21:23:49.118Z",
+                "updatedAt": "2026-05-22T17:01:28.810Z",
+                "deletedAt": null,
+                "version": 3990,
+                "id": "ff8b2ec5-29b3-426e-b641-6d3ec82c14c1",
+                "index": 0,
+                "status": "TBD",
+                "description": "Yes",
+                "type": "Over",
+                "last": "0.27100",
+                "available": "0.26700",
+                "altLast": "0.38800",
+                "altAvailable": "0.00000",
+                "marketId": "d09e91cb-cb34-48e8-aafb-323755481b1b",
+                "competitorId": null
+              },
+              {
+                "createdAt": "2026-05-17T21:23:49.118Z",
+                "updatedAt": "2026-05-22T17:01:28.810Z",
+                "deletedAt": null,
+                "version": 3990,
+                "id": "53add66c-6c64-4b5d-a2c1-67343e992a99",
+                "index": 1,
+                "status": "TBD",
+                "description": "No",
+                "type": "Under",
+                "last": "0.72900",
+                "available": "0.78700",
+                "altLast": "0.61200",
+                "altAvailable": "0.00000",
+                "marketId": "d09e91cb-cb34-48e8-aafb-323755481b1b",
+                "competitorId": null
+              }
+            ],
+            "playerId": null,
+            "competitor": {
+              "createdAt": "2025-03-24T19:56:00.417Z",
+              "updatedAt": "2026-02-05T06:55:54.266Z",
+              "deletedAt": null,
+              "version": 3,
+              "id": "b57b8ea2-d032-415f-8493-8d46ea16ff69",
+              "name": "Scottie Scheffler",
+              "shortName": "S. Scheffler",
+              "symbol": "Scheffler",
+              "country": "United States",
+              "countryCode": null,
+              "league": "PGA",
+              "division": null,
+              "divisionName": null,
+              "conferenceName": null,
+              "state": null,
+              "gender": null,
+              "metabetId": null,
+              "unabatedId": null,
+              "jindoId": null,
+              "swishId": null,
+              "betsApiId": null,
+              "opticOddsId": "3204F7E88129",
+              "mascot": "",
+              "ranking": null,
+              "wins": null,
+              "draws": null,
+              "losses": null,
+              "recent_form": null,
+              "points": null,
+              "primaryColor": null,
+              "secondaryColor": null
+            },
+            "competitorId": "b57b8ea2-d032-415f-8493-8d46ea16ff69",
+            "league": "PGA"
+          },
+          {
+            "createdAt": "2026-05-17T21:23:50.349Z",
+            "updatedAt": "2026-05-22T14:21:39.894Z",
+            "deletedAt": null,
+            "version": 54,
+            "id": "0d49d123-fdd0-4e71-8577-9edd0f347ca3",
+            "strike": 0,
+            "description": "Si Woo Kim WINNER",
+            "isConsensus": true,
+            "status": "OPEN",
+            "type": "WINNER",
+            "volume": "9594.60000",
+            "settledAt": null,
+            "reSettledAt": null,
+            "event": {
+              "createdAt": "2026-05-17T20:43:55.300Z",
+              "updatedAt": "2026-05-22T17:01:54.832Z",
+              "deletedAt": null,
+              "version": 1556,
+              "id": "ced101d2-49a6-4d57-939b-06c47c006568",
+              "type": "Future",
+              "status": "OPEN_PREGAME",
+              "league": "PGA",
+              "scheduledStart": "2026-05-22T00:00:00.000Z",
+              "description": "THE CJ CUP Byron Nelson 2026 Winner",
+              "game": null,
+              "gameId": null,
+              "parentEventId": "1313d7b2-54cc-4d9a-83fc-6b7067f0ec33",
+              "lastRadarMessage": null,
+              "lastRadarProducer": null,
+              "isVisiblePregame": true,
+              "isVisibleLive": true,
+              "isStatusLocked": false,
+              "metabetId": null,
+              "unabatedId": null,
+              "jindoId": null,
+              "swishId": null,
+              "metabetPoints": null,
+              "betsApiId": null,
+              "opticOddsId": "type_the_cj_cup_byron_nelson_2026_winner-sport_golf-league_pga"
+            },
+            "eventId": "ced101d2-49a6-4d57-939b-06c47c006568",
+            "outcomes": [
+              {
+                "createdAt": "2026-05-17T21:23:50.349Z",
+                "updatedAt": "2026-05-22T17:01:28.810Z",
+                "deletedAt": null,
+                "version": 4100,
+                "id": "9e0057b5-cff5-42e4-8ca7-77f8848be416",
+                "index": 0,
+                "status": "TBD",
+                "description": "Yes",
+                "type": "Over",
+                "last": "0.14700",
+                "available": "0.16200",
+                "altLast": "0.13200",
+                "altAvailable": "0.00000",
+                "marketId": "0d49d123-fdd0-4e71-8577-9edd0f347ca3",
+                "competitorId": null
+              },
+              {
+                "createdAt": "2026-05-17T21:23:50.349Z",
+                "updatedAt": "2026-05-22T17:01:28.810Z",
+                "deletedAt": null,
+                "version": 4100,
+                "id": "622b93cd-c0da-4e37-a79c-5262e077531b",
+                "index": 1,
+                "status": "TBD",
+                "description": "No",
+                "type": "Under",
+                "last": "0.85300",
+                "available": "0.89500",
+                "altLast": "0.86800",
+                "altAvailable": "0.00000",
+                "marketId": "0d49d123-fdd0-4e71-8577-9edd0f347ca3",
+                "competitorId": null
+              }
+            ],
+            "playerId": null,
+            "competitor": {
+              "createdAt": "2025-03-24T19:55:58.577Z",
+              "updatedAt": "2026-02-05T06:55:24.544Z",
+              "deletedAt": null,
+              "version": 3,
+              "id": "441d7056-7b72-4846-85f8-b165355c6661",
+              "name": "Si Woo Kim",
+              "shortName": "S. Kim",
+              "symbol": "Kim",
+              "country": "South Korea",
+              "countryCode": null,
+              "league": "PGA",
+              "division": null,
+              "divisionName": null,
+              "conferenceName": null,
+              "state": null,
+              "gender": null,
+              "metabetId": null,
+              "unabatedId": null,
+              "jindoId": null,
+              "swishId": null,
+              "betsApiId": null,
+              "opticOddsId": "9873D73E9A8C",
+              "mascot": "",
+              "ranking": null,
+              "wins": null,
+              "draws": null,
+              "losses": null,
+              "recent_form": null,
+              "points": null,
+              "primaryColor": null,
+              "secondaryColor": null
+            },
+            "competitorId": "441d7056-7b72-4846-85f8-b165355c6661",
+            "league": "PGA"
+          },
+          {
+            "createdAt": "2026-05-17T21:23:47.988Z",
+            "updatedAt": "2026-05-22T15:32:48.222Z",
+            "deletedAt": null,
+            "version": 94,
+            "id": "9b5e397b-67a3-45c2-a5ce-676d80d30b1a",
+            "strike": 0,
+            "description": "Brooks Koepka WINNER",
+            "isConsensus": true,
+            "status": "OPEN",
+            "type": "WINNER",
+            "volume": "40997.65000",
+            "settledAt": null,
+            "reSettledAt": null,
+            "event": {
+              "createdAt": "2026-05-17T20:43:55.300Z",
+              "updatedAt": "2026-05-22T17:01:54.832Z",
+              "deletedAt": null,
+              "version": 1556,
+              "id": "ced101d2-49a6-4d57-939b-06c47c006568",
+              "type": "Future",
+              "status": "OPEN_PREGAME",
+              "league": "PGA",
+              "scheduledStart": "2026-05-22T00:00:00.000Z",
+              "description": "THE CJ CUP Byron Nelson 2026 Winner",
+              "game": null,
+              "gameId": null,
+              "parentEventId": "1313d7b2-54cc-4d9a-83fc-6b7067f0ec33",
+              "lastRadarMessage": null,
+              "lastRadarProducer": null,
+              "isVisiblePregame": true,
+              "isVisibleLive": true,
+              "isStatusLocked": false,
+              "metabetId": null,
+              "unabatedId": null,
+              "jindoId": null,
+              "swishId": null,
+              "metabetPoints": null,
+              "betsApiId": null,
+              "opticOddsId": "type_the_cj_cup_byron_nelson_2026_winner-sport_golf-league_pga"
+            },
+            "eventId": "ced101d2-49a6-4d57-939b-06c47c006568",
+            "outcomes": [
+              {
+                "createdAt": "2026-05-17T21:23:47.988Z",
+                "updatedAt": "2026-05-22T17:02:33.921Z",
+                "deletedAt": null,
+                "version": 3810,
+                "id": "6c8a8231-0f91-4411-8db2-2e597d8a66db",
+                "index": 0,
+                "status": "TBD",
+                "description": "Yes",
+                "type": "Over",
+                "last": "0.12900",
+                "available": "0.13500",
+                "altLast": "0.00000",
+                "altAvailable": "0.00000",
+                "marketId": "9b5e397b-67a3-45c2-a5ce-676d80d30b1a",
+                "competitorId": null
+              },
+              {
+                "createdAt": "2026-05-17T21:23:47.988Z",
+                "updatedAt": "2026-05-22T17:02:33.921Z",
+                "deletedAt": null,
+                "version": 3810,
+                "id": "48d178d8-9178-49d1-acb6-1f61483ae8cd",
+                "index": 1,
+                "status": "TBD",
+                "description": "No",
+                "type": "Under",
+                "last": "0.87100",
+                "available": "0.89500",
+                "altLast": "0.00000",
+                "altAvailable": "0.00000",
+                "marketId": "9b5e397b-67a3-45c2-a5ce-676d80d30b1a",
+                "competitorId": null
+              }
+            ],
+            "playerId": null,
+            "competitor": {
+              "createdAt": "2025-04-07T17:07:16.372Z",
+              "updatedAt": "2026-02-06T17:56:25.143Z",
+              "deletedAt": null,
+              "version": 4,
+              "id": "8893156a-1822-4f84-9491-4b2171563a65",
+              "name": "Brooks Koepka",
+              "shortName": "B. Koepka",
+              "symbol": "Koepka",
+              "country": "United States",
+              "countryCode": null,
+              "league": "PGA",
+              "division": null,
+              "divisionName": null,
+              "conferenceName": null,
+              "state": null,
+              "gender": null,
+              "metabetId": null,
+              "unabatedId": null,
+              "jindoId": null,
+              "swishId": null,
+              "betsApiId": null,
+              "opticOddsId": "9280360F29EE",
+              "mascot": "",
+              "ranking": null,
+              "wins": null,
+              "draws": null,
+              "losses": null,
+              "recent_form": null,
+              "points": null,
+              "primaryColor": null,
+              "secondaryColor": null
+            },
+            "competitorId": "8893156a-1822-4f84-9491-4b2171563a65",
+            "league": "PGA"
+          }
+        ]
+      },
+      {
+        "league": "NHL",
+        "macrotype": "HART_TROPHY_WINNER",
+        "volume": 190750.4,
+        "topMarkets": [
+          {
+            "createdAt": "2026-01-08T06:48:16.539Z",
+            "updatedAt": "2026-05-20T23:54:28.204Z",
+            "deletedAt": null,
+            "version": 46,
+            "id": "2e36d6ce-efde-41e8-b449-33ba3a38c1de",
+            "strike": 0,
+            "description": "Connor McDavid HART_TROPHY_WINNER",
+            "isConsensus": true,
+            "status": "OPEN",
+            "type": "HART_TROPHY_WINNER",
+            "volume": "39152.59000",
+            "settledAt": null,
+            "reSettledAt": null,
+            "event": {
+              "createdAt": "2025-06-02T15:54:34.751Z",
+              "updatedAt": "2026-05-22T17:01:53.730Z",
+              "deletedAt": null,
+              "version": 47587,
+              "id": "f55694c4-f493-4cfa-9fad-db53c93ceb05",
+              "type": "Future",
+              "status": "OPEN_PREGAME",
+              "league": "NHL",
+              "scheduledStart": "2026-03-31T23:00:00.000Z",
+              "description": "Hart Trophy Winner",
+              "game": null,
+              "gameId": null,
+              "parentEventId": null,
+              "lastRadarMessage": null,
+              "lastRadarProducer": null,
+              "isVisiblePregame": true,
+              "isVisibleLive": true,
+              "isStatusLocked": false,
+              "metabetId": null,
+              "unabatedId": null,
+              "jindoId": null,
+              "swishId": null,
+              "metabetPoints": null,
+              "betsApiId": null,
+              "opticOddsId": "type_hart_trophy_winner-sport_hockey-league_nhl"
+            },
+            "eventId": "f55694c4-f493-4cfa-9fad-db53c93ceb05",
+            "outcomes": [
+              {
+                "createdAt": "2026-01-08T06:48:16.539Z",
+                "updatedAt": "2026-05-22T03:00:04.957Z",
+                "deletedAt": null,
+                "version": 4205,
+                "id": "e892b1c1-646e-4762-b1da-8e6a11dddb78",
+                "index": 0,
+                "status": "TBD",
+                "description": "Yes",
+                "type": "Over",
+                "last": "0.56800",
+                "available": "0.61000",
+                "altLast": "0.45200",
+                "altAvailable": "0.61000",
+                "marketId": "2e36d6ce-efde-41e8-b449-33ba3a38c1de",
+                "competitorId": null
+              },
+              {
+                "createdAt": "2026-01-08T06:48:16.539Z",
+                "updatedAt": "2026-05-22T03:00:04.957Z",
+                "deletedAt": null,
+                "version": 4205,
+                "id": "80d8efe3-e148-4e07-ad72-edf361945530",
+                "index": 1,
+                "status": "TBD",
+                "description": "No",
+                "type": "Under",
+                "last": "0.43200",
+                "available": "0.46100",
+                "altLast": "0.54800",
+                "altAvailable": "0.46100",
+                "marketId": "2e36d6ce-efde-41e8-b449-33ba3a38c1de",
+                "competitorId": null
+              }
+            ],
+            "player": {
+              "createdAt": "2024-09-22T08:10:04.912Z",
+              "updatedAt": "2026-05-15T14:16:10.843Z",
+              "deletedAt": null,
+              "version": 41,
+              "id": "c9fd0175-9eb7-4255-8545-47cd6236cbcc",
+              "fullName": "Connor McDavid",
+              "name": "Connor McDavid",
+              "gender": null,
+              "jerseyNumber": "97",
+              "country": "CAN",
+              "nationality": "CAN",
+              "position": "C",
+              "height": 72,
+              "weight": 193,
+              "logo": "https://cdn.opticodds.com/player-logos/hockey/591850.png",
+              "teams": [
+                {
+                  "createdAt": "2023-12-29T23:42:35.805Z",
+                  "updatedAt": "2026-04-13T01:33:51.688Z",
+                  "deletedAt": null,
+                  "version": 105,
+                  "id": "b7aa2e49-60c5-4c2e-98f2-dafb06b2efcd",
+                  "name": "Edmonton Oilers",
+                  "shortName": "EDM",
+                  "symbol": "EDM",
+                  "country": "USA",
+                  "countryCode": "USA",
+                  "league": "NHL",
+                  "division": null,
+                  "divisionName": "Pacific Division",
+                  "conferenceName": "Western",
+                  "state": null,
+                  "gender": "male",
+                  "metabetId": 13356,
+                  "unabatedId": 744,
+                  "jindoId": 641,
+                  "swishId": "22nhl",
+                  "betsApiId": null,
+                  "opticOddsId": "759AA8469413",
+                  "mascot": "Oilers",
+                  "ranking": null,
+                  "wins": "40",
+                  "draws": "1",
+                  "losses": "30",
+                  "recent_form": null,
+                  "points": null,
+                  "primaryColor": "#00205B",
+                  "secondaryColor": "#CF4520"
+                }
+              ],
+              "metabetId": 26415,
+              "unabatedId": null,
+              "jindoId": null,
+              "swishId": "8478402nhl",
+              "opticOddsId": "FAE37F90B734"
+            },
+            "playerId": "c9fd0175-9eb7-4255-8545-47cd6236cbcc",
+            "competitorId": null,
+            "league": "NHL"
+          },
+          {
+            "createdAt": "2026-01-08T06:48:18.400Z",
+            "updatedAt": "2026-05-20T23:54:21.091Z",
+            "deletedAt": null,
+            "version": 127,
+            "id": "8d5f1dad-2402-49fb-9f97-296f50fe6c97",
+            "strike": 0,
+            "description": "Nikita Kucherov HART_TROPHY_WINNER",
+            "isConsensus": true,
+            "status": "OPEN",
+            "type": "HART_TROPHY_WINNER",
+            "volume": "85704.66000",
+            "settledAt": null,
+            "reSettledAt": null,
+            "event": {
+              "createdAt": "2025-06-02T15:54:34.751Z",
+              "updatedAt": "2026-05-22T17:01:53.730Z",
+              "deletedAt": null,
+              "version": 47587,
+              "id": "f55694c4-f493-4cfa-9fad-db53c93ceb05",
+              "type": "Future",
+              "status": "OPEN_PREGAME",
+              "league": "NHL",
+              "scheduledStart": "2026-03-31T23:00:00.000Z",
+              "description": "Hart Trophy Winner",
+              "game": null,
+              "gameId": null,
+              "parentEventId": null,
+              "lastRadarMessage": null,
+              "lastRadarProducer": null,
+              "isVisiblePregame": true,
+              "isVisibleLive": true,
+              "isStatusLocked": false,
+              "metabetId": null,
+              "unabatedId": null,
+              "jindoId": null,
+              "swishId": null,
+              "metabetPoints": null,
+              "betsApiId": null,
+              "opticOddsId": "type_hart_trophy_winner-sport_hockey-league_nhl"
+            },
+            "eventId": "f55694c4-f493-4cfa-9fad-db53c93ceb05",
+            "outcomes": [
+              {
+                "createdAt": "2026-01-08T06:48:18.400Z",
+                "updatedAt": "2026-05-22T03:00:04.957Z",
+                "deletedAt": null,
+                "version": 7772,
+                "id": "92ae46e4-00f6-4bd6-8ac3-7a8c40001e06",
+                "index": 0,
+                "status": "TBD",
+                "description": "Yes",
+                "type": "Over",
+                "last": "0.36000",
+                "available": "0.33900",
+                "altLast": "0.33300",
+                "altAvailable": "0.33900",
+                "marketId": "8d5f1dad-2402-49fb-9f97-296f50fe6c97",
+                "competitorId": null
+              },
+              {
+                "createdAt": "2026-01-08T06:48:18.400Z",
+                "updatedAt": "2026-05-22T03:00:04.957Z",
+                "deletedAt": null,
+                "version": 7772,
+                "id": "bf6c1a4f-b89a-4e64-bed3-815f3f718a02",
+                "index": 1,
+                "status": "TBD",
+                "description": "No",
+                "type": "Under",
+                "last": "0.64000",
+                "available": "0.73200",
+                "altLast": "0.66700",
+                "altAvailable": "0.73200",
+                "marketId": "8d5f1dad-2402-49fb-9f97-296f50fe6c97",
+                "competitorId": null
+              }
+            ],
+            "player": {
+              "createdAt": "2024-09-24T18:33:12.389Z",
+              "updatedAt": "2026-05-15T14:16:10.878Z",
+              "deletedAt": null,
+              "version": 41,
+              "id": "04266035-f795-4ace-812c-5dfb27917ec8",
+              "fullName": "Nikita Kucherov",
+              "name": "Nikita Kucherov",
+              "gender": null,
+              "jerseyNumber": "86",
+              "country": "RUS",
+              "nationality": "RUS",
+              "position": "RW",
+              "height": 70,
+              "weight": 180,
+              "logo": "https://cdn.opticodds.com/player-logos/hockey/592792.png",
+              "teams": [
+                {
+                  "createdAt": "2023-12-29T23:42:35.805Z",
+                  "updatedAt": "2026-04-14T23:21:53.331Z",
+                  "deletedAt": null,
+                  "version": 160,
+                  "id": "662b7e2b-48dd-4749-b62c-28c8a36b13f6",
+                  "name": "Tampa Bay Lightning",
+                  "shortName": "TBL",
+                  "symbol": "TB",
+                  "country": "USA",
+                  "countryCode": "USA",
+                  "league": "NHL",
+                  "division": null,
+                  "divisionName": "Atlantic Division",
+                  "conferenceName": "Eastern",
+                  "state": "FL",
+                  "gender": "male",
+                  "metabetId": 13371,
+                  "unabatedId": 736,
+                  "jindoId": 647,
+                  "swishId": "14nhl",
+                  "betsApiId": null,
+                  "opticOddsId": "68141935CE55",
+                  "mascot": "Lightning",
+                  "ranking": null,
+                  "wins": "50",
+                  "draws": "5",
+                  "losses": "25",
+                  "recent_form": null,
+                  "points": null,
+                  "primaryColor": "#00205B",
+                  "secondaryColor": "#FFFFFF"
+                }
+              ],
+              "metabetId": 11708,
+              "unabatedId": null,
+              "jindoId": null,
+              "swishId": "8476453nhl",
+              "opticOddsId": "6652E6118780"
+            },
+            "playerId": "04266035-f795-4ace-812c-5dfb27917ec8",
+            "competitorId": null,
+            "league": "NHL"
+          },
+          {
+            "createdAt": "2026-01-08T06:48:18.288Z",
+            "updatedAt": "2026-05-20T04:18:59.505Z",
+            "deletedAt": null,
+            "version": 133,
+            "id": "d4fed11d-110e-4b35-a8b0-46d567582d2c",
+            "strike": 0,
+            "description": "Nathan MacKinnon HART_TROPHY_WINNER",
+            "isConsensus": true,
+            "status": "OPEN",
+            "type": "HART_TROPHY_WINNER",
+            "volume": "65893.15000",
+            "settledAt": null,
+            "reSettledAt": null,
+            "event": {
+              "createdAt": "2025-06-02T15:54:34.751Z",
+              "updatedAt": "2026-05-22T17:01:53.730Z",
+              "deletedAt": null,
+              "version": 47587,
+              "id": "f55694c4-f493-4cfa-9fad-db53c93ceb05",
+              "type": "Future",
+              "status": "OPEN_PREGAME",
+              "league": "NHL",
+              "scheduledStart": "2026-03-31T23:00:00.000Z",
+              "description": "Hart Trophy Winner",
+              "game": null,
+              "gameId": null,
+              "parentEventId": null,
+              "lastRadarMessage": null,
+              "lastRadarProducer": null,
+              "isVisiblePregame": true,
+              "isVisibleLive": true,
+              "isStatusLocked": false,
+              "metabetId": null,
+              "unabatedId": null,
+              "jindoId": null,
+              "swishId": null,
+              "metabetPoints": null,
+              "betsApiId": null,
+              "opticOddsId": "type_hart_trophy_winner-sport_hockey-league_nhl"
+            },
+            "eventId": "f55694c4-f493-4cfa-9fad-db53c93ceb05",
+            "outcomes": [
+              {
+                "createdAt": "2026-01-08T06:48:18.288Z",
+                "updatedAt": "2026-05-22T03:00:04.957Z",
+                "deletedAt": null,
+                "version": 4852,
+                "id": "cccdf5e2-509c-45b2-9541-f432eec5668f",
+                "index": 0,
+                "status": "TBD",
+                "description": "Yes",
+                "type": "Over",
+                "last": "0.14100",
+                "available": "0.14100",
+                "altLast": "0.14100",
+                "altAvailable": "0.14100",
+                "marketId": "d4fed11d-110e-4b35-a8b0-46d567582d2c",
+                "competitorId": null
+              },
+              {
+                "createdAt": "2026-01-08T06:48:18.288Z",
+                "updatedAt": "2026-05-22T03:00:04.957Z",
+                "deletedAt": null,
+                "version": 4852,
+                "id": "2ba64330-5b3e-4168-a551-5278f6af7df2",
+                "index": 1,
+                "status": "TBD",
+                "description": "No",
+                "type": "Under",
+                "last": "0.85900",
+                "available": "0.00000",
+                "altLast": "0.85900",
+                "altAvailable": "0.00000",
+                "marketId": "d4fed11d-110e-4b35-a8b0-46d567582d2c",
+                "competitorId": null
+              }
+            ],
+            "player": {
+              "createdAt": "2024-09-23T01:12:26.343Z",
+              "updatedAt": "2026-05-15T14:16:10.810Z",
+              "deletedAt": null,
+              "version": 42,
+              "id": "727c4fc5-b02f-453f-b26e-b8811c6b9dd4",
+              "fullName": "Nathan MacKinnon",
+              "name": "Nathan MacKinnon",
+              "gender": null,
+              "jerseyNumber": "29",
+              "country": "CAN",
+              "nationality": "CAN",
+              "position": "C",
+              "height": 70,
+              "weight": 198,
+              "logo": "https://cdn.opticodds.com/player-logos/hockey/592752.png",
+              "teams": [
+                {
+                  "createdAt": "2023-12-29T23:42:35.805Z",
+                  "updatedAt": "2026-04-16T02:13:03.495Z",
+                  "deletedAt": null,
+                  "version": 103,
+                  "id": "b7f9148d-2f9d-4850-a58e-fa7cfdde2ecb",
+                  "name": "Colorado Avalanche",
+                  "shortName": "COL",
+                  "symbol": "COL",
+                  "country": "USA",
+                  "countryCode": "USA",
+                  "league": "NHL",
+                  "division": null,
+                  "divisionName": "Central Division",
+                  "conferenceName": "Western",
+                  "state": "CO",
+                  "gender": "male",
+                  "metabetId": 13352,
+                  "unabatedId": 743,
+                  "jindoId": 637,
+                  "swishId": "21nhl",
+                  "betsApiId": null,
+                  "opticOddsId": "7C307B636971",
+                  "mascot": "Avalanche",
+                  "ranking": null,
+                  "wins": "54",
+                  "draws": "3",
+                  "losses": "16",
+                  "recent_form": null,
+                  "points": null,
+                  "primaryColor": "#6F263D",
+                  "secondaryColor": "#236192"
+                }
+              ],
+              "metabetId": 26271,
+              "unabatedId": 43926,
+              "jindoId": null,
+              "swishId": "8477492nhl",
+              "opticOddsId": "2F5E1A452920"
+            },
+            "playerId": "727c4fc5-b02f-453f-b26e-b8811c6b9dd4",
+            "competitorId": null,
+            "league": "NHL"
+          }
+        ]
+      }
+    ]
+  },
+  "https://api.novig.us/recs/v1/featured-markets": {
+    "markets": [
+      {
+        "id": "8ec65dab-9a94-4df5-a5ec-6ddf4aa5b62a",
+        "volume": 278713.84,
+        "status": "OPEN",
+        "isAdminSelected": false,
+        "isLocked": false,
+        "outcomes": [
+          {
+            "id": "b27a5b61-9610-4248-9cb6-283c0ca51d2d",
+            "index": 0,
+            "available": 0.537,
+            "altAvailable": 0.549,
+            "description": "SAS"
+          },
+          {
+            "id": "c9ae07c0-7946-475e-898e-7661d630ae24",
+            "index": 1,
+            "available": 0.466,
+            "altAvailable": 0.483,
+            "description": "OKC"
+          }
+        ],
+        "event": {
+          "id": "3072c99a-09a5-4793-9436-3b79ac4a0291",
+          "status": "OPEN_PREGAME",
+          "scheduledStart": "2026-05-23T00:35:00.000+00:00",
+          "league": "NBA",
+          "type": "Game",
+          "game": {
+            "sport": "Basketball",
+            "period": null,
+            "timeRemaining": null,
+            "homeScore": null,
+            "awayScore": null,
+            "homeTeam": {
+              "id": "8e9cfeaf-188a-4c1c-9e0c-e3cf21f2d9ea",
+              "name": "San Antonio Spurs",
+              "symbol": "SA",
+              "shortName": "SAS",
+              "mascot": "Spurs",
+              "primaryColor": "#BAC3C9",
+              "secondaryColor": "#061922",
+              "wins": "1",
+              "losses": "1",
+              "draws": "",
+              "ranking": null,
+              "swishId": "24nba",
+              "opticOddsId": "E89F51275352",
+              "country": "USA"
+            },
+            "awayTeam": {
+              "id": "90741970-9213-4b12-955b-f70c134c4ab2",
+              "name": "Oklahoma City Thunder",
+              "symbol": "OKC",
+              "shortName": "OKC",
+              "mascot": "Thunder",
+              "primaryColor": "#007DC3",
+              "secondaryColor": "#F05133",
+              "wins": "1",
+              "losses": "1",
+              "draws": "",
+              "ranking": null,
+              "swishId": "25nba",
+              "opticOddsId": "D8EC6878976A",
+              "country": "USA"
+            }
+          }
+        }
+      },
+      {
+        "id": "e9c736d5-5d6c-4e31-9b04-ba47e0d19bf3",
+        "volume": 121236.14,
+        "status": "OPEN",
+        "isAdminSelected": false,
+        "isLocked": false,
+        "outcomes": [
+          {
+            "id": "9edb2e7b-77d9-4b1a-ad6d-68cc3b65626b",
+            "index": 0,
+            "available": 0.405,
+            "altAvailable": 0.41,
+            "description": "LAA"
+          },
+          {
+            "id": "e2e3be44-2b7b-4a19-8192-4566a4a7dd7f",
+            "index": 1,
+            "available": 0.599,
+            "altAvailable": 0.625,
+            "description": "TEX"
+          }
+        ],
+        "event": {
+          "id": "b947a178-05ba-4f20-95c8-ab204fb4489c",
+          "status": "OPEN_PREGAME",
+          "scheduledStart": "2026-05-23T01:38:00.000+00:00",
+          "league": "MLB",
+          "type": "Game",
+          "game": {
+            "sport": "Baseball",
+            "period": null,
+            "timeRemaining": null,
+            "homeScore": null,
+            "awayScore": null,
+            "homeTeam": {
+              "id": "d09c395d-4df0-4859-be9a-a11422d6367d",
+              "name": "Los Angeles Angels",
+              "symbol": "LAA",
+              "shortName": "LAA",
+              "mascot": "Angels",
+              "primaryColor": "#BA0021",
+              "secondaryColor": "#FFFFFF",
+              "wins": "17",
+              "losses": "34",
+              "draws": "",
+              "ranking": null,
+              "swishId": "108mlb",
+              "opticOddsId": "7BB3C6DB321C",
+              "country": "USA"
+            },
+            "awayTeam": {
+              "id": "c700a31c-e05f-47ca-b05b-b8ce13c8db17",
+              "name": "Texas Rangers",
+              "symbol": "TEX",
+              "shortName": "TEX",
+              "mascot": "Rangers",
+              "primaryColor": "#003278",
+              "secondaryColor": "#C0111F",
+              "wins": "24",
+              "losses": "25",
+              "draws": "",
+              "ranking": null,
+              "swishId": "140mlb",
+              "opticOddsId": "B85216061897",
+              "country": "USA"
+            }
+          }
+        }
+      },
+      {
+        "id": "5383749d-5b46-4066-af8f-4ae3eef8cb5e",
+        "volume": 90301.4,
+        "status": "OPEN",
+        "isAdminSelected": false,
+        "isLocked": false,
+        "outcomes": [
+          {
+            "id": "28c1711d-5281-49b8-bd97-4f54bd0147ca",
+            "index": 0,
+            "available": 0.573,
+            "altAvailable": 0.599,
+            "description": "CHC"
+          },
+          {
+            "id": "fdadf963-1499-4e36-a516-d1dd923aca7c",
+            "index": 1,
+            "available": 0.431,
+            "altAvailable": 0.433,
+            "description": "HOU"
+          }
+        ],
+        "event": {
+          "id": "9ddd77c9-b4b9-4143-a3d4-1d92f8114a5e",
+          "status": "OPEN_PREGAME",
+          "scheduledStart": "2026-05-22T18:20:00.000+00:00",
+          "league": "MLB",
+          "type": "Game",
+          "game": {
+            "sport": "Baseball",
+            "period": null,
+            "timeRemaining": null,
+            "homeScore": null,
+            "awayScore": null,
+            "homeTeam": {
+              "id": "818d7c0d-bff7-4971-b4dd-b98d7a345616",
+              "name": "Chicago Cubs",
+              "symbol": "CHI",
+              "shortName": "CHC",
+              "mascot": "Cubs",
+              "primaryColor": "#0E3386",
+              "secondaryColor": "#0E3386",
+              "wins": "29",
+              "losses": "21",
+              "draws": "",
+              "ranking": null,
+              "swishId": "112mlb",
+              "opticOddsId": "5045D954DFF8",
+              "country": "USA"
+            },
+            "awayTeam": {
+              "id": "a3865dd0-0b29-4196-b8b9-b076f4fee96e",
+              "name": "Houston Astros",
+              "symbol": "HOU",
+              "shortName": "HOU",
+              "mascot": "Astros",
+              "primaryColor": "#002D62",
+              "secondaryColor": "#EB6E1F",
+              "wins": "20",
+              "losses": "31",
+              "draws": "",
+              "ranking": null,
+              "swishId": "117mlb",
+              "opticOddsId": "4F11A5896C24",
+              "country": "USA"
+            }
+          }
+        }
+      },
+      {
+        "id": "2afedb4a-7243-47a1-85a0-67b8ad9e1051",
+        "volume": 85779.95,
+        "status": "OPEN",
+        "isAdminSelected": false,
+        "isLocked": false,
+        "outcomes": [
+          {
+            "id": "7e888b3b-fd18-41f8-a971-340eff4506ea",
+            "index": 0,
+            "available": 0.574,
+            "altAvailable": 0.59,
+            "description": "BOS"
+          },
+          {
+            "id": "f5b7180b-31b5-441f-8caa-d39e7efc0bc6",
+            "index": 1,
+            "available": 0.428,
+            "altAvailable": 0.444,
+            "description": "MIN"
+          }
+        ],
+        "event": {
+          "id": "de8547fa-6512-4c19-9e37-09219cd41960",
+          "status": "OPEN_PREGAME",
+          "scheduledStart": "2026-05-22T23:10:00.000+00:00",
+          "league": "MLB",
+          "type": "Game",
+          "game": {
+            "sport": "Baseball",
+            "period": null,
+            "timeRemaining": null,
+            "homeScore": null,
+            "awayScore": null,
+            "homeTeam": {
+              "id": "9b28411a-0dab-40a3-86ed-860e03fef019",
+              "name": "Boston Red Sox",
+              "symbol": "BOS",
+              "shortName": "BOS",
+              "mascot": "Red Sox",
+              "primaryColor": "#BD3039",
+              "secondaryColor": "#0C2340",
+              "wins": "22",
+              "losses": "27",
+              "draws": "",
+              "ranking": null,
+              "swishId": "111mlb",
+              "opticOddsId": "1232720C5D66",
+              "country": "USA"
+            },
+            "awayTeam": {
+              "id": "afd88f63-fb49-455b-9671-fbd3b6ae98b8",
+              "name": "Minnesota Twins",
+              "symbol": "MIN",
+              "shortName": "MIN",
+              "mascot": "Twins",
+              "primaryColor": "#002B5C",
+              "secondaryColor": "#D31145",
+              "wins": "23",
+              "losses": "27",
+              "draws": "",
+              "ranking": null,
+              "swishId": "142mlb",
+              "opticOddsId": "E8C4E6927B2D",
+              "country": "USA"
+            }
+          }
+        }
+      }
+    ]
+  }
+}

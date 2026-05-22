@@ -3,6 +3,7 @@ import { dirname, relative, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import type { NormalizedMarket } from "../packages/core/src/market-normalization";
 import { assessMarketRelationship, impliedFromAmerican, marketComparisonKey } from "../packages/core/src/market-normalization";
+import { rateArb } from "../packages/core/src/scan-findings";
 const scriptDir = dirname(fileURLToPath(import.meta.url));
 const repoRoot = resolve(scriptDir, "..");
 const BOOKS = ["bovada", "novig", "4c", "rebet", "prophetx"];
@@ -24,6 +25,8 @@ type PairReport = {
   sideB: string;
   bookB: string;
   oddsB: number;
+  liquidityA: number | null;
+  liquidityB: number | null;
   combinedImplied: number | null;
   reason: string;
 };
@@ -84,6 +87,8 @@ function quoteReport(a: NormalizedMarket & { odds_american: number }, b: Normali
     sideB: b.side,
     bookB: b.source,
     oddsB: b.odds_american,
+    liquidityA: typeof a.liquidity === "number" && Number.isFinite(a.liquidity) ? a.liquidity : null,
+    liquidityB: typeof b.liquidity === "number" && Number.isFinite(b.liquidity) ? b.liquidity : null,
     combinedImplied: relationship.kind === "same_line_opposite_side" ? combinedImplied : null,
     reason: relationship.reason,
   };
@@ -109,31 +114,49 @@ function main(): void {
       reports.push(quoteReport(a, b));
     }
   }
-  reports.sort((x, y) => (x.combinedImplied ?? 99) - (y.combinedImplied ?? 99));
+  // Rate every pair with the KB logic, then rank best → worst by that score
+  // (so the console and CSV both lead with the strongest, executable plays).
+  const rated = reports.map((o) => ({
+    o,
+    rating: rateArb({
+      classification: o.classification,
+      combinedImplied: o.combinedImplied,
+      bookA: o.bookA,
+      bookB: o.bookB,
+      liquidityA: o.liquidityA,
+      liquidityB: o.liquidityB,
+    }),
+  }));
+  rated.sort(
+    (x, y) => y.rating.score - x.rating.score || (x.o.combinedImplied ?? 99) - (y.o.combinedImplied ?? 99),
+  );
   const arbs = reports.filter((o) => o.classification === "true_arb_candidate");
   const middles = reports.filter((o) => o.classification === "middle_candidate");
-  const shown = reports.filter((o) => o.combinedImplied === null || o.combinedImplied <= maxCombined);
-  console.log("=== Cross-book same-market arb/middle report ===");
+  const shown = rated.filter(({ o }) => o.combinedImplied === null || o.combinedImplied <= maxCombined);
+  console.log("=== Cross-book same-market arb/middle report (KB-rated) ===");
   console.log(`Books:        ${[...new Set(rows.map((r) => r.source))].join(", ")}`);
   console.log(`Pairs checked: ${reports.length}   True arb candidates: ${arbs.length}   Middles: ${middles.length}`);
-  console.log("Imported implied_probability is ignored; combined implied is recomputed from odds_american.");
+  console.log("Combined implied is recomputed from odds_american. ROE/grade follow the OddsFlex KB (1–3% typical, >5% suspect).");
   console.log("");
   const head =
-    "classification".padEnd(24) + "market".padEnd(26) + "sideA".padEnd(18) + "sideB".padEnd(18) + "combined";
+    "grade".padEnd(6) + "roe".padEnd(9) + "type".padEnd(11) + "market".padEnd(22) + "sideA".padEnd(18) + "sideB".padEnd(18) + "maxbet";
   console.log(head);
   console.log("-".repeat(head.length));
-  for (const o of shown.slice(0, 80)) {
+  for (const { o, rating } of shown.slice(0, 80)) {
     const aStr = `${o.sideA}${o.lineA === null ? "" : " " + o.lineA} ${fmtAm(o.oddsA)}@${o.bookA}`;
     const bStr = `${o.sideB}${o.lineB === null ? "" : " " + o.lineB} ${fmtAm(o.oddsB)}@${o.bookB}`;
-    const combined = o.combinedImplied === null ? "middle" : `${(o.combinedImplied * 100).toFixed(2)}%`;
+    const roe = rating.roe === null ? (o.combinedImplied === null ? "middle" : "—") : `${(rating.roe * 100).toFixed(2)}%`;
+    const maxbet = rating.maxStake === null ? "?" : `$${Math.floor(rating.maxStake).toLocaleString()}`;
     const market = `${o.market}${o.player ? " " + o.player : ""}`;
-    console.log(o.classification.padEnd(24) + market.slice(0, 25).padEnd(26) + aStr.padEnd(18) + bStr.padEnd(18) + combined);
+    console.log(
+      rating.grade.padEnd(6) + roe.padEnd(9) + rating.tradeType.padEnd(11) + market.slice(0, 21).padEnd(22) + aStr.padEnd(18) + bStr.padEnd(18) + maxbet,
+    );
   }
   mkdirSync(dirname(CSV_OUT), { recursive: true });
   const csv = [
-    "classification,sport,league,event,market,player,period,side_a,line_a,book_a,odds_a,side_b,line_b,book_b,odds_b,combined_implied,reason",
-    ...reports.map((o) =>
-      [
+    "classification,sport,league,event,market,player,period,side_a,line_a,book_a,odds_a,side_b,line_b,book_b,odds_b,combined_implied,reason,liq_a,liq_b,roe,hold_pct,max_stake,trade_type,rating,score,flags",
+    ...rated.map(({ o, rating }) => {
+      return [
         o.classification,
         o.sport,
         o.league,
@@ -151,10 +174,19 @@ function main(): void {
         o.oddsB,
         o.combinedImplied === null ? "" : o.combinedImplied.toFixed(6),
         o.reason,
+        o.liquidityA ?? "",
+        o.liquidityB ?? "",
+        rating.roe === null ? "" : rating.roe.toFixed(6),
+        rating.holdPct === null ? "" : rating.holdPct.toFixed(6),
+        rating.maxStake ?? "",
+        rating.tradeType,
+        rating.grade,
+        rating.score,
+        rating.flags.join("|"),
       ]
         .map((value) => `"${String(value).replace(/"/g, '""')}"`)
-        .join(","),
-    ),
+        .join(",");
+    }),
   ].join("\n");
   writeFileSync(CSV_OUT, `${csv}\n`, "utf8");
   console.log(`\n${reports.length} evaluated pairs, ${arbs.length} true arb candidates. Full list: ${CSV_OUT}`);

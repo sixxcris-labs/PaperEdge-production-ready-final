@@ -118,6 +118,10 @@ function deriveEntries(raw: ProphetXRawMarket | ProphetXRawMarket[]): ProphetXEn
     if (isRecord(containerCandidate.data)) {
       rootCandidates.push(containerCandidate.data);
     }
+    // get_multiple_markets returns `data` as an array of { eventId, markets: [...] }.
+    if (Array.isArray(containerCandidate.data)) {
+      rootCandidates.push(...containerCandidate.data.filter(isRecord));
+    }
 
     for (const root of rootCandidates) {
       const nestedMarket = isRecord(root.market) ? root.market : null;
