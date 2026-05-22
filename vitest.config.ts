@@ -6,7 +6,7 @@ export default defineConfig({
   plugins: [react()],
   test: {
     environment: "node",
-    include: ["lib/**/*.test.ts", "packages/**/*.test.ts"],
+    include: ["lib/**/*.test.ts", "packages/**/*.test.ts", "apps/**/*.test.ts"],
   },
   resolve: {
     alias: {

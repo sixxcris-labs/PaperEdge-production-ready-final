@@ -1,28 +1,6 @@
-export type BonusType =
-  | "none"
-  | "cash_bonus"
-  | "promo_free_play"
-  | "deposit_match"
-  | "reload"
-  | "casino_credit"
-  | "sweepstakes_sc";
+import type { BonusType, CalculatorName as Calculator, TradeType } from "./domain";
 
-export type TradeType =
-  | "cash_arbitrage"
-  | "promo_conversion"
-  | "cash_bonus_conversion"
-  | "low_hold"
-  | "rollover_clearing"
-  | "screener_comparison"
-  | "middle"
-  | "other";
-
-export type Calculator =
-  | "arbitrage"
-  | "promo_converter"
-  | "low_holds"
-  | "screener"
-  | "middle";
+export type { BonusType, TradeType, CalculatorName as Calculator } from "./domain";
 
 export function requiredCalculator(
   bonusType: BonusType,

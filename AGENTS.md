@@ -10,9 +10,12 @@ This is not the Next.js you know. This version has breaking changes; APIs, conve
 
 ## Live Planning Sources
 
-- Current implementation plan: `docs/active/DASHBOARD_AND_SPLIT_PRIORITIES.md`
-- Data-model boundary decision: `docs/active/ADR-001-trade-opportunity-model.md`
-- Current repo layout: `docs/active/REPO_STRUCTURE.md`
+- Completion tracker (update every coding session): `docs/active/PROJECT_COMPLETION_TRACKER.md`
+- Architecture route ownership ADR: `docs/active/ADR-002-split-app-route-ownership.md`
+- Bookmap product boundary ADR: `docs/active/ADR-003-bookmap-boundary.md`
+- Current implementation plan: `docs/PAPEREDGE_BUILD_PLAN.md`
+- Canonical verification commands: `docs/QUALITY_GATES.md`
+- Prior repository audit: `docs/REPO_AUDIT_AND_NEXT_STEPS.md`
 
 PaperEdge is a paper-trading app for tracking simulated sports-betting opportunities. It does not place real wagers, connect to sportsbook accounts, bypass geo checks, scrape private account data, or guarantee profit. The core product is a manual and semi-assisted workflow that helps the user import opportunities, verify the details, lock paper trades, track outcomes, and review performance.
 

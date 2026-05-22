@@ -2,6 +2,8 @@
 
 > Drop this file into the repo root or `/docs/`. Claude Code and human contributors should read this before touching any feature work.
 
+> Supersession note (2026-05-21): Route ownership and app-surface architecture are governed by `docs/active/ADR-002-split-app-route-ownership.md`. This build plan remains useful for product intent and feature sequencing, but not as the canonical source for root-route ownership.
+
 ---
 
 ## Product Direction

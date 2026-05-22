@@ -10,6 +10,10 @@
 
 import type { PrismaClient } from "@paperedge/database";
 import { cashPayout, lowHold, middleHedge, promoPayout } from "@paperedge/core/calc";
+import {
+  dollarsFromCentsOrNumberOrNull,
+} from "@paperedge/core/money-fields";
+import { toCents } from "@paperedge/core/money";
 
 export interface LockOpportunityResult {
   paperTradeId: string;
@@ -70,8 +74,8 @@ export async function lockOpportunityAsPaperTrade(
 
     const oddsA = opp.verifiedOddsA ?? opp.oddsA;
     const oddsB = opp.verifiedOddsB ?? opp.oddsB;
-    const stakeA = opp.stakeA;
-    const stakeB = opp.stakeB;
+    const stakeA = dollarsFromCentsOrNumberOrNull(opp.stakeACents, opp.stakeA);
+    const stakeB = dollarsFromCentsOrNumberOrNull(opp.stakeBCents, opp.stakeB);
     if (oddsA == null || oddsB == null) throw new LockOpportunityError("Both legs must have odds before locking", "MISSING_ODDS");
     if (stakeA == null || stakeB == null || stakeA <= 0 || stakeB <= 0) {
       throw new LockOpportunityError("Both legs must have positive stakes before locking", "MISSING_STAKE");
@@ -108,13 +112,27 @@ export async function lockOpportunityAsPaperTrade(
         oddsjamSnapshotJson: opp.rawEntryText,
         importedAt: opp.importedAt,
         expectedProfitIfA: econ.profitIfA,
+        expectedProfitIfACents: toCents(econ.profitIfA),
         expectedProfitIfB: econ.profitIfB,
+        expectedProfitIfBCents: toCents(econ.profitIfB),
         worstCasePL: econ.worstCase,
+        worstCasePLCents: toCents(econ.worstCase),
         bestCasePL: econ.bestCase,
+        bestCasePLCents: toCents(econ.bestCase),
         totalStakeExposure: stakeA + stakeB,
+        totalStakeExposureCents: toCents(stakeA + stakeB),
         hedgeStake: stakeB,
+        hedgeStakeCents: toCents(stakeB),
         promoConversionValue: opp.tradeType === "promo_conversion" ? econ.worstCase : null,
+        promoConversionValueCents:
+          opp.tradeType === "promo_conversion"
+            ? toCents(econ.worstCase)
+            : null,
         lowHoldLossAmount: opp.tradeType === "low_hold" || opp.tradeType === "rollover_clearing" ? Math.abs(Math.min(0, econ.worstCase)) : null,
+        lowHoldLossAmountCents:
+          opp.tradeType === "low_hold" || opp.tradeType === "rollover_clearing"
+            ? toCents(Math.abs(Math.min(0, econ.worstCase)))
+            : null,
         lowHoldLossPct: (opp.tradeType === "low_hold" || opp.tradeType === "rollover_clearing") && stakeA + stakeB > 0 ? (Math.abs(Math.min(0, econ.worstCase)) / (stakeA + stakeB)) * 100 : null,
         expectedRoiPct: stakeA + stakeB > 0 ? (econ.worstCase / (stakeA + stakeB)) * 100 : null,
         notes: opp.notes,
@@ -128,6 +146,7 @@ export async function lockOpportunityAsPaperTrade(
               oddsAmerican: oddsA,
               lineValue: lineA,
               stake: stakeA,
+              stakeCents: toCents(stakeA),
               oddsCapturedAt: opp.verifiedAt ?? opp.importedAt,
               verificationStatus: "verified",
               verifiedAt: opp.verifiedAt,
@@ -142,6 +161,7 @@ export async function lockOpportunityAsPaperTrade(
               oddsAmerican: oddsB,
               lineValue: lineB,
               stake: stakeB,
+              stakeCents: toCents(stakeB),
               oddsCapturedAt: opp.verifiedAt ?? opp.importedAt,
               verificationStatus: "verified",
               verifiedAt: opp.verifiedAt,

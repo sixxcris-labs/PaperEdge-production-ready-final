@@ -3,8 +3,7 @@ import { db } from "@paperedge/database";
 import { fmtUSD } from "@paperedge/core/fmt";
 import { KPI } from "@/components/ui/design";
 import { STATUS } from "@paperedge/core/status";
-
-const LOCAL_USER_EMAIL = "local@paperedge.app";
+import { getDashboardLocalUser } from "@/apps/dashboard/lib/local-user";
 export const dynamic = "force-dynamic";
 
 const MISTAKE_REASONS = [
@@ -21,7 +20,7 @@ const MISTAKE_REASONS = [
 ];
 
 export default async function MistakesPage() {
-  const user = await db.user.findUniqueOrThrow({ where: { email: LOCAL_USER_EMAIL } });
+  const user = await getDashboardLocalUser();
 
   const [mistakes, overrides] = await Promise.all([
     db.tradeMistake.findMany({

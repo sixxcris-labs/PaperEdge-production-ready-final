@@ -7,15 +7,25 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { toast } from "sonner";
 import { settleTrade } from "./settle-actions";
+import { netProfitLossFromSettlement } from "@paperedge/core/calc";
 
 interface Props {
   tradeId: string;
   legALabel?: string;
   legBLabel?: string;
+  legAStake?: number;
+  legBStake?: number;
   onDone: () => void;
 }
 
-export function SettleForm({ tradeId, legALabel = "Side A", legBLabel = "Side B", onDone }: Props) {
+export function SettleForm({
+  tradeId,
+  legALabel = "Side A",
+  legBLabel = "Side B",
+  legAStake = 0,
+  legBStake = 0,
+  onDone,
+}: Props) {
   const [winningSide, setWinningSide] = useState("A");
   const [finalStat, setFinalStat] = useState("");
   const [actualPayout, setActualPayout] = useState("");
@@ -25,10 +35,13 @@ export function SettleForm({ tradeId, legALabel = "Side A", legBLabel = "Side B"
   const [pending, setPending] = useState(false);
 
   // Auto-calculate P/L when payout + losing stake change
-  function recalcPL(payout: string, losing: string) {
+  function recalcPL(payout: string, losing: string, side = winningSide) {
     const p = parseFloat(payout) || 0;
     const l = parseFloat(losing) || 0;
-    if (p > 0 || l > 0) setActualPL((p - l).toFixed(2));
+    const winningStake = side === "A" ? legAStake : side === "B" ? legBStake : legAStake + legBStake;
+    if (p > 0 || l > 0 || winningStake > 0) {
+      setActualPL(netProfitLossFromSettlement(p, winningStake, l).toFixed(2));
+    }
   }
 
   async function handleSubmit(e: React.FormEvent) {
@@ -88,7 +101,7 @@ export function SettleForm({ tradeId, legALabel = "Side A", legBLabel = "Side B"
             value={actualPayout}
             onChange={(e) => {
               setActualPayout(e.target.value);
-              recalcPL(e.target.value, losingSake);
+              recalcPL(e.target.value, losingSake, winningSide);
             }}
             placeholder="526.00"
             className="mt-1"
@@ -103,7 +116,7 @@ export function SettleForm({ tradeId, legALabel = "Side A", legBLabel = "Side B"
             value={losingSake}
             onChange={(e) => {
               setLosingSake(e.target.value);
-              recalcPL(actualPayout, e.target.value);
+              recalcPL(actualPayout, e.target.value, winningSide);
             }}
             placeholder="398.00"
             className="mt-1"

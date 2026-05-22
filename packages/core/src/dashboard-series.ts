@@ -10,10 +10,10 @@
 
 import {
   getActualProfitLoss,
-  getConservativeExpectedProfit,
   type TradeMetricInput,
 } from "./trade-metrics";
 import { isSettled } from "./status";
+import { dollarsFromCentsOrNumberOrNull } from "./money-fields";
 
 // ─── Types ──────────────────────────────────────────────────────────────────
 
@@ -34,11 +34,16 @@ export interface DailyEvAPoint {
 export interface BankrollSnapshotInput {
   snapshotDate: Date;
   currentBankroll: number;
+  currentBankrollCents?: number | null;
 }
 
 /** Settled trade row shape — extends metric input with a settledAt timestamp. */
 export interface SettledTradeInput extends TradeMetricInput {
-  result?: { actualProfitLoss?: number | null; settledAt?: Date | null } | null;
+  result?: {
+    actualProfitLoss?: number | null;
+    actualProfitLossCents?: number | null;
+    settledAt?: Date | null;
+  } | null;
 }
 
 // ─── Bankroll curve ─────────────────────────────────────────────────────────
@@ -89,7 +94,13 @@ function curveFromSnapshots(
     (a, b) => a.snapshotDate.getTime() - b.snapshotDate.getTime(),
   );
   for (const s of sorted) {
-    byDay.set(isoDay(s.snapshotDate), s.currentBankroll);
+    const bankroll = dollarsFromCentsOrNumberOrNull(
+      s.currentBankrollCents,
+      s.currentBankroll,
+    );
+    if (bankroll !== null) {
+      byDay.set(isoDay(s.snapshotDate), bankroll);
+    }
   }
 
   // Forward-fill: a day with no snapshot inherits the previous day's value.
@@ -190,10 +201,16 @@ export function buildDailyExpectedVsActual(
  * status-based zeroing.
  */
 function originalExpectedProfit(t: TradeMetricInput): number {
-  const w = numericOrNull(t.worstCasePL);
+  const w = dollarsFromCentsOrNumberOrNull(t.worstCasePLCents, t.worstCasePL);
   if (w !== null) return w;
-  const a = numericOrNull(t.expectedProfitIfA);
-  const b = numericOrNull(t.expectedProfitIfB);
+  const a = dollarsFromCentsOrNumberOrNull(
+    t.expectedProfitIfACents,
+    t.expectedProfitIfA,
+  );
+  const b = dollarsFromCentsOrNumberOrNull(
+    t.expectedProfitIfBCents,
+    t.expectedProfitIfB,
+  );
   if (a !== null && b !== null) return Math.min(a, b);
   if (a !== null) return a;
   if (b !== null) return b;
@@ -250,10 +267,6 @@ function isWithinWindow(d: Date, window: DayBucket[]): boolean {
     t >= window[0].date.getTime() &&
     t < window[window.length - 1].date.getTime() + 24 * 60 * 60 * 1000
   );
-}
-
-function numericOrNull(v: number | null | undefined): number | null {
-  return typeof v === "number" && Number.isFinite(v) ? v : null;
 }
 
 function round2(v: number): number {

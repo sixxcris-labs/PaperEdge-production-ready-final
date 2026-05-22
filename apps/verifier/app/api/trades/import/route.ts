@@ -1,17 +1,24 @@
 import { NextResponse } from "next/server";
 import { createOpportunityFromRaw } from "@/lib/opportunity-service";
+import { localExtensionCorsHeaders, rejectDisallowedOrigin } from "@/apps/verifier/lib/cors";
 
-const corsHeaders = {
-  "Access-Control-Allow-Origin": "*",
-  "Access-Control-Allow-Methods": "POST, OPTIONS",
-  "Access-Control-Allow-Headers": "Content-Type",
-};
+const ALLOWED_METHODS = "POST, OPTIONS";
 
-export async function OPTIONS() {
-  return new Response(null, { status: 204, headers: corsHeaders });
+export async function OPTIONS(req: Request) {
+  const blocked = rejectDisallowedOrigin(req, ALLOWED_METHODS);
+  if (blocked) return blocked;
+  return new Response(null, {
+    status: 204,
+    headers: localExtensionCorsHeaders(req, ALLOWED_METHODS),
+  });
 }
 
 export async function POST(req: Request) {
+  const blocked = rejectDisallowedOrigin(req, ALLOWED_METHODS);
+  if (blocked) return blocked;
+
+  const headers = localExtensionCorsHeaders(req, ALLOWED_METHODS);
+
   try {
     const body = await req.json();
     const raw = typeof body?.raw === "string" ? body.raw : "";
@@ -23,12 +30,12 @@ export async function POST(req: Request) {
         status: opportunity.status,
         verifyUrl: `/verify/${opportunity.id}`,
       },
-      { headers: corsHeaders },
+      { headers },
     );
   } catch (error) {
     return NextResponse.json(
       { error: error instanceof Error ? error.message : "Failed to import opportunity" },
-      { status: 400, headers: corsHeaders },
+      { status: 400, headers },
     );
   }
 }

@@ -1,6 +1,6 @@
 import { notFound } from "next/navigation";
-import { db } from "@/lib/db";
-import { getLocalUser } from "@/lib/current-user";
+import { db } from "@paperedge/database";
+import { getLocalUser } from "@/lib/opportunity-service";
 import { VerifyClient } from "./VerifyClient";
 
 interface Props {

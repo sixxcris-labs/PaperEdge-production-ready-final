@@ -25,7 +25,9 @@ model UserSettings {
   userId                     String  @id
   user                       User    @relation(fields: [userId], references: [id])
   startingBankroll           Float   @default(1000)
+  startingBankrollCents      Int?
   currentBankroll            Float   @default(1000)
+  currentBankrollCents       Int?
   maxStakePct                Float   @default(5.0)
   oddsFreshnessMinutes       Int     @default(5)
   defaultUnitPct             Float   @default(1.0)
@@ -41,8 +43,11 @@ model Book {
   role              String        @default("unknown")
   available         Boolean       @default(true)
   currentBalance    Float         @default(0)
+  currentBalanceCents Int?
   rolloverRemaining Float         @default(0)
+  rolloverRemainingCents Int?
   maxBetLimit       Float?
+  maxBetLimitCents  Int?
   kycCompleted      Boolean       @default(false)
   notes             String?
   createdAt         DateTime      @default(now())
@@ -94,13 +99,21 @@ model PaperTrade {
   oddsjamSnapshotJson  String?
   importedAt           DateTime?
   expectedProfitIfA    Float?
+  expectedProfitIfACents Int?
   expectedProfitIfB    Float?
+  expectedProfitIfBCents Int?
   worstCasePL          Float?
+  worstCasePLCents     Int?
   bestCasePL           Float?
+  bestCasePLCents      Int?
   totalStakeExposure   Float?
+  totalStakeExposureCents Int?
   hedgeStake           Float?
+  hedgeStakeCents      Int?
   promoConversionValue Float?
+  promoConversionValueCents Int?
   lowHoldLossAmount    Float?
+  lowHoldLossAmountCents Int?
   lowHoldLossPct       Float?
   expectedRoiPct       Float?
   notes                String?
@@ -180,10 +193,13 @@ model TradeOpportunity {
   oddsA                Int?
   lineA                Float?
   stakeA               Float?
+  stakeACents          Int?
   liquidityA           Float?
+  liquidityACents      Int?
   verifiedOddsA        Int?
   verifiedLineA        Float?
   verifiedLiquidityA   Float?
+  verifiedLiquidityACents Int?
   bookANotes           String?
   bookAVerified        Boolean  @default(false)
 
@@ -194,10 +210,13 @@ model TradeOpportunity {
   oddsB                Int?
   lineB                Float?
   stakeB               Float?
+  stakeBCents          Int?
   liquidityB           Float?
+  liquidityBCents      Int?
   verifiedOddsB        Int?
   verifiedLineB        Float?
   verifiedLiquidityB   Float?
+  verifiedLiquidityBCents Int?
   bookBNotes           String?
   bookBVerified        Boolean  @default(false)
 
@@ -216,17 +235,24 @@ model TradeOpportunity {
 
   // Computed at import + refined post-verification
   totalExposure        Float?
+  totalExposureCents   Int?
   profitIfAWins        Float?
+  profitIfAWinsCents   Int?
   profitIfBWins        Float?
+  profitIfBWinsCents   Int?
   expectedProfitMin    Float?
+  expectedProfitMinCents Int?
   expectedProfitMax    Float?
+  expectedProfitMaxCents Int?
 
   // Middle-trade specifics (null for non-middles)
   middleDistance       Float?
   middleNumber         Float?
   middleRange          String?
   outsideLoss          Float?
+  outsideLossCents     Int?
   middleProfit         Float?
+  middleProfitCents    Int?
 
   createdAt            DateTime @default(now())
   updatedAt            DateTime @updatedAt
@@ -246,10 +272,12 @@ model TradeLeg {
   oddsAmerican         Int
   lineValue            Float?
   stake                Float
+  stakeCents           Int?
   isPromoLeg           Boolean    @default(false)
   promoStakeReturned   Boolean    @default(true)
   oddsCapturedAt       DateTime   @default(now())
   maxBetAtBook         Float?
+  maxBetAtBookCents    Int?
   bonusId              String?
   bonus                Bonus?     @relation(fields: [bonusId], references: [id])
   // Verification fields
@@ -298,7 +326,9 @@ model Result {
   trade                  PaperTrade @relation(fields: [tradeId], references: [id], onDelete: Cascade)
   winningSide            String?
   actualPayout           Float?
+  actualPayoutCents      Int?
   actualProfitLoss       Float?
+  actualProfitLossCents  Int?
   matchedExpectedOutcome Boolean?
   resultNotes            String?
   finalStat              String?
@@ -329,11 +359,16 @@ model Bonus {
   bookId                String
   book                  Book       @relation(fields: [bookId], references: [id])
   bonusAmount           Float
+  bonusAmountCents      Int?
   depositAmount         Float?
+  depositAmountCents    Int?
   rolloverMultiple      Float?
   requiredBettingVolume Float?
+  requiredBettingVolumeCents Int?
   volumeCompleted       Float      @default(0)
+  volumeCompletedCents  Int?
   volumeRemaining       Float?
+  volumeRemainingCents  Int?
   status                String     @default("not_started")
   notes                 String?
   createdAt             DateTime   @default(now())
@@ -347,9 +382,14 @@ model BankrollSnapshot {
   user            User     @relation(fields: [userId], references: [id])
   snapshotDate    DateTime
   currentBankroll Float
+  currentBankrollCents Int?
   dailyPL         Float?
+  dailyPLCents    Int?
   weeklyPL        Float?
+  weeklyPLCents   Int?
   monthlyPL       Float?
+  monthlyPLCents  Int?
   drawdown        Float?
+  drawdownCents   Int?
   createdAt       DateTime @default(now())
 }

@@ -1,9 +1,9 @@
 import { db } from "@paperedge/database";
 import { fmtUSD, fmtPct } from "@paperedge/core/fmt";
+import { dollarsFromCentsOrNumber, dollarsFromCentsOrNumberOrNull } from "@paperedge/core/money-fields";
 import { KPI, BarChart } from "@/components/ui/design";
 import { STATUS, groupList } from "@paperedge/core/status";
-
-const LOCAL_USER_EMAIL = "local@paperedge.app";
+import { getDashboardLocalUser } from "@/apps/dashboard/lib/local-user";
 export const dynamic = "force-dynamic";
 
 const MONTHLY_PROFIT = [
@@ -16,7 +16,7 @@ const MONTHLY_PROFIT = [
 ];
 
 export default async function PnLPage() {
-  const user = await db.user.findUniqueOrThrow({ where: { email: LOCAL_USER_EMAIL } });
+  const user = await getDashboardLocalUser();
 
   const settled = await db.paperTrade.findMany({
     where: {
@@ -34,24 +34,51 @@ export default async function PnLPage() {
   });
 
   const allSettled = [...settled, ...also];
+  const tradeActual = (trade: (typeof allSettled)[number]) =>
+    dollarsFromCentsOrNumber(
+      trade.result?.actualProfitLossCents,
+      trade.result?.actualProfitLoss,
+    );
+  const tradeExpected = (trade: (typeof allSettled)[number]) => {
+    const worstCase = dollarsFromCentsOrNumberOrNull(
+      trade.worstCasePLCents,
+      trade.worstCasePL,
+    );
+    if (worstCase != null) return worstCase;
+    const a = dollarsFromCentsOrNumberOrNull(
+      trade.expectedProfitIfACents,
+      trade.expectedProfitIfA,
+    );
+    const b = dollarsFromCentsOrNumberOrNull(
+      trade.expectedProfitIfBCents,
+      trade.expectedProfitIfB,
+    );
+    if (a != null && b != null) return Math.min(a, b);
+    return a ?? b ?? 0;
+  };
+  const tradeStake = (trade: (typeof allSettled)[number]) =>
+    dollarsFromCentsOrNumber(
+      trade.totalStakeExposureCents,
+      trade.totalStakeExposure,
+    );
 
   // expectedProfitRange is a free-text string — use the numeric fields instead.
   const totalExpected = allSettled.reduce(
-    (s, t) => s + (t.worstCasePL ?? t.expectedProfitIfA ?? 0),
+    (s, t) => s + tradeExpected(t),
     0
   );
-  const totalActual = allSettled.reduce((s, t) => s + (t.result?.actualProfitLoss ?? 0), 0);
-  const wins = allSettled.filter((t) => (t.result?.actualProfitLoss ?? 0) > 0).length;
+  const totalActual = allSettled.reduce((s, t) => s + tradeActual(t), 0);
+  const wins = allSettled.filter((t) => tradeActual(t) > 0).length;
   const winRate = allSettled.length ? (wins / allSettled.length) * 100 : 0;
   const avgProfit = allSettled.length ? totalActual / allSettled.length : 0;
-  const totalStaked = allSettled.reduce((s, t) => s + (t.totalStakeExposure ?? 0), 0);
+  const totalStaked = allSettled.reduce((s, t) => s + tradeStake(t), 0);
   const avgStake = allSettled.length ? totalStaked / allSettled.length : 0;
   const roi = totalStaked > 0 ? (totalActual / totalStaked) * 100 : 0;
 
   const best = allSettled.reduce<typeof allSettled[0] | null>((b, t) =>
-    !b || (t.result?.actualProfitLoss ?? -Infinity) > (b.result?.actualProfitLoss ?? -Infinity) ? t : b, null);
+    !b || tradeActual(t) > tradeActual(b) ? t : b, null);
   const worst = allSettled.reduce<typeof allSettled[0] | null>((b, t) =>
-    !b || (t.result?.actualProfitLoss ?? Infinity) < (b.result?.actualProfitLoss ?? Infinity) ? t : b, null);
+    !b || tradeActual(t) < tradeActual(b) ? t : b, null);
 
   // Profit by book
   const bookProfitMap: Record<string, { name: string; profit: number }> = {};
@@ -60,7 +87,7 @@ export default async function PnLPage() {
       const name = leg.book.name;
       if (!bookProfitMap[name]) bookProfitMap[name] = { name, profit: 0 };
       // Credit half the P/L to each leg (approximate)
-      bookProfitMap[name].profit += (t.result?.actualProfitLoss ?? 0) / 2;
+      bookProfitMap[name].profit += tradeActual(t) / 2;
     }
   }
   const profitByBook = Object.values(bookProfitMap).sort((a, b) => b.profit - a.profit).map((b) => ({ m: b.name, v: Math.round(b.profit * 100) / 100 }));
@@ -69,7 +96,7 @@ export default async function PnLPage() {
   const marketProfitMap: Record<string, number> = {};
   for (const t of allSettled) {
     const market = t.marketType ?? "Other";
-    marketProfitMap[market] = (marketProfitMap[market] ?? 0) + (t.result?.actualProfitLoss ?? 0);
+    marketProfitMap[market] = (marketProfitMap[market] ?? 0) + tradeActual(t);
   }
   const profitByMarket = Object.entries(marketProfitMap).map(([m, v]) => ({ m, v: Math.round(v * 100) / 100 })).sort((a, b) => b.v - a.v);
 
@@ -102,8 +129,8 @@ export default async function PnLPage() {
         <KPI label="Win rate"              value={`${winRate.toFixed(1)}%`} sub={`${wins} / ${allSettled.length} settled`} />
         <KPI label="Avg. profit / trade"   value={fmtUSD(avgProfit, { sign: true })} sub="per settled trade" />
         <KPI label="Avg. stake / trade"    value={fmtUSD(avgStake)} sub="combined both books" />
-        <KPI label="Best trade"            value={fmtUSD(best?.result?.actualProfitLoss ?? 0, { sign: true })} sub={best?.eventName ?? "—"} up />
-        <KPI label="Worst trade"           value={fmtUSD(worst?.result?.actualProfitLoss ?? 0, { sign: true })} sub={worst?.eventName ?? "—"} down />
+        <KPI label="Best trade"            value={fmtUSD(best ? tradeActual(best) : 0, { sign: true })} sub={best?.eventName ?? "—"} up />
+        <KPI label="Worst trade"           value={fmtUSD(worst ? tradeActual(worst) : 0, { sign: true })} sub={worst?.eventName ?? "—"} down />
       </div>
 
       {/* Charts */}
@@ -150,8 +177,8 @@ export default async function PnLPage() {
                   <tr><td colSpan={5} style={{ textAlign: "center", padding: "32px", color: "var(--fg-4)" }}>No settled trades yet.</td></tr>
                 ) : (
                   allSettled.map((t) => {
-                    const actual = t.result?.actualProfitLoss ?? 0;
-                    const expected = t.worstCasePL ?? t.expectedProfitIfA ?? 0;
+                    const actual = tradeActual(t);
+                    const expected = tradeExpected(t);
                     const variance = actual - expected;
                     return (
                       <tr key={t.id}>

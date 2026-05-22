@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { db } from "@paperedge/database";
 import { fmtUSD } from "@paperedge/core/fmt";
+import { dollarsFromCentsOrNumberOrNull } from "@paperedge/core/money-fields";
 import { getLocalUser } from "@/lib/opportunity-service";
 
 export const dynamic = "force-dynamic";
@@ -34,7 +35,15 @@ export default async function QueuePage() {
                   <td>{o.bookA?.name ?? "Book A"} / {o.bookB?.name ?? "Book B"}</td>
                   <td>{o.market}</td>
                   <td><span className="badge b-needs"><span className="dot" />{o.status}</span></td>
-                  <td className="num">{o.expectedProfitMin != null ? fmtUSD(o.expectedProfitMin, { sign: true }) : "—"}</td>
+                  <td className="num">
+                    {(() => {
+                      const expected = dollarsFromCentsOrNumberOrNull(
+                        o.expectedProfitMinCents,
+                        o.expectedProfitMin,
+                      );
+                      return expected != null ? fmtUSD(expected, { sign: true }) : "—";
+                    })()}
+                  </td>
                   <td><Link className="btn ghost" href={`/verify/${o.id}`}>Verify</Link></td>
                 </tr>
               ))}

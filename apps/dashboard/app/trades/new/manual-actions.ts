@@ -4,17 +4,40 @@ import { revalidatePath } from "next/cache";
 import { db } from "@paperedge/database";
 import { cashArbHedge, cashPayout } from "@paperedge/core/calc";
 import {
+  dollarsFromCentsOrNumber,
+  dollarsFromCentsOrNumberOrNull,
+} from "@paperedge/core/money-fields";
+import { toCents, toCentsOrNull } from "@paperedge/core/money";
+import {
   isSettlementBlock,
   parseSettlementBlock,
   settledStatusFor,
   type ParsedSettlement,
 } from "@paperedge/core/import-settlement";
 import type { ManualTradeInput } from "./manual-schema";
+import { getDashboardLocalUser } from "@/apps/dashboard/lib/local-user";
 
-const LOCAL_USER_EMAIL = "local@paperedge.app";
+function expectedMoneyFields(values: {
+  expectedProfitIfA: number | null;
+  expectedProfitIfB: number | null;
+  worstCasePL: number | null;
+  bestCasePL: number | null;
+  totalStakeExposure: number;
+  hedgeStake: number | null;
+}) {
+  return {
+    ...values,
+    expectedProfitIfACents: toCentsOrNull(values.expectedProfitIfA),
+    expectedProfitIfBCents: toCentsOrNull(values.expectedProfitIfB),
+    worstCasePLCents: toCentsOrNull(values.worstCasePL),
+    bestCasePLCents: toCentsOrNull(values.bestCasePL),
+    totalStakeExposureCents: toCents(values.totalStakeExposure),
+    hedgeStakeCents: toCentsOrNull(values.hedgeStake),
+  };
+}
 
 export async function createManualTrade(input: ManualTradeInput): Promise<string> {
-  const user = await db.user.findUniqueOrThrow({ where: { email: LOCAL_USER_EMAIL } });
+  const user = await getDashboardLocalUser();
 
   // Run the arbitrage calculator so numeric expected-profit fields are always
   // populated. This powers the dashboard KPIs and P/L tracker correctly.
@@ -66,12 +89,14 @@ export async function createManualTrade(input: ManualTradeInput): Promise<string
       expectedProfitRange: input.expectedProfitRange || null,
       notes: input.notes || null,
       // Numeric expected-profit fields — use calc output when available.
-      totalStakeExposure: calcFields?.totalStakeExposure ?? (input.stakeA + input.stakeB),
-      expectedProfitIfA: calcFields?.expectedProfitIfA ?? null,
-      expectedProfitIfB: calcFields?.expectedProfitIfB ?? null,
-      worstCasePL: calcFields?.worstCasePL ?? null,
-      bestCasePL: calcFields?.bestCasePL ?? null,
-      hedgeStake: calcFields?.hedgeStake ?? null,
+      ...expectedMoneyFields({
+        totalStakeExposure: calcFields?.totalStakeExposure ?? (input.stakeA + input.stakeB),
+        expectedProfitIfA: calcFields?.expectedProfitIfA ?? null,
+        expectedProfitIfB: calcFields?.expectedProfitIfB ?? null,
+        worstCasePL: calcFields?.worstCasePL ?? null,
+        bestCasePL: calcFields?.bestCasePL ?? null,
+        hedgeStake: calcFields?.hedgeStake ?? null,
+      }),
       expectedRoiPct: calcFields?.expectedRoiPct ?? null,
     },
   });
@@ -85,6 +110,7 @@ export async function createManualTrade(input: ManualTradeInput): Promise<string
       oddsAmerican: input.oddsA,
       lineValue: input.lineValue,
       stake: input.stakeA,
+      stakeCents: toCents(input.stakeA),
     },
   });
 
@@ -97,6 +123,7 @@ export async function createManualTrade(input: ManualTradeInput): Promise<string
       oddsAmerican: input.oddsB,
       lineValue: input.lineValue,
       stake: input.stakeB,
+      stakeCents: toCents(input.stakeB),
     },
   });
 
@@ -109,7 +136,14 @@ async function findOrCreateBook(userId: string, name: string): Promise<string> {
   const existing = await db.book.findFirst({ where: { userId, name } });
   if (existing) return existing.id;
   const created = await db.book.create({
-    data: { userId, name, role: "unknown", available: false },
+    data: {
+      userId,
+      name,
+      role: "unknown",
+      available: false,
+      currentBalanceCents: 0,
+      rolloverRemainingCents: 0,
+    },
   });
   return created.id;
 }
@@ -117,7 +151,7 @@ async function findOrCreateBook(userId: string, name: string): Promise<string> {
 export async function importTradesFromText(
   raw: string
 ): Promise<{ created: number; settled: number; errors: string[] }> {
-  const user = await db.user.findUniqueOrThrow({ where: { email: LOCAL_USER_EMAIL } });
+  const user = await getDashboardLocalUser();
 
   const blocks = raw.trim().split(/\n-{3,}\n|\n{3,}/).map((b) => b.trim()).filter(Boolean);
   const errors: string[] = [];
@@ -175,12 +209,14 @@ export async function importTradesFromText(
           source: "manual",
           expectedProfitRange: parsed.expectedProfitRange || null,
           notes: parsed.notes || null,
-          totalStakeExposure: importCalc?.totalStakeExposure ?? (parsed.stakeA + parsed.stakeB),
-          expectedProfitIfA: importCalc?.expectedProfitIfA ?? null,
-          expectedProfitIfB: importCalc?.expectedProfitIfB ?? null,
-          worstCasePL: importCalc?.worstCasePL ?? null,
-          bestCasePL: importCalc?.bestCasePL ?? null,
-          hedgeStake: importCalc?.hedgeStake ?? null,
+          ...expectedMoneyFields({
+            totalStakeExposure: importCalc?.totalStakeExposure ?? (parsed.stakeA + parsed.stakeB),
+            expectedProfitIfA: importCalc?.expectedProfitIfA ?? null,
+            expectedProfitIfB: importCalc?.expectedProfitIfB ?? null,
+            worstCasePL: importCalc?.worstCasePL ?? null,
+            bestCasePL: importCalc?.bestCasePL ?? null,
+            hedgeStake: importCalc?.hedgeStake ?? null,
+          }),
           expectedRoiPct: importCalc?.expectedRoiPct ?? null,
         },
       });
@@ -194,6 +230,7 @@ export async function importTradesFromText(
           oddsAmerican: parsed.oddsA,
           lineValue: parsed.lineValue,
           stake: parsed.stakeA,
+          stakeCents: toCents(parsed.stakeA),
         },
       });
 
@@ -206,6 +243,7 @@ export async function importTradesFromText(
           oddsAmerican: parsed.oddsB,
           lineValue: parsed.lineValue,
           stake: parsed.stakeB,
+          stakeCents: toCents(parsed.stakeB),
         },
       });
 
@@ -273,10 +311,14 @@ async function applySettlement(
   let pl = s.actualProfitLoss;
   if (winLeg) {
     try {
-      const p = cashPayout(winLeg.stake, winLeg.oddsAmerican);
+      const winStake = dollarsFromCentsOrNumber(winLeg.stakeCents, winLeg.stake);
+      const loseStake = loseLeg
+        ? dollarsFromCentsOrNumber(loseLeg.stakeCents, loseLeg.stake)
+        : 0;
+      const p = cashPayout(winStake, winLeg.oddsAmerican);
       actualPayout = p.totalReturn;
       // Derive net P/L only if the text didn't state it explicitly.
-      if (pl == null) pl = p.profit - (loseLeg?.stake ?? 0);
+      if (pl == null) pl = p.profit - loseStake;
     } catch {
       /* invalid odds — fall through to pl ?? 0 */
     }
@@ -284,16 +326,25 @@ async function applySettlement(
   if (pl == null) pl = 0;
 
   const status = settledStatusFor(s.winningSide, pl);
+  const worstCasePL = dollarsFromCentsOrNumberOrNull(
+    trade.worstCasePLCents,
+    trade.worstCasePL,
+  );
+  const resultMoney = {
+    actualPayout,
+    actualPayoutCents: toCentsOrNull(actualPayout),
+    actualProfitLoss: pl,
+    actualProfitLossCents: toCents(pl),
+  };
 
   await db.result.upsert({
     where: { tradeId: trade.id },
     update: {
       winningSide: s.winningSide || null,
       finalStat: s.finalStat || null,
-      actualPayout,
-      actualProfitLoss: pl,
+      ...resultMoney,
       matchedExpectedOutcome:
-        trade.worstCasePL != null ? pl >= trade.worstCasePL : null,
+        worstCasePL != null ? pl >= worstCasePL : null,
       resultNotes: s.resultNotes || null,
       settledAt: new Date(),
     },
@@ -301,10 +352,9 @@ async function applySettlement(
       tradeId: trade.id,
       winningSide: s.winningSide || null,
       finalStat: s.finalStat || null,
-      actualPayout,
-      actualProfitLoss: pl,
+      ...resultMoney,
       matchedExpectedOutcome:
-        trade.worstCasePL != null ? pl >= trade.worstCasePL : null,
+        worstCasePL != null ? pl >= worstCasePL : null,
       resultNotes: s.resultNotes || null,
       settledAt: new Date(),
     },
@@ -317,9 +367,17 @@ async function applySettlement(
 
   const settings = await db.userSettings.findUnique({ where: { userId } });
   if (settings) {
+    const bankroll = dollarsFromCentsOrNumber(
+      settings.currentBankrollCents,
+      settings.currentBankroll,
+    );
+    const nextBankroll = bankroll + pl;
     await db.userSettings.update({
       where: { userId },
-      data: { currentBankroll: settings.currentBankroll + pl },
+      data: {
+        currentBankroll: nextBankroll,
+        currentBankrollCents: toCents(nextBankroll),
+      },
     });
   }
 

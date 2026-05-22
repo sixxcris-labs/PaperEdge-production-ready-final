@@ -12,7 +12,7 @@ It does **not** scrape odds automatically, log into books, read account balances
 2. Open Chrome at `chrome://extensions/`.
 3. Turn on Developer mode.
 4. Click **Load unpacked**.
-5. Select `paperedge/apps/verifier/extensions/paperedge-verifier/`.
+5. Select `paperedge/extensions/paperedge-verifier/`.
 6. Pin the PaperEdge icon.
 7. Open the popup and confirm the API base is `http://localhost:3001`.
 

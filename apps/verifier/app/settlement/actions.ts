@@ -3,6 +3,11 @@
 import { revalidatePath } from "next/cache";
 import { computeSnapshotPL } from "@paperedge/core/bankroll-snapshots";
 import { db } from "@paperedge/database";
+import {
+  dollarsFromCentsOrNumber,
+  dollarsFromCentsOrNumberOrNull,
+} from "@paperedge/core/money-fields";
+import { toCents } from "@paperedge/core/money";
 import { getLocalUser } from "@/lib/opportunity-service";
 
 export async function confirmSettlementSuggestion(formData: FormData) {
@@ -17,7 +22,7 @@ export async function confirmSettlementSuggestion(formData: FormData) {
         paperTrade: {
           include: {
             result: true,
-            legs: { select: { stake: true } },
+            legs: { select: { stake: true, stakeCents: true } },
           },
         },
       },
@@ -34,7 +39,15 @@ export async function confirmSettlementSuggestion(formData: FormData) {
 
     const winningSide = normalizeWinningSide(suggestion.suggestedWinningSide);
     const profitLoss = suggestion.suggestedProfitLoss;
-    const totalExposure = suggestion.paperTrade.totalStakeExposure ?? suggestion.paperTrade.legs.reduce((sum, leg) => sum + leg.stake, 0);
+    const totalExposure = dollarsFromCentsOrNumberOrNull(
+      suggestion.paperTrade.totalStakeExposureCents,
+      suggestion.paperTrade.totalStakeExposure,
+    ) ??
+      suggestion.paperTrade.legs.reduce(
+        (sum, leg) =>
+          sum + dollarsFromCentsOrNumber(leg.stakeCents, leg.stake),
+        0,
+      );
     const actualPayout = totalExposure + profitLoss;
 
     await tx.result.create({
@@ -42,7 +55,9 @@ export async function confirmSettlementSuggestion(formData: FormData) {
         tradeId: suggestion.paperTradeId,
         winningSide,
         actualPayout,
+        actualPayoutCents: toCents(actualPayout),
         actualProfitLoss: profitLoss,
+        actualProfitLossCents: toCents(profitLoss),
         matchedExpectedOutcome: null,
         resultNotes: `Confirmed settlement suggestion: ${suggestion.reason}`,
         finalStat: null,
@@ -67,12 +82,28 @@ export async function confirmSettlementSuggestion(formData: FormData) {
       },
     });
 
+    const existingSettings = await tx.userSettings.findUnique({
+      where: { userId: user.id },
+    });
+    const baseCurrentBankroll = existingSettings
+      ? dollarsFromCentsOrNumber(
+          existingSettings.currentBankrollCents,
+          existingSettings.currentBankroll,
+        )
+      : 1000;
+    const nextCurrentBankroll = baseCurrentBankroll + profitLoss;
+
     const settings = await tx.userSettings.upsert({
       where: { userId: user.id },
-      update: { currentBankroll: { increment: profitLoss } },
+      update: {
+        currentBankroll: nextCurrentBankroll,
+        currentBankrollCents: toCents(nextCurrentBankroll),
+      },
       create: {
         userId: user.id,
-        currentBankroll: 1000 + profitLoss,
+        currentBankroll: nextCurrentBankroll,
+        currentBankrollCents: toCents(nextCurrentBankroll),
+        startingBankrollCents: toCents(1000),
       },
     });
 
@@ -88,6 +119,7 @@ export async function confirmSettlementSuggestion(formData: FormData) {
       select: {
         settledAt: true,
         actualProfitLoss: true,
+        actualProfitLossCents: true,
       },
     });
 
@@ -98,9 +130,13 @@ export async function confirmSettlementSuggestion(formData: FormData) {
         userId: user.id,
         snapshotDate: settledAt,
         currentBankroll: settings.currentBankroll,
+        currentBankrollCents: toCents(settings.currentBankroll),
         dailyPL,
+        dailyPLCents: toCents(dailyPL),
         weeklyPL,
+        weeklyPLCents: toCents(weeklyPL),
         monthlyPL,
+        monthlyPLCents: toCents(monthlyPL),
       },
     });
   });

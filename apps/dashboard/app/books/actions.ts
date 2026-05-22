@@ -2,24 +2,36 @@
 
 import { revalidatePath } from "next/cache";
 import { db } from "@paperedge/database";
+import { toCents, toCentsOrNull } from "@paperedge/core/money";
 import { parseBookFormData } from "@/lib/book-form";
-
-const LOCAL_USER_EMAIL = "local@paperedge.app";
-
-async function getLocalUser() {
-  return db.user.findUniqueOrThrow({ where: { email: LOCAL_USER_EMAIL } });
-}
+import { getDashboardLocalUser } from "@/apps/dashboard/lib/local-user";
 
 export async function createBook(formData: FormData) {
-  const user = await getLocalUser();
+  const user = await getDashboardLocalUser();
   const data = parseBookFormData(formData);
-  await db.book.create({ data: { ...data, userId: user.id } });
+  await db.book.create({
+    data: {
+      ...data,
+      userId: user.id,
+      currentBalanceCents: toCents(data.currentBalance),
+      rolloverRemainingCents: toCents(data.rolloverRemaining),
+      maxBetLimitCents: toCentsOrNull(data.maxBetLimit),
+    },
+  });
   revalidatePath("/books");
 }
 
 export async function updateBook(id: string, formData: FormData) {
   const data = parseBookFormData(formData);
-  await db.book.update({ where: { id }, data });
+  await db.book.update({
+    where: { id },
+    data: {
+      ...data,
+      currentBalanceCents: toCents(data.currentBalance),
+      rolloverRemainingCents: toCents(data.rolloverRemaining),
+      maxBetLimitCents: toCentsOrNull(data.maxBetLimit),
+    },
+  });
   revalidatePath("/books");
 }
 

@@ -5,11 +5,20 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import { cashPayout, lowHold, middleHedge, promoPayout } from "@paperedge/core/calc";
-import { lockGateFailures } from "@paperedge/core/checklist";
+import {
+  evaluateManualLockChecklistFailures,
+  evaluateVerificationGates,
+  type VerificationTradeInput,
+} from "@paperedge/core/verification-gates";
 import { fmtOdds, fmtUSD } from "@paperedge/core/fmt";
 
 interface Props {
   opportunity: any;
+  settings?: {
+    currentBankroll?: number | null;
+    maxStakePct?: number | null;
+    oddsFreshnessMinutes?: number | null;
+  } | null;
   backHref?: string;
   afterLockHref?: string;
 }
@@ -50,11 +59,19 @@ function defaultLegState(opportunity: any, leg: "A" | "B"): LegState {
   };
 }
 
-export function OpportunityVerifyClient({ opportunity, backHref = "/verify", afterLockHref = "/locked" }: Props) {
+export function OpportunityVerifyClient({
+  opportunity,
+  settings,
+  backHref = "/verify",
+  afterLockHref = "/locked",
+}: Props) {
   const router = useRouter();
   const [started, setStarted] = useState(Boolean(opportunity.bookAVerified || opportunity.bookBVerified || String(opportunity.status).startsWith("verifying")));
   const [bookA, setBookA] = useState(() => defaultLegState(opportunity, "A"));
   const [bookB, setBookB] = useState(() => defaultLegState(opportunity, "B"));
+  const [lastVerifiedAt, setLastVerifiedAt] = useState<Date | null>(() =>
+    opportunity.verifiedAt ? new Date(opportunity.verifiedAt) : null,
+  );
   const [checks, setChecks] = useState<CheckState>({
     sameEventConfirmed: Boolean(opportunity.sameEventConfirmed),
     sameMarketConfirmed: Boolean(opportunity.sameMarketConfirmed),
@@ -71,23 +88,79 @@ export function OpportunityVerifyClient({ opportunity, backHref = "/verify", aft
   const [locking, setLocking] = useState(false);
 
   const economics = useMemo(() => computeEconomics(opportunity.tradeType, bookA, bookB), [opportunity.tradeType, bookA, bookB]);
-  const failures = lockGateFailures({
+  const opportunityTradeType = String(opportunity.tradeType ?? "").trim().toLowerCase();
+  const derivedBonusType =
+    opportunityTradeType.includes("promo") || opportunityTradeType.includes("bonus")
+      ? "promo free play"
+      : "cash";
+  const derivedCalculatorUsed = opportunityTradeType.includes("middle")
+    ? "middle"
+    : opportunityTradeType.includes("promo") || opportunityTradeType.includes("bonus")
+      ? "promo_converter"
+      : "arbitrage";
+
+  const verificationInput: VerificationTradeInput = {
+    goal: opportunityTradeType.includes("middle") ? "middle" : "profit",
+    tradeType: opportunity.tradeType ?? null,
+    bonusType: derivedBonusType,
+    calculatorUsed: derivedCalculatorUsed,
+    bankroll: settings?.currentBankroll ?? 1000,
+    maxStakePct: settings?.maxStakePct ?? 5,
+    oddsVerifiedAt: lastVerifiedAt,
+    oddsFreshnessSeconds: (settings?.oddsFreshnessMinutes ?? 5) * 60,
+    rolloverAmount: null,
+    rolloverMultiple: null,
+    rolloverUnknownOrNA: true,
+    oppositeSideConfirmed: checks.oppositeSidesConfirmed,
+    legA: {
+      bookId: opportunity.bookAId ?? null,
+      bookName: opportunity.bookA?.name ?? null,
+      event: opportunity.event ?? null,
+      market: opportunity.market ?? null,
+      period: opportunity.period ?? null,
+      side: opportunity.sideA ?? null,
+      oddsAmerican:
+        numberOrNull(bookA.observedOdds) ?? opportunity.verifiedOddsA ?? opportunity.oddsA ?? null,
+      stake: numberOrNull(bookA.stake) ?? opportunity.stakeA ?? null,
+      line:
+        numberOrNull(bookA.observedLine) ?? opportunity.verifiedLineA ?? opportunity.lineA ?? null,
+    },
+    legB: {
+      bookId: opportunity.bookBId ?? null,
+      bookName: opportunity.bookB?.name ?? null,
+      event: opportunity.event ?? null,
+      market: opportunity.market ?? null,
+      period: opportunity.period ?? null,
+      side: opportunity.sideB ?? null,
+      oddsAmerican:
+        numberOrNull(bookB.observedOdds) ?? opportunity.verifiedOddsB ?? opportunity.oddsB ?? null,
+      stake: numberOrNull(bookB.stake) ?? opportunity.stakeB ?? null,
+      line:
+        numberOrNull(bookB.observedLine) ?? opportunity.verifiedLineB ?? opportunity.lineB ?? null,
+    },
+  };
+  const verificationGateFailures = evaluateVerificationGates(verificationInput, new Date())
+    .filter((gate) => gate.status !== "pass")
+    .map((gate) => `${gate.label}: ${gate.message}`);
+  const manualGateFailures = evaluateManualLockChecklistFailures({
     bookAVerified: bookA.verified,
     bookBVerified: bookB.verified,
     sameEventConfirmed: checks.sameEventConfirmed,
-    sameMarketTypeConfirmed: checks.sameMarketConfirmed,
-    sameGamePeriodConfirmed: checks.samePeriodConfirmed,
+    sameMarketConfirmed: checks.sameMarketConfirmed,
+    samePlayerOrTeamConfirmed: checks.samePlayerOrTeamConfirmed,
+    requiresSamePlayerOrTeam: Boolean(opportunity.playerOrTeam),
+    samePeriodConfirmed: checks.samePeriodConfirmed,
     sameLineConfirmed: checks.sameLineConfirmed,
+    isMiddleTrade: opportunityTradeType.includes("middle"),
     oppositeSidesConfirmed: checks.oppositeSidesConfirmed,
-    recalculatedConfirmed: checks.recalculatedConfirmed,
     oddsAcceptedConfirmed: checks.oddsAcceptedConfirmed,
     stakeAcceptedConfirmed: checks.stakeAcceptedConfirmed,
     liquidityEnoughConfirmed: checks.liquidityEnoughConfirmed,
+    recalculatedConfirmed: checks.recalculatedConfirmed,
     userFinalConfirm: checks.userFinalConfirm,
-    hasPlayerOrTeam: Boolean(opportunity.playerOrTeam),
-    samePlayerOrTeamConfirmed: checks.samePlayerOrTeamConfirmed,
-    tradeType: opportunity.tradeType,
   });
+  const failures = [...verificationGateFailures, ...manualGateFailures];
+  const canLock = failures.length === 0;
 
   async function startVerification() {
     const response = await fetch(`/api/trades/${opportunity.id}/start-verification`, { method: "POST" });
@@ -145,6 +218,7 @@ export function OpportunityVerifyClient({ opportunity, backHref = "/verify", aft
         throw new Error(body.error ?? "Could not save verification");
       }
       setState((prev) => ({ ...prev, verified: true, saving: false }));
+      setLastVerifiedAt(new Date());
       toast.success(`Book ${leg} verified`);
     } catch (error) {
       setState((prev) => ({ ...prev, saving: false }));

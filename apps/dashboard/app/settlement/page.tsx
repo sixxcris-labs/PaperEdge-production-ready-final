@@ -1,12 +1,12 @@
 import { db } from "@paperedge/database";
 import { groupList } from "@paperedge/core/status";
+import { dollarsFromCentsOrNumber, dollarsFromCentsOrNumberOrNull } from "@paperedge/core/money-fields";
 import { SettlementClient } from "./SettlementClient";
-
-const LOCAL_USER_EMAIL = "local@paperedge.app";
+import { getDashboardLocalUser } from "@/apps/dashboard/lib/local-user";
 export const dynamic = "force-dynamic";
 
 export default async function SettlementPage() {
-  const user = await db.user.findUniqueOrThrow({ where: { email: LOCAL_USER_EMAIL } });
+  const user = await getDashboardLocalUser();
 
   const candidates = await db.paperTrade.findMany({
     where: {
@@ -37,15 +37,25 @@ export default async function SettlementPage() {
       time: t.tradeDate.toLocaleTimeString("en-US", { hour: "numeric", minute: "2-digit" }),
       date: t.tradeDate.toISOString().slice(0, 10),
       status: t.status,
-      expectedProfit: t.worstCasePL ?? t.expectedProfitIfA ?? 0,
+      expectedProfit:
+        dollarsFromCentsOrNumberOrNull(t.worstCasePLCents, t.worstCasePL) ??
+        dollarsFromCentsOrNumberOrNull(
+          t.expectedProfitIfACents,
+          t.expectedProfitIfA,
+        ) ??
+        0,
       bookA: legA?.book.name ?? "—",
       sideA: legA?.side ?? "",
       oddsA: legA?.oddsAmerican ?? 0,
-      stakeA: legA?.stake ?? 0,
+      stakeA: legA
+        ? dollarsFromCentsOrNumber(legA.stakeCents, legA.stake)
+        : 0,
       bookB: legB?.book.name ?? "—",
       sideB: legB?.side ?? "",
       oddsB: legB?.oddsAmerican ?? 0,
-      stakeB: legB?.stake ?? 0,
+      stakeB: legB
+        ? dollarsFromCentsOrNumber(legB.stakeCents, legB.stake)
+        : 0,
     };
   });
 

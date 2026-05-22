@@ -5,8 +5,9 @@ import { z } from "zod";
 import { db } from "@paperedge/database";
 import { STATUS, isSettled } from "@paperedge/core/status";
 import { computeSnapshotPL } from "@paperedge/core/bankroll-snapshots";
-
-const LOCAL_USER_EMAIL = "local@paperedge.app";
+import { dollarsFromCentsOrNumber } from "@paperedge/core/money-fields";
+import { toCents } from "@paperedge/core/money";
+import { getDashboardLocalUser } from "@/apps/dashboard/lib/local-user";
 
 /** Statuses that cannot be re-settled or mutated. */
 const isLocked = (status: string) => isSettled(status) || status === STATUS.cancelled;
@@ -25,7 +26,7 @@ const SettleSchema = z.object({
 
 export async function settleTrade(tradeId: string, formData: FormData) {
   // Verify ownership and guard against re-settling a locked trade.
-  const user = await db.user.findUniqueOrThrow({ where: { email: LOCAL_USER_EMAIL } });
+  const user = await getDashboardLocalUser();
   const trade = await db.paperTrade.findUnique({
     where: { id: tradeId },
     include: { result: true },
@@ -62,13 +63,25 @@ export async function settleTrade(tradeId: string, formData: FormData) {
 
   const settledAt = new Date();
   await db.$transaction(async (tx) => {
+    const latestTrade = await tx.paperTrade.findUnique({
+      where: { id: tradeId },
+      include: { result: true },
+    });
+    if (!latestTrade) throw new Error("Trade not found");
+    if (latestTrade.userId !== user.id) throw new Error("Unauthorised");
+    if (isLocked(latestTrade.status) || latestTrade.result?.settledAt) {
+      throw new Error("This trade is already settled and cannot be changed.");
+    }
+
     await tx.result.upsert({
       where: { tradeId },
       update: {
         winningSide,
         finalStat: data.finalStat ?? null,
         actualPayout: data.actualPayout,
+        actualPayoutCents: toCents(data.actualPayout),
         actualProfitLoss: data.actualProfitLoss,
+        actualProfitLossCents: toCents(data.actualProfitLoss),
         matchedExpectedOutcome: data.matchedExpectedOutcome,
         resultNotes: data.resultNotes,
         settledAt,
@@ -78,7 +91,9 @@ export async function settleTrade(tradeId: string, formData: FormData) {
         winningSide,
         finalStat: data.finalStat ?? null,
         actualPayout: data.actualPayout,
+        actualPayoutCents: toCents(data.actualPayout),
         actualProfitLoss: data.actualProfitLoss,
+        actualProfitLossCents: toCents(data.actualProfitLoss),
         matchedExpectedOutcome: data.matchedExpectedOutcome,
         resultNotes: data.resultNotes,
         settledAt,
@@ -90,16 +105,28 @@ export async function settleTrade(tradeId: string, formData: FormData) {
       data: { status },
     });
 
-    // Re-settlement is blocked above; this guard keeps bankroll safe if that
-    // rule changes later.
-    if (trade.result?.settledAt) return;
+    const existingSettings = await tx.userSettings.findUnique({
+      where: { userId: user.id },
+    });
+    const baseCurrentBankroll = existingSettings
+      ? dollarsFromCentsOrNumber(
+          existingSettings.currentBankrollCents,
+          existingSettings.currentBankroll,
+        )
+      : 1000;
+    const nextCurrentBankroll = baseCurrentBankroll + data.actualProfitLoss;
 
     const settings = await tx.userSettings.upsert({
       where: { userId: user.id },
-      update: { currentBankroll: { increment: data.actualProfitLoss } },
+      update: {
+        currentBankroll: nextCurrentBankroll,
+        currentBankrollCents: toCents(nextCurrentBankroll),
+      },
       create: {
         userId: user.id,
-        currentBankroll: 1000 + data.actualProfitLoss,
+        currentBankroll: nextCurrentBankroll,
+        currentBankrollCents: toCents(nextCurrentBankroll),
+        startingBankrollCents: toCents(1000),
       },
     });
 
@@ -115,6 +142,7 @@ export async function settleTrade(tradeId: string, formData: FormData) {
       select: {
         settledAt: true,
         actualProfitLoss: true,
+        actualProfitLossCents: true,
       },
     });
 
@@ -125,23 +153,26 @@ export async function settleTrade(tradeId: string, formData: FormData) {
         userId: user.id,
         snapshotDate: settledAt,
         currentBankroll: settings.currentBankroll,
+        currentBankrollCents: toCents(settings.currentBankroll),
         dailyPL,
+        dailyPLCents: toCents(dailyPL),
         weeklyPL,
+        weeklyPLCents: toCents(weeklyPL),
         monthlyPL,
+        monthlyPLCents: toCents(monthlyPL),
       },
     });
-  });
 
-  // Log mistakes
-  if (data.mistakeTagIds.length > 0) {
-    await db.tradeMistake.createMany({
-      data: data.mistakeTagIds.map((tagId) => ({
-        tradeId,
-        mistakeTagId: tagId,
-        notes: data.mistakeNotes ?? null,
-      })),
-    });
-  }
+    if (data.mistakeTagIds.length > 0) {
+      await tx.tradeMistake.createMany({
+        data: data.mistakeTagIds.map((tagId) => ({
+          tradeId,
+          mistakeTagId: tagId,
+          notes: data.mistakeNotes ?? null,
+        })),
+      });
+    }
+  });
 
   revalidatePath(`/trades/${tradeId}`);
   revalidatePath("/trades");

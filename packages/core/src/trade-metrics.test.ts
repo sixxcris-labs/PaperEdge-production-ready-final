@@ -24,6 +24,19 @@ function trade(o: Partial<TradeMetricInput>): TradeMetricInput {
 // ─── getConservativeExpectedProfit ──────────────────────────────────────────
 
 describe("getConservativeExpectedProfit", () => {
+  it("prefers cents-backed worst-case values when present", () => {
+    expect(
+      getConservativeExpectedProfit(
+        trade({
+          worstCasePLCents: 499,
+          worstCasePL: 4.35,
+          expectedProfitIfA: 10,
+          expectedProfitIfB: 5,
+        }),
+      ),
+    ).toBe(4.99);
+  });
+
   it("uses worstCasePL when present", () => {
     expect(
       getConservativeExpectedProfit(
@@ -105,6 +118,11 @@ describe("getOptimisticExpectedProfit", () => {
 
 describe("exposure helpers", () => {
   it("getOpenExposure returns stake for locked / pending statuses only", () => {
+    expect(
+      getOpenExposure(
+        trade({ status: "paper_traded", totalStakeExposureCents: 20050 }),
+      ),
+    ).toBe(200.5);
     expect(getOpenExposure(trade({ status: "paper_traded", totalStakeExposure: 200 }))).toBe(200);
     expect(getOpenExposure(trade({ status: "locked_paper_trade", totalStakeExposure: 150 }))).toBe(150);
     expect(getOpenExposure(trade({ status: "locked_paper_trade_upgraded", totalStakeExposure: 300 }))).toBe(300);
@@ -143,6 +161,17 @@ describe("exposure helpers", () => {
 // ─── getActualProfitLoss / getSettledStake ──────────────────────────────────
 
 describe("settled metrics", () => {
+  it("prefers cents-backed realized P/L when both representations exist", () => {
+    expect(
+      getActualProfitLoss(
+        trade({
+          status: "settled_won",
+          result: { actualProfitLoss: 9.99, actualProfitLossCents: 875 },
+        }),
+      ),
+    ).toBe(8.75);
+  });
+
   it("pulls actualProfitLoss from the result relation for settled trades", () => {
     expect(
       getActualProfitLoss(trade({ status: "settled_won", result: { actualProfitLoss: 42 } })),

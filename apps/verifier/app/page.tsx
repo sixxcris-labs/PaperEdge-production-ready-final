@@ -2,6 +2,7 @@ import Link from "next/link";
 import { db } from "@paperedge/database";
 import { buildPerBookPassRates, buildVerificationFunnel } from "@paperedge/core/verification-analytics";
 import { fmtPct, fmtUSD } from "@paperedge/core/fmt";
+import { dollarsFromCentsOrNumber } from "@paperedge/core/money-fields";
 import { getLocalUser } from "@/lib/opportunity-service";
 
 export const dynamic = "force-dynamic";
@@ -18,7 +19,12 @@ export default async function VerifierHomePage() {
   const queued = opportunities.filter((o) => o.status === "queued_for_verification" || o.status === "imported");
   const ready = opportunities.filter((o) => o.status === "ready_to_lock" || o.status === "books_verified");
   const locked = opportunities.filter((o) => o.status === "locked");
-  const expectedMin = opportunities.reduce((sum, o) => sum + (o.expectedProfitMin ?? 0), 0);
+  const expectedMin = opportunities.reduce(
+    (sum, o) =>
+      sum +
+      dollarsFromCentsOrNumber(o.expectedProfitMinCents, o.expectedProfitMin),
+    0,
+  );
 
   return (
     <div className="page">

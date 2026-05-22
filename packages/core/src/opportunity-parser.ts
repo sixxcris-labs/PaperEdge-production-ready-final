@@ -123,6 +123,40 @@ export function parseOpportunityText(raw: string): ParsedOpportunity {
   return parsed;
 }
 
+export function validateParsedOpportunityForImport(parsed: ParsedOpportunity): string[] {
+  const missing: string[] = [];
+  if (!hasText(parsed.event) || parsed.event === "Pending verification") missing.push("event");
+  if (!hasText(parsed.market)) missing.push("market");
+  if (!hasText(parsed.bookAName)) missing.push("bookAName");
+  if (!hasText(parsed.sideA)) missing.push("sideA");
+  if (parsed.oddsA == null) missing.push("oddsA");
+  if (parsed.stakeA == null || parsed.stakeA <= 0) missing.push("stakeA");
+  if (!hasText(parsed.bookBName)) missing.push("bookBName");
+  if (!hasText(parsed.sideB)) missing.push("sideB");
+  if (parsed.oddsB == null) missing.push("oddsB");
+  if (parsed.stakeB == null || parsed.stakeB <= 0) missing.push("stakeB");
+  return missing;
+}
+
+export function buildOpportunityDuplicateFingerprint(parsed: ParsedOpportunity): string {
+  const parts = [
+    normalizeFingerprintPart(parsed.event),
+    normalizeFingerprintPart(parsed.market),
+    normalizeFingerprintPart(parsed.period),
+    normalizeFingerprintPart(parsed.tradeType),
+    normalizeFingerprintPart(parsed.bookAName),
+    normalizeFingerprintPart(parsed.sideA),
+    normalizeFingerprintPart(parsed.bookBName),
+    normalizeFingerprintPart(parsed.sideB),
+    String(parsed.oddsA ?? ""),
+    String(parsed.oddsB ?? ""),
+    parsed.lineA == null ? "" : String(parsed.lineA),
+    parsed.lineB == null ? "" : String(parsed.lineB),
+    parsed.startTime ? parsed.startTime.toISOString().slice(0, 16) : "",
+  ];
+  return parts.join("|");
+}
+
 function normalizeKey(key: string): string {
   return key.toLowerCase().replace(/[\s_\-]+/g, " ").trim();
 }
@@ -242,4 +276,14 @@ function normalizeTradeType(value: string): string {
   if (v.includes("low_hold")) return "low_hold";
   if (v.includes("arb")) return "cash_arbitrage";
   return v || "cash_arbitrage";
+}
+
+function hasText(value: unknown): boolean {
+  return typeof value === "string" && value.trim().length > 0;
+}
+
+function normalizeFingerprintPart(value: unknown): string {
+  return typeof value === "string"
+    ? value.toLowerCase().trim().replace(/\s+/g, " ")
+    : "";
 }

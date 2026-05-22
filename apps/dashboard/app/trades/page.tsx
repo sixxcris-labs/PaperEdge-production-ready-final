@@ -1,14 +1,15 @@
 import Link from "next/link";
 import { db } from "@paperedge/database";
-import { fmtUSD, fmtOdds } from "@paperedge/core/fmt";
-import { BookCell, SportPill, StatusBadge } from "@/components/ui/design";
+import {
+  dollarsFromCentsOrNumber,
+  dollarsFromCentsOrNumberOrNull,
+} from "@paperedge/core/money-fields";
 import { LockedTradesClient } from "./LockedTradesClient";
-
-const LOCAL_USER_EMAIL = "local@paperedge.app";
+import { getDashboardLocalUser } from "@/apps/dashboard/lib/local-user";
 export const dynamic = "force-dynamic";
 
 export default async function TradesPage() {
-  const user = await db.user.findUniqueOrThrow({ where: { email: LOCAL_USER_EMAIL } });
+  const user = await getDashboardLocalUser();
 
   const trades = await db.paperTrade.findMany({
     where: { userId: user.id },
@@ -34,13 +35,27 @@ export default async function TradesPage() {
       bookA: legA?.book.name ?? "—",
       sideA: legA?.side ?? "",
       oddsA: legA?.oddsAmerican ?? null,
-      stakeA: legA?.stake ?? 0,
+      stakeA: legA
+        ? dollarsFromCentsOrNumber(legA.stakeCents, legA.stake)
+        : 0,
       bookB: legB?.book.name ?? "—",
       sideB: legB?.side ?? "",
       oddsB: legB?.oddsAmerican ?? null,
-      stakeB: legB?.stake ?? 0,
-      expectedProfit: t.worstCasePL ?? t.expectedProfitIfA ?? 0,
-      actualPL: t.result?.actualProfitLoss ?? null,
+      stakeB: legB
+        ? dollarsFromCentsOrNumber(legB.stakeCents, legB.stake)
+        : 0,
+      expectedProfit:
+        dollarsFromCentsOrNumberOrNull(t.worstCasePLCents, t.worstCasePL) ??
+        dollarsFromCentsOrNumberOrNull(
+          t.expectedProfitIfACents,
+          t.expectedProfitIfA,
+        ) ??
+        0,
+      actualPL:
+        dollarsFromCentsOrNumberOrNull(
+          t.result?.actualProfitLossCents,
+          t.result?.actualProfitLoss,
+        ) ?? null,
       status: t.status,
     };
   });

@@ -1,17 +1,21 @@
 import { NextResponse } from "next/server";
 import { getActiveVerificationOpportunity } from "@/lib/opportunity-service";
+import { localExtensionCorsHeaders, rejectDisallowedOrigin } from "@/apps/verifier/lib/cors";
 
-const corsHeaders = {
-  "Access-Control-Allow-Origin": "*",
-  "Access-Control-Allow-Methods": "GET, OPTIONS",
-  "Access-Control-Allow-Headers": "Content-Type",
-};
+const ALLOWED_METHODS = "GET, OPTIONS";
 
-export async function OPTIONS() {
-  return new Response(null, { status: 204, headers: corsHeaders });
+export async function OPTIONS(req: Request) {
+  const blocked = rejectDisallowedOrigin(req, ALLOWED_METHODS);
+  if (blocked) return blocked;
+  return new Response(null, {
+    status: 204,
+    headers: localExtensionCorsHeaders(req, ALLOWED_METHODS),
+  });
 }
 
-export async function GET() {
+export async function GET(req: Request) {
+  const blocked = rejectDisallowedOrigin(req, ALLOWED_METHODS);
+  if (blocked) return blocked;
   const trade = await getActiveVerificationOpportunity();
-  return NextResponse.json({ trade }, { headers: corsHeaders });
+  return NextResponse.json({ trade }, { headers: localExtensionCorsHeaders(req, ALLOWED_METHODS) });
 }

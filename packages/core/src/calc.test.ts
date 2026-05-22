@@ -10,6 +10,7 @@ import {
   middleHedge,
   isOddsStale,
   roiPct,
+  netProfitLossFromSettlement,
 } from "./calc";
 
 // ─── americanToDecimal ────────────────────────────────────────────────────────
@@ -303,5 +304,18 @@ describe("roiPct", () => {
   });
   it("handles negative profit (loss)", () => {
     expect(roiPct(-50, 200)).toBeCloseTo(-25, 2);
+  });
+});
+
+describe("netProfitLossFromSettlement", () => {
+  it("uses (winning payout - winning stake) - losing stakes", () => {
+    // If A wins: payout 240 on a 100 stake, and 135.65 loses
+    // Net P/L = (240 - 100) - 135.65 = 4.35
+    expect(netProfitLossFromSettlement(240, 100, 135.65)).toBeCloseTo(4.35, 2);
+  });
+
+  it("returns zero when both stakes are returned on push", () => {
+    // Push/void style: payout equals returned stakes, no losing stake
+    expect(netProfitLossFromSettlement(235.65, 235.65, 0)).toBeCloseTo(0, 6);
   });
 });

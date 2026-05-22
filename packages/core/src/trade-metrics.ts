@@ -20,6 +20,10 @@ import {
   isExcluded,
   isDraft,
 } from "./status";
+import {
+  dollarsFromCentsOrNumber,
+  dollarsFromCentsOrNumberOrNull,
+} from "./money-fields";
 
 /**
  * Minimum surface a trade row needs to expose for metric calculation.
@@ -32,13 +36,23 @@ export interface TradeMetricInput {
   status: string;
   tradeType?: string | null;
   expectedProfitIfA?: number | null;
+  expectedProfitIfACents?: number | null;
   expectedProfitIfB?: number | null;
+  expectedProfitIfBCents?: number | null;
   worstCasePL?: number | null;
+  worstCasePLCents?: number | null;
   bestCasePL?: number | null;
+  bestCasePLCents?: number | null;
   totalStakeExposure?: number | null;
+  totalStakeExposureCents?: number | null;
   promoConversionValue?: number | null;
+  promoConversionValueCents?: number | null;
   lowHoldLossAmount?: number | null;
-  result?: { actualProfitLoss?: number | null } | null;
+  lowHoldLossAmountCents?: number | null;
+  result?: {
+    actualProfitLoss?: number | null;
+    actualProfitLossCents?: number | null;
+  } | null;
 }
 
 // ─── Per-trade scalars ──────────────────────────────────────────────────────
@@ -68,12 +82,20 @@ export function getConservativeExpectedProfit(t: TradeMetricInput): number {
 
   // `worstCasePL` is precomputed at log time and is the canonical conservative
   // figure for arb / promo / middle. Trust it when present.
-  if (typeof t.worstCasePL === "number" && Number.isFinite(t.worstCasePL)) {
-    return t.worstCasePL;
-  }
+  const worstCase = dollarsFromCentsOrNumberOrNull(
+    t.worstCasePLCents,
+    t.worstCasePL,
+  );
+  if (worstCase !== null) return worstCase;
 
-  const a = numericOrNull(t.expectedProfitIfA);
-  const b = numericOrNull(t.expectedProfitIfB);
+  const a = dollarsFromCentsOrNumberOrNull(
+    t.expectedProfitIfACents,
+    t.expectedProfitIfA,
+  );
+  const b = dollarsFromCentsOrNumberOrNull(
+    t.expectedProfitIfBCents,
+    t.expectedProfitIfB,
+  );
   if (a !== null && b !== null) return Math.min(a, b);
   if (a !== null) return a;
   if (b !== null) return b;
@@ -95,12 +117,20 @@ export function getOptimisticExpectedProfit(t: TradeMetricInput): number {
     return 0;
   }
 
-  if (typeof t.bestCasePL === "number" && Number.isFinite(t.bestCasePL)) {
-    return t.bestCasePL;
-  }
+  const bestCase = dollarsFromCentsOrNumberOrNull(
+    t.bestCasePLCents,
+    t.bestCasePL,
+  );
+  if (bestCase !== null) return bestCase;
 
-  const a = numericOrNull(t.expectedProfitIfA);
-  const b = numericOrNull(t.expectedProfitIfB);
+  const a = dollarsFromCentsOrNumberOrNull(
+    t.expectedProfitIfACents,
+    t.expectedProfitIfA,
+  );
+  const b = dollarsFromCentsOrNumberOrNull(
+    t.expectedProfitIfBCents,
+    t.expectedProfitIfB,
+  );
   if (a !== null && b !== null) return Math.max(a, b);
   if (a !== null) return a;
   if (b !== null) return b;
@@ -115,7 +145,10 @@ export function getOptimisticExpectedProfit(t: TradeMetricInput): number {
  */
 export function getOpenExposure(t: TradeMetricInput): number {
   if (!hasOpenExposure(t.status)) return 0;
-  return numericOrZero(t.totalStakeExposure);
+  return dollarsFromCentsOrNumber(
+    t.totalStakeExposureCents,
+    t.totalStakeExposure,
+  );
 }
 
 /**
@@ -125,7 +158,10 @@ export function getOpenExposure(t: TradeMetricInput): number {
  */
 export function getCandidateExposure(t: TradeMetricInput): number {
   if (!hasCandidateExposure(t.status)) return 0;
-  return numericOrZero(t.totalStakeExposure);
+  return dollarsFromCentsOrNumber(
+    t.totalStakeExposureCents,
+    t.totalStakeExposure,
+  );
 }
 
 /**
@@ -135,7 +171,10 @@ export function getCandidateExposure(t: TradeMetricInput): number {
  */
 export function getActualProfitLoss(t: TradeMetricInput): number {
   if (!isSettled(t.status)) return 0;
-  return numericOrZero(t.result?.actualProfitLoss);
+  return dollarsFromCentsOrNumber(
+    t.result?.actualProfitLossCents,
+    t.result?.actualProfitLoss,
+  );
 }
 
 /**
@@ -144,7 +183,10 @@ export function getActualProfitLoss(t: TradeMetricInput): number {
  */
 export function getSettledStake(t: TradeMetricInput): number {
   if (!isSettled(t.status)) return 0;
-  return numericOrZero(t.totalStakeExposure);
+  return dollarsFromCentsOrNumber(
+    t.totalStakeExposureCents,
+    t.totalStakeExposure,
+  );
 }
 
 // ─── Portfolio aggregates ───────────────────────────────────────────────────
@@ -262,14 +304,4 @@ export function getTradeMetricState(t: TradeMetricInput): TradeMetricState {
     expected: getConservativeExpectedProfit(t),
     actual: 0,
   };
-}
-
-// ─── Internal ───────────────────────────────────────────────────────────────
-
-function numericOrNull(v: number | null | undefined): number | null {
-  return typeof v === "number" && Number.isFinite(v) ? v : null;
-}
-
-function numericOrZero(v: number | null | undefined): number {
-  return typeof v === "number" && Number.isFinite(v) ? v : 0;
 }

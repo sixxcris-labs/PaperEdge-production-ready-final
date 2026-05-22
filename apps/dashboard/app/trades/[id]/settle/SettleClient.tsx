@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { fmtUSD, fmtOdds, americanToDec } from "@paperedge/core/fmt";
+import { netProfitLossFromSettlement } from "@paperedge/core/calc";
 import { toast } from "sonner";
 import { settleTrade } from "../settle-actions";
 
@@ -28,10 +29,19 @@ export function SettleClient({ trade, mistageTags }: Props) {
   const [mistakeNotes, setMistakeNotes] = useState("");
   const [pending, setPending] = useState(false);
 
-  function recalcPL(payout: string, losing: string) {
+  function currentWinningStake(side: string): number {
+    if (side === "A") return legA?.stake ?? 0;
+    if (side === "B") return legB?.stake ?? 0;
+    return totalStake;
+  }
+
+  function recalcPL(payout: string, losing: string, side = winningSide) {
     const p = parseFloat(payout) || 0;
     const l = parseFloat(losing) || 0;
-    if (p > 0 || l > 0) setActualPL((p - l).toFixed(2));
+    const w = currentWinningStake(side);
+    if (p > 0 || l > 0 || w > 0) {
+      setActualPL(netProfitLossFromSettlement(p, w, l).toFixed(2));
+    }
   }
 
   function handleWinningSideChange(side: string) {
@@ -41,16 +51,16 @@ export function SettleClient({ trade, mistageTags }: Props) {
       const payout = (legA.stake * americanToDec(legA.oddsAmerican)).toFixed(2);
       setActualPayout(payout);
       setLosingStake(legB.stake.toFixed(2));
-      recalcPL(payout, legB.stake.toFixed(2));
+      recalcPL(payout, legB.stake.toFixed(2), "A");
     } else if (side === "B" && legA && legB) {
       const payout = (legB.stake * americanToDec(legB.oddsAmerican)).toFixed(2);
       setActualPayout(payout);
       setLosingStake(legA.stake.toFixed(2));
-      recalcPL(payout, legA.stake.toFixed(2));
+      recalcPL(payout, legA.stake.toFixed(2), "B");
     } else if (side === "push") {
       setActualPayout(totalStake.toFixed(2));
       setLosingStake("0");
-      setActualPL("0.00");
+      recalcPL(totalStake.toFixed(2), "0", "push");
     }
   }
 
@@ -142,7 +152,7 @@ export function SettleClient({ trade, mistageTags }: Props) {
                     value={actualPayout}
                     onChange={(e) => {
                       setActualPayout(e.target.value);
-                      recalcPL(e.target.value, losingStake);
+                      recalcPL(e.target.value, losingStake, winningSide);
                     }}
                     placeholder="526.00"
                   />
@@ -156,7 +166,7 @@ export function SettleClient({ trade, mistageTags }: Props) {
                     value={losingStake}
                     onChange={(e) => {
                       setLosingStake(e.target.value);
-                      recalcPL(actualPayout, e.target.value);
+                      recalcPL(actualPayout, e.target.value, winningSide);
                     }}
                     placeholder="398.00"
                   />

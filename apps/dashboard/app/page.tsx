@@ -20,17 +20,18 @@ import {
   sumConservativeExpectedProfit,
   getRealizedRoiPct,
   getLargestExposurePct,
+  getSettledStake,
 } from "@paperedge/core/trade-metrics";
 import {
   buildBankrollSeries,
   buildDailyExpectedVsActual,
 } from "@paperedge/core/dashboard-series";
-
-const LOCAL_USER_EMAIL = "local@paperedge.app";
+import { dollarsFromCentsOrNumber } from "@paperedge/core/money-fields";
+import { getDashboardLocalUser } from "@/apps/dashboard/lib/local-user";
 export const dynamic = "force-dynamic";
 
 export default async function DashboardPage() {
-  const user = await db.user.findUniqueOrThrow({ where: { email: LOCAL_USER_EMAIL } });
+  const user = await getDashboardLocalUser();
   const settings = await db.userSettings.findUnique({ where: { userId: user.id } });
 
   // Dashboard ignores draft/excluded rows globally; everything past this point
@@ -71,7 +72,9 @@ export default async function DashboardPage() {
       select: {
         role: true,
         currentBalance: true,
+        currentBalanceCents: true,
         rolloverRemaining: true,
+        rolloverRemainingCents: true,
         available: true,
       },
     }),
@@ -98,10 +101,20 @@ export default async function DashboardPage() {
   // failed verification, which never had real exposure.
   const totalStaked =
     sumOpenExposure(openTrades) +
-    settledTrades.reduce((s, t) => s + (t.totalStakeExposure ?? 0), 0);
+    settledTrades.reduce((s, t) => s + getSettledStake(t), 0);
 
-  const startingBankroll = settings?.startingBankroll ?? 10000;
-  const currentBankroll = settings?.currentBankroll ?? (startingBankroll + actualPL);
+  const startingBankroll = settings
+    ? dollarsFromCentsOrNumber(
+        settings.startingBankrollCents,
+        settings.startingBankroll,
+      )
+    : 10000;
+  const currentBankroll = settings
+    ? dollarsFromCentsOrNumber(
+        settings.currentBankrollCents,
+        settings.currentBankroll,
+      )
+    : startingBankroll + actualPL;
   const bankrollPct = startingBankroll > 0 ? ((currentBankroll - startingBankroll) / startingBankroll) * 100 : 0;
 
   const winsCount = settledTrades.filter((t) => settledKind(t.status) === "win").length;
@@ -134,10 +147,17 @@ export default async function DashboardPage() {
 
   // ── Bankroll Mechanics ────────────────────────────────────────────────────
   const rolloverBooks = books.filter(
-    (b) => b.available && (b.rolloverRemaining ?? 0) > 0,
+    (b) =>
+      b.available &&
+      dollarsFromCentsOrNumber(
+        b.rolloverRemainingCents,
+        b.rolloverRemaining,
+      ) > 0,
   );
   const rolloverRemainingTotal = rolloverBooks.reduce(
-    (s, b) => s + (b.rolloverRemaining ?? 0),
+    (s, b) =>
+      s +
+      dollarsFromCentsOrNumber(b.rolloverRemainingCents, b.rolloverRemaining),
     0,
   );
 
@@ -145,7 +165,8 @@ export default async function DashboardPage() {
   // balances sitting on rollover-restricted books. Conservative view: money
   // the user can still move freely.
   const rolloverBookBalance = rolloverBooks.reduce(
-    (s, b) => s + (b.currentBalance ?? 0),
+    (s, b) =>
+      s + dollarsFromCentsOrNumber(b.currentBalanceCents, b.currentBalance),
     0,
   );
   const liquidBankroll = Math.max(

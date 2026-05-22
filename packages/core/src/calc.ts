@@ -204,3 +204,11 @@ export function roiPct(profit: number, exposure: number): number {
   if (exposure <= 0) return 0;
   return (profit / exposure) * 100;
 }
+
+export function netProfitLossFromSettlement(
+  winningPayout: number,
+  winningStake: number,
+  losingStakes: number,
+): number {
+  return (winningPayout - winningStake) - losingStakes;
+}

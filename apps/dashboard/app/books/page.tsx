@@ -2,12 +2,11 @@ import { db } from "@paperedge/database";
 import { fmtUSD, fmtOdds } from "@paperedge/core/fmt";
 import { Sparkline, bookInfo } from "@/components/ui/design";
 import Link from "next/link";
-
-const LOCAL_USER_EMAIL = "local@paperedge.app";
+import { getDashboardLocalUser } from "@/apps/dashboard/lib/local-user";
 export const dynamic = "force-dynamic";
 
 export default async function BooksPage() {
-  const user = await db.user.findUniqueOrThrow({ where: { email: LOCAL_USER_EMAIL } });
+  const user = await getDashboardLocalUser();
 
   // Compute per-book stats from legs
   const legs = await db.tradeLeg.findMany({

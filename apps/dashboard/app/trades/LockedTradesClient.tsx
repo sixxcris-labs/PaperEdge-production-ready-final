@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
 import Link from "next/link";
 import { toast } from "sonner";
-import { fmtUSD, fmtOdds } from "@/lib/fmt";
+import { fmtUSD, fmtOdds } from "@paperedge/core/fmt";
 import { BookCell, SportPill, StatusBadge } from "@/components/ui/design";
 import { removeTrade } from "./actions";
 
@@ -230,7 +230,7 @@ export function LockedTradesClient({ trades }: { trades: TradeRow[] }) {
                 <th>Side B</th>
                 <th className="num">Odds B</th>
                 <th className="num">Stake B</th>
-                <th className="num">Exp. profit</th>
+                <th className="num">Profit</th>
                 <th>Status</th>
                 <th></th>
               </tr>
@@ -291,49 +291,56 @@ function SectionRows({
           {label} <span className="dim">· {items.length}</span>
         </td>
       </tr>
-      {items.map((t) => (
-        <tr key={t.id}>
-          <td className="muted num">
-            {t.date}
-            <div className="hint">{t.time}</div>
-          </td>
-          <td><SportPill sport={t.sport} /></td>
-          <td>
-            <b>{t.eventName}</b>
-            <div className="hint">{t.customTradeId ?? t.id.slice(0, 8)}</div>
-          </td>
-          <td>
-            {t.marketType}
-            {t.player && <div className="hint">{t.player}</div>}
-          </td>
-          <td><BookCell name={t.bookA} /></td>
-          <td>{t.sideA || "—"}</td>
-          <td className="num">{t.oddsA != null ? fmtOdds(t.oddsA) : "—"}</td>
-          <td className="num">{fmtUSD(t.stakeA)}</td>
-          <td><BookCell name={t.bookB} /></td>
-          <td>{t.sideB || "—"}</td>
-          <td className="num">{t.oddsB != null ? fmtOdds(t.oddsB) : "—"}</td>
-          <td className="num">{fmtUSD(t.stakeB)}</td>
-          <td className="num pos">{fmtUSD(t.expectedProfit, { sign: true })}</td>
-          <td><StatusBadge status={t.status} /></td>
-          <td className="actions">
-            <div className="row tight" style={{ gap: 6, justifyContent: "flex-end" }}>
-              <Link href={`/trades/${t.id}`} className="btn ghost sm">Review →</Link>
-              {isRemovable(t.status) && (
-                <button
-                  className="btn ghost sm"
-                  style={{ color: "var(--loss)" }}
-                  disabled={removingId === t.id}
-                  onClick={() => onRemove(t)}
-                  title="Remove from active list (soft — kept for audit)"
-                >
-                  {removingId === t.id ? "Removing…" : "Remove"}
-                </button>
-              )}
-            </div>
-          </td>
-        </tr>
-      ))}
+      {items.map((t) => {
+        const isSettled = t.status.startsWith("settled_");
+        const displayProfit = isSettled ? t.actualPL : t.expectedProfit;
+        const profitClass = displayProfit == null ? "" : displayProfit >= 0 ? "pos" : "neg";
+        return (
+          <tr key={t.id}>
+            <td className="muted num">
+              {t.date}
+              <div className="hint">{t.time}</div>
+            </td>
+            <td><SportPill sport={t.sport} /></td>
+            <td>
+              <b>{t.eventName}</b>
+              <div className="hint">{t.customTradeId ?? t.id.slice(0, 8)}</div>
+            </td>
+            <td>
+              {t.marketType}
+              {t.player && <div className="hint">{t.player}</div>}
+            </td>
+            <td><BookCell name={t.bookA} /></td>
+            <td>{t.sideA || "—"}</td>
+            <td className="num">{t.oddsA != null ? fmtOdds(t.oddsA) : "—"}</td>
+            <td className="num">{fmtUSD(t.stakeA)}</td>
+            <td><BookCell name={t.bookB} /></td>
+            <td>{t.sideB || "—"}</td>
+            <td className="num">{t.oddsB != null ? fmtOdds(t.oddsB) : "—"}</td>
+            <td className="num">{fmtUSD(t.stakeB)}</td>
+            <td className={`num ${profitClass}`}>
+              {displayProfit == null ? "—" : fmtUSD(displayProfit, { sign: true })}
+            </td>
+            <td><StatusBadge status={t.status} /></td>
+            <td className="actions">
+              <div className="row tight" style={{ gap: 6, justifyContent: "flex-end" }}>
+                <Link href={`/trades/${t.id}`} className="btn ghost sm">Review →</Link>
+                {isRemovable(t.status) && (
+                  <button
+                    className="btn ghost sm"
+                    style={{ color: "var(--loss)" }}
+                    disabled={removingId === t.id}
+                    onClick={() => onRemove(t)}
+                    title="Remove from active list (soft — kept for audit)"
+                  >
+                    {removingId === t.id ? "Removing…" : "Remove"}
+                  </button>
+                )}
+              </div>
+            </td>
+          </tr>
+        );
+      })}
     </>
   );
 }

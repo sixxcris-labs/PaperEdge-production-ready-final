@@ -6,13 +6,15 @@ import { db } from "@paperedge/database";
 import { cashArbHedge, promoHedge, lowHold } from "@paperedge/core/calc";
 import { requiredCalculator } from "@paperedge/core/calculator-router";
 import { checklistComplete, checklistFailures } from "@paperedge/core/checklist";
-import type { BonusType, TradeType } from "@paperedge/core/calculator-router";
-
-const LOCAL_USER_EMAIL = "local@paperedge.app";
-
-async function getLocalUser() {
-  return db.user.findUniqueOrThrow({ where: { email: LOCAL_USER_EMAIL } });
-}
+import {
+  STATUS,
+  normalizeBonusType,
+  normalizePaperTradeStatus,
+  normalizeTradeType,
+  type PaperTradeStatus,
+} from "@paperedge/core/domain";
+import { toCents, toCentsOrNull } from "@paperedge/core/money";
+import { getDashboardLocalUser } from "@/apps/dashboard/lib/local-user";
 
 const TradeFormSchema = z.object({
   tradeType: z.string(),
@@ -56,10 +58,9 @@ const TradeFormSchema = z.object({
 type TradeFormData = z.infer<typeof TradeFormSchema>;
 
 function calcExpected(data: TradeFormData) {
-  const calc = requiredCalculator(
-    data.bonusType as BonusType,
-    data.tradeType as TradeType
-  );
+  const bonusType = normalizeBonusType(data.bonusType);
+  const tradeType = normalizeTradeType(data.tradeType);
+  const calc = requiredCalculator(bonusType, tradeType);
   const totalStake = data.legAstake + data.legBstake;
 
   if (calc === "promo_converter") {
@@ -102,12 +103,23 @@ function calcExpected(data: TradeFormData) {
 }
 
 export async function createTrade(data: TradeFormData, status: string) {
-  const user = await getLocalUser();
-  const calc = requiredCalculator(
-    data.bonusType as BonusType,
-    data.tradeType as TradeType
-  );
+  const user = await getDashboardLocalUser();
+  const tradeType = normalizeTradeType(data.tradeType);
+  const bonusType = normalizeBonusType(data.bonusType);
+  const normalizedStatus = normalizePaperTradeStatus(status);
+  const calc = requiredCalculator(bonusType, tradeType);
   const expected = calcExpected(data);
+  const expectedMoney = {
+    ...expected,
+    expectedProfitIfACents: toCentsOrNull(expected.expectedProfitIfA),
+    expectedProfitIfBCents: toCentsOrNull(expected.expectedProfitIfB),
+    worstCasePLCents: toCentsOrNull(expected.worstCasePL),
+    bestCasePLCents: toCentsOrNull(expected.bestCasePL),
+    totalStakeExposureCents: toCentsOrNull(expected.totalStakeExposure),
+    hedgeStakeCents: toCentsOrNull(expected.hedgeStake),
+    promoConversionValueCents: toCentsOrNull(expected.promoConversionValue),
+    lowHoldLossAmountCents: toCentsOrNull(expected.lowHoldLossAmount),
+  };
 
   const checklistData = {
     goalStated: data.goalStated,
@@ -127,7 +139,7 @@ export async function createTrade(data: TradeFormData, status: string) {
   const failures = checklistFailures(data);
   const isOverride = data.forceOverride && data.overrideReason;
 
-  if (status === "ready" && failures.length > 0 && !isOverride) {
+  if (normalizedStatus === STATUS.ready && failures.length > 0 && !isOverride) {
     throw new Error("Checklist incomplete");
   }
 
@@ -141,13 +153,13 @@ export async function createTrade(data: TradeFormData, status: string) {
       marketType: data.marketType,
       gamePeriod: data.gamePeriod,
       lineValue: data.lineValue,
-      tradeType: data.tradeType,
-      bonusType: data.bonusType,
+      tradeType,
+      bonusType,
       goal: data.goal,
       requiredCalculator: calc,
-      status,
+      status: normalizedStatus,
       notes: data.notes,
-      ...expected,
+      ...expectedMoney,
       legs: {
         create: [
           {
@@ -156,6 +168,7 @@ export async function createTrade(data: TradeFormData, status: string) {
             side: data.legAside,
             oddsAmerican: data.legAodds,
             stake: data.legAstake,
+            stakeCents: toCents(data.legAstake),
             isPromoLeg: data.legAisPromo,
           },
           {
@@ -164,6 +177,7 @@ export async function createTrade(data: TradeFormData, status: string) {
             side: data.legBside,
             oddsAmerican: data.legBodds,
             stake: data.legBstake,
+            stakeCents: toCents(data.legBstake),
             isPromoLeg: data.legBisPromo,
           },
         ],
@@ -192,7 +206,7 @@ export async function createTrade(data: TradeFormData, status: string) {
  *  Currently empty: user-driven cleanup is allowed for all trades, including settled.
  *  Removed trades become `replaced_removed` (soft-deleted) — the row stays
  *  so audit trail is preserved, but it disappears from active lists and P&L. */
-const PROTECTED_STATUSES = new Set<string>();
+const PROTECTED_STATUSES = new Set<PaperTradeStatus>();
 
 /**
  * Soft-remove a trade that still needs review (pending / unverified / queued).
@@ -201,19 +215,20 @@ const PROTECTED_STATUSES = new Set<string>();
  * its legs, checklist, and audit trail. Settled trades cannot be removed.
  */
 export async function removeTrade(tradeId: string) {
-  const user = await getLocalUser();
+  const user = await getDashboardLocalUser();
   const trade = await db.paperTrade.findUnique({ where: { id: tradeId } });
 
   if (!trade) throw new Error("Trade not found");
   if (trade.userId !== user.id) throw new Error("Unauthorised");
-  if (PROTECTED_STATUSES.has(trade.status)) {
+  const normalizedTradeStatus = normalizePaperTradeStatus(trade.status);
+  if (PROTECTED_STATUSES.has(normalizedTradeStatus)) {
     throw new Error("Settled trades cannot be removed — they are part of your P&L history.");
   }
-  if (trade.status === "replaced_removed") return; // already removed, no-op
+  if (normalizedTradeStatus === STATUS.replaced_removed) return; // already removed, no-op
 
   await db.paperTrade.update({
     where: { id: tradeId },
-    data: { status: "replaced_removed" },
+    data: { status: STATUS.replaced_removed },
   });
 
   revalidatePath("/trades");

@@ -84,7 +84,12 @@
       "Bash(curl -s -o /dev/null -w \"3001: %{http_code}\\\\n\" --max-time 2 http://127.0.0.1:3001/)",
       "Bash(sed -n '190,225p' /c/Users/Cristian/Downloads/PaperEdge-production-ready-final/apps/dashboard/app/trades/actions.ts)",
       "Bash(sed -n '11,20p' /c/Users/Cristian/Downloads/PaperEdge-production-ready-final/apps/dashboard/app/trades/LockedTradesClient.tsx)",
-      "Bash(curl -s -o /dev/null -w \"trades: %{http_code}\\\\n\" http://localhost:3000/trades)"
+      "Bash(curl -s -o /dev/null -w \"trades: %{http_code}\\\\n\" http://localhost:3000/trades)",
+      "Bash(break)",
+      "PowerShell(Get-NetTCPConnection -LocalPort 3000 -State Listen -ErrorAction SilentlyContinue | Select-Object -Expand OwningProcess -Unique | ForEach-Object { Stop-Process -Id $_ -Force; \"killed PID $_\" })",
+      "Bash(curl -s \"http://127.0.0.1:3001/\")",
+      "Bash(node node_modules/tsx/dist/cli.mjs scripts-tmp-clear-settled.mjs)",
+      "Bash(node scripts-tmp-clear-settled.mjs)"
     ]
   }
 }

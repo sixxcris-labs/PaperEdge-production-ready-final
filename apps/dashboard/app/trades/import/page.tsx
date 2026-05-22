@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { toast } from "sonner";
 import { importTradesFromText } from "../new/manual-actions";
-import { normalizeTradePaste } from "@/lib/trade-text-import";
+import { normalizeTradePaste } from "@paperedge/core/trade-text-import";
 
 const EXAMPLE = `Trade ID: CHET-AST-001
 Date: May 18, 2026

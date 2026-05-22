@@ -1,24 +1,40 @@
 import { resolveBookUrl } from "@/lib/deep-links";
+import { localExtensionCorsHeaders, rejectDisallowedOrigin } from "@/apps/verifier/lib/cors";
+import {
+  parseDeepLinkQuery,
+  sanitizeResolvedUrl,
+} from "@/apps/verifier/lib/deep-link-request";
 
-const corsHeaders = {
-  "Access-Control-Allow-Origin": "*",
-  "Access-Control-Allow-Methods": "GET, OPTIONS",
-  "Access-Control-Allow-Headers": "Content-Type",
-};
+const ALLOWED_METHODS = "GET, OPTIONS";
 
-export async function OPTIONS() {
-  return new Response(null, { status: 204, headers: corsHeaders });
+export async function OPTIONS(req: Request) {
+  const blocked = rejectDisallowedOrigin(req, ALLOWED_METHODS);
+  if (blocked) return blocked;
+  return new Response(null, {
+    status: 204,
+    headers: localExtensionCorsHeaders(req, ALLOWED_METHODS),
+  });
 }
 
 export async function GET(req: Request) {
-  const { searchParams } = new URL(req.url);
-  const bookId = searchParams.get("bookId") ?? "";
-  const sport = searchParams.get("sport") ?? "default";
-  const marketType = searchParams.get("marketType") ?? "default";
-  const player = searchParams.get("player") ?? undefined;
-  const team = searchParams.get("team") ?? undefined;
-  const event = searchParams.get("event") ?? undefined;
+  const blocked = rejectDisallowedOrigin(req, ALLOWED_METHODS);
+  if (blocked) return blocked;
 
-  const url = await resolveBookUrl(bookId, sport, marketType, { player, team, event });
-  return new Response(url ?? "about:blank", { headers: corsHeaders });
+  const headers = localExtensionCorsHeaders(req, ALLOWED_METHODS);
+
+  try {
+    const { searchParams } = new URL(req.url);
+    const query = parseDeepLinkQuery(searchParams);
+    const url = await resolveBookUrl(query.bookId, query.sport, query.marketType, {
+      player: query.player,
+      team: query.team,
+      event: query.event,
+    });
+    return new Response(sanitizeResolvedUrl(url), { headers });
+  } catch (error) {
+    return new Response(error instanceof Error ? error.message : "Invalid deep-link request", {
+      status: 400,
+      headers,
+    });
+  }
 }

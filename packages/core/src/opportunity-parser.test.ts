@@ -1,5 +1,12 @@
 import { describe, expect, it } from "vitest";
-import { parseAmericanOdds, parseMoney, parseNumber, parseOpportunityText } from "./opportunity-parser";
+import {
+  buildOpportunityDuplicateFingerprint,
+  parseAmericanOdds,
+  parseMoney,
+  parseNumber,
+  parseOpportunityText,
+  validateParsedOpportunityForImport,
+} from "./opportunity-parser";
 
 describe("parseOpportunityText", () => {
   it("parses structured OddsJam-style text", () => {
@@ -45,5 +52,47 @@ describe("parser numeric helpers", () => {
     expect(parseAmericanOdds("-110")).toBe(-110);
     expect(parseMoney("$1,234.50")).toBe(1234.5);
     expect(parseNumber("line 7.5")).toBe(7.5);
+  });
+});
+
+describe("import validation and duplicate fingerprint", () => {
+  it("returns missing required fields for incomplete opportunities", () => {
+    const parsed = parseOpportunityText(`Event: Celtics vs Knicks
+Market: Moneyline
+Book A: Novig
+Side A: Celtics
+Odds A: +120
+Stake A: $100`);
+
+    const missing = validateParsedOpportunityForImport(parsed);
+
+    expect(missing).toEqual(["bookBName", "sideB", "oddsB", "stakeB"]);
+  });
+
+  it("builds stable duplicate fingerprint for same normalized opportunity", () => {
+    const base = parseOpportunityText(`Event: Celtics vs Knicks
+Market: Moneyline
+Book A: Novig
+Side A: Celtics ML
+Odds A: +120
+Stake A: $100
+Book B: Sportzino
+Side B: Knicks ML
+Odds B: -110
+Stake B: $110`);
+    const noisy = parseOpportunityText(`Event:   celtics vs knicks
+Market: moneyline
+Book A: NOVIG
+Side A:  Celtics ML
+Odds A: +120
+Stake A: $100
+Book B: sportzino
+Side B: knicks ml
+Odds B: -110
+Stake B: $110`);
+
+    expect(buildOpportunityDuplicateFingerprint(base)).toBe(
+      buildOpportunityDuplicateFingerprint(noisy),
+    );
   });
 });

@@ -57,9 +57,28 @@ describe("buildBankrollSeries", () => {
     expect(day3.v).toBe(10_180);
   });
 
+  it("prefers cents-backed snapshot bankroll values when present", () => {
+    const snapshots: BankrollSnapshotInput[] = [
+      {
+        snapshotDate: daysAgo(1),
+        currentBankroll: 10_000,
+        currentBankrollCents: 1_002_555,
+      },
+    ];
+    const series = buildBankrollSeries(snapshots, [], 10_000, 2, NOW);
+    expect(series[1].v).toBe(10025.55);
+  });
+
   it("falls back to starting bankroll + cumulative settled P/L when no snapshots", () => {
     const settled: SettledTradeInput[] = [
-      { status: "settled_won", result: { actualProfitLoss: 50,  settledAt: daysAgo(4) } },
+      {
+        status: "settled_won",
+        result: {
+          actualProfitLoss: 50,
+          actualProfitLossCents: 5_125,
+          settledAt: daysAgo(4),
+        },
+      },
       { status: "settled_loss", result: { actualProfitLoss: -20, settledAt: daysAgo(2) } },
       { status: "settled_win",  result: { actualProfitLoss: 10,  settledAt: daysAgo(0) } },
     ];
@@ -68,11 +87,11 @@ describe("buildBankrollSeries", () => {
     // Window opens 6 days ago.
     expect(values[0]).toBe(10_000); // 6 days ago — nothing settled yet
     expect(values[1]).toBe(10_000); // 5 days ago
-    expect(values[2]).toBe(10_050); // 4 days ago — +50
-    expect(values[3]).toBe(10_050); // 3 days ago — no delta
-    expect(values[4]).toBe(10_030); // 2 days ago — -20
-    expect(values[5]).toBe(10_030); // 1 day ago — no delta
-    expect(values[6]).toBe(10_040); // today — +10
+    expect(values[2]).toBe(10_051.25); // 4 days ago — cents value preferred
+    expect(values[3]).toBe(10_051.25); // 3 days ago — no delta
+    expect(values[4]).toBe(10_031.25); // 2 days ago — -20
+    expect(values[5]).toBe(10_031.25); // 1 day ago — no delta
+    expect(values[6]).toBe(10_041.25); // today — +10
   });
 
   it("fallback seeds the curve with realized P/L from BEFORE the window opens", () => {

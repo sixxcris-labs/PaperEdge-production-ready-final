@@ -1,7 +1,16 @@
 import type { PrismaClient } from "@paperedge/database";
 import { db } from "@paperedge/database";
 import { cashPayout, lowHold, middleHedge } from "@paperedge/core/calc";
-import { parseOpportunityText } from "@paperedge/core/opportunity-parser";
+import {
+  dollarsFromCentsOrNumberOrNull,
+  toCentsOrUndefined,
+} from "@paperedge/core/money-fields";
+import { toCentsOrNull } from "@paperedge/core/money";
+import {
+  buildOpportunityDuplicateFingerprint,
+  parseOpportunityText,
+  validateParsedOpportunityForImport,
+} from "@paperedge/core/opportunity-parser";
 
 export const LOCAL_USER_EMAIL = "local@paperedge.app";
 const MAX_IMPORT_CHARS = 50_000;
@@ -42,8 +51,52 @@ export async function createOpportunityFromRaw(raw: string, client: PrismaClient
 
   const user = await getLocalUser(client);
   const parsed = parseOpportunityText(raw);
+  const missingFields = validateParsedOpportunityForImport(parsed);
+  if (missingFields.length > 0) {
+    throw new Error(`Import missing required fields: ${missingFields.join(", ")}`);
+  }
+
   const bookA = await findOrCreateBook(parsed.bookAName, user.id, client);
   const bookB = await findOrCreateBook(parsed.bookBName, user.id, client);
+  const duplicateFingerprint = buildOpportunityDuplicateFingerprint(parsed);
+  const existing = await client.tradeOpportunity.findMany({
+    where: {
+      userId: user.id,
+      status: { not: "skipped" },
+      event: parsed.event,
+      market: parsed.market,
+      period: parsed.period,
+    },
+    include: { bookA: true, bookB: true },
+    take: 50,
+    orderBy: { importedAt: "desc" },
+  });
+  const duplicate = existing.find((candidate) =>
+    buildOpportunityDuplicateFingerprint({
+      event: candidate.event,
+      market: candidate.market,
+      period: candidate.period,
+      tradeType: candidate.tradeType,
+      sport: candidate.sport,
+      source: candidate.source,
+      startTime: candidate.startTime ?? undefined,
+      bookAName: candidate.bookA?.name ?? undefined,
+      sideA: candidate.sideA ?? undefined,
+      oddsA: candidate.oddsA ?? undefined,
+      lineA: candidate.lineA ?? undefined,
+      stakeA: candidate.stakeA ?? undefined,
+      liquidityA: candidate.liquidityA ?? undefined,
+      bookBName: candidate.bookB?.name ?? undefined,
+      sideB: candidate.sideB ?? undefined,
+      oddsB: candidate.oddsB ?? undefined,
+      lineB: candidate.lineB ?? undefined,
+      stakeB: candidate.stakeB ?? undefined,
+      liquidityB: candidate.liquidityB ?? undefined,
+    }) === duplicateFingerprint,
+  );
+  if (duplicate) {
+    throw new Error(`Duplicate opportunity detected (existing id: ${duplicate.id})`);
+  }
   const economics = computeOpportunityEconomics({
     tradeType: parsed.tradeType,
     oddsA: parsed.oddsA,
@@ -53,6 +106,8 @@ export async function createOpportunityFromRaw(raw: string, client: PrismaClient
     lineA: parsed.lineA,
     lineB: parsed.lineB,
   });
+  const expectedProfitMin = parsed.expectedProfitMin ?? economics.expectedProfitMin;
+  const expectedProfitMax = parsed.expectedProfitMax ?? economics.expectedProfitMax;
 
   return client.tradeOpportunity.create({
     data: {
@@ -74,23 +129,34 @@ export async function createOpportunityFromRaw(raw: string, client: PrismaClient
       oddsA: parsed.oddsA,
       lineA: parsed.lineA,
       stakeA: parsed.stakeA,
+      stakeACents: toCentsOrNull(parsed.stakeA),
       liquidityA: parsed.liquidityA,
+      liquidityACents: toCentsOrNull(parsed.liquidityA),
       bookBId: bookB?.id,
       sideB: parsed.sideB,
       oddsB: parsed.oddsB,
       lineB: parsed.lineB,
       stakeB: parsed.stakeB,
+      stakeBCents: toCentsOrNull(parsed.stakeB),
       liquidityB: parsed.liquidityB,
+      liquidityBCents: toCentsOrNull(parsed.liquidityB),
       totalExposure: economics.totalExposure,
+      totalExposureCents: toCentsOrNull(economics.totalExposure),
       profitIfAWins: economics.profitIfA,
+      profitIfAWinsCents: toCentsOrNull(economics.profitIfA),
       profitIfBWins: economics.profitIfB,
-      expectedProfitMin: parsed.expectedProfitMin ?? economics.expectedProfitMin,
-      expectedProfitMax: parsed.expectedProfitMax ?? economics.expectedProfitMax,
+      profitIfBWinsCents: toCentsOrNull(economics.profitIfB),
+      expectedProfitMin,
+      expectedProfitMinCents: toCentsOrNull(expectedProfitMin),
+      expectedProfitMax,
+      expectedProfitMaxCents: toCentsOrNull(expectedProfitMax),
       middleDistance: economics.middleDistance,
       middleNumber: economics.middleNumber,
       middleRange: economics.middleRange,
       outsideLoss: economics.outsideLoss,
+      outsideLossCents: toCentsOrNull(economics.outsideLoss),
       middleProfit: economics.middleProfit,
+      middleProfitCents: toCentsOrNull(economics.middleProfit),
       notes: parsed.notes,
     },
     include: { bookA: true, bookB: true },
@@ -172,13 +238,19 @@ export async function applyOpportunityLegVerification(
     data.bookAVerified = !isFailure;
     if (observedOdds != null) data.verifiedOddsA = Math.round(observedOdds);
     if (observedLine != null) data.verifiedLineA = observedLine;
-    if (observedLiquidity != null) data.verifiedLiquidityA = observedLiquidity;
+    if (observedLiquidity != null) {
+      data.verifiedLiquidityA = observedLiquidity;
+      data.verifiedLiquidityACents = toCentsOrUndefined(observedLiquidity);
+    }
     if (notes != null) data.bookANotes = notes;
   } else {
     data.bookBVerified = !isFailure;
     if (observedOdds != null) data.verifiedOddsB = Math.round(observedOdds);
     if (observedLine != null) data.verifiedLineB = observedLine;
-    if (observedLiquidity != null) data.verifiedLiquidityB = observedLiquidity;
+    if (observedLiquidity != null) {
+      data.verifiedLiquidityB = observedLiquidity;
+      data.verifiedLiquidityBCents = toCentsOrUndefined(observedLiquidity);
+    }
     if (notes != null) data.bookBNotes = notes;
   }
 
@@ -213,7 +285,10 @@ export function opportunityToExtensionTrade(opportunity: any) {
         side: opportunity.sideA,
         oddsAmerican: opportunity.verifiedOddsA ?? opportunity.oddsA,
         lineValue: opportunity.verifiedLineA ?? opportunity.lineA,
-        stake: opportunity.stakeA,
+        stake: dollarsFromCentsOrNumberOrNull(
+          opportunity.stakeACents,
+          opportunity.stakeA,
+        ),
         verificationStatus: opportunity.bookAVerified ? "verified" : "unverified",
       },
       {
@@ -224,7 +299,10 @@ export function opportunityToExtensionTrade(opportunity: any) {
         side: opportunity.sideB,
         oddsAmerican: opportunity.verifiedOddsB ?? opportunity.oddsB,
         lineValue: opportunity.verifiedLineB ?? opportunity.lineB,
-        stake: opportunity.stakeB,
+        stake: dollarsFromCentsOrNumberOrNull(
+          opportunity.stakeBCents,
+          opportunity.stakeB,
+        ),
         verificationStatus: opportunity.bookBVerified ? "verified" : "unverified",
       },
     ].filter((leg) => leg.bookId || leg.side || leg.oddsAmerican != null),
@@ -244,6 +322,8 @@ async function findOrCreateBook(name: string | undefined, userId: string, client
       name: normalized,
       role: "unknown",
       available: false,
+      currentBalanceCents: 0,
+      rolloverRemainingCents: 0,
       notes: "Auto-created from verifier import. Classify role and availability before locking real workflows.",
     },
   });

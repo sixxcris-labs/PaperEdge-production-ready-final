@@ -3,8 +3,8 @@
 import { revalidatePath } from "next/cache";
 import { z } from "zod";
 import { db } from "@paperedge/database";
-
-const LOCAL_USER_EMAIL = "local@paperedge.app";
+import { toCents } from "@paperedge/core/money";
+import { getDashboardLocalUser } from "@/apps/dashboard/lib/local-user";
 
 const SettingsSchema = z.object({
   startingBankroll:         z.coerce.number().positive(),
@@ -16,7 +16,7 @@ const SettingsSchema = z.object({
 });
 
 export async function saveSettings(formData: FormData) {
-  const user = await db.user.findUniqueOrThrow({ where: { email: LOCAL_USER_EMAIL } });
+  const user = await getDashboardLocalUser();
   const data = SettingsSchema.parse({
     startingBankroll:     formData.get("startingBankroll"),
     currentBankroll:      formData.get("currentBankroll"),
@@ -25,11 +25,16 @@ export async function saveSettings(formData: FormData) {
     defaultUnitPct:       formData.get("defaultUnitPct"),
     warnLowHoldPctAbove:  formData.get("warnLowHoldPctAbove"),
   });
+  const moneyData = {
+    ...data,
+    startingBankrollCents: toCents(data.startingBankroll),
+    currentBankrollCents: toCents(data.currentBankroll),
+  };
 
   await db.userSettings.upsert({
     where: { userId: user.id },
-    update: data,
-    create: { userId: user.id, ...data },
+    update: moneyData,
+    create: { userId: user.id, ...moneyData },
   });
 
   revalidatePath("/settings");

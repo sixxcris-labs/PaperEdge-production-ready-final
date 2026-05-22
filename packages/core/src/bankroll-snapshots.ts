@@ -1,6 +1,9 @@
+import { dollarsFromCentsOrNumberOrNull } from "./money-fields";
+
 export interface SettledPLInput {
   settledAt: Date | null | undefined;
   actualProfitLoss: number | null | undefined;
+  actualProfitLossCents?: number | null | undefined;
 }
 
 export interface SnapshotPL {
@@ -25,8 +28,11 @@ export function computeSnapshotPL(
 
   for (const row of settledRows) {
     if (!(row.settledAt instanceof Date)) continue;
-    const pl = row.actualProfitLoss;
-    if (typeof pl !== "number" || !Number.isFinite(pl)) continue;
+    const pl = dollarsFromCentsOrNumberOrNull(
+      row.actualProfitLossCents,
+      row.actualProfitLoss,
+    );
+    if (pl == null) continue;
 
     const at = row.settledAt.getTime();
     if (at >= dayStart.getTime()) dailyPL += pl;

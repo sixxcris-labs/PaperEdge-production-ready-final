@@ -4,9 +4,9 @@ import { useState, useCallback } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { toast } from "sonner";
-import { recalculateOnObserved } from "@/lib/verify";
-import { lockGateFailures } from "@/lib/checklist";
-import { fmtUSD, fmtOdds } from "@/lib/fmt";
+import { recalculateOnObserved } from "@paperedge/core/verify";
+import { lockGateFailures } from "@paperedge/core/checklist";
+import { fmtUSD, fmtOdds } from "@paperedge/core/fmt";
 import { updateTradeStatus } from "../settle-actions";
 
 type VerifStatus =

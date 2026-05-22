@@ -17,7 +17,7 @@ paperedge/
 ├─ packages/
 │  ├─ core/                     # Calculators, status helpers, metrics, parser, verification analytics
 │  └─ database/                 # Prisma schema, generated client, SQLite adapter, seed data
-└─ apps/verifier/extensions/    # Chrome verifier extension
+└─ extensions/paperedge-verifier/ # Chrome verifier extension
 ```
 
 The important data split is:
@@ -111,7 +111,7 @@ npm run build:verifier
 The extension is located at:
 
 ```text
-apps/verifier/extensions/paperedge-verifier/
+extensions/paperedge-verifier/
 ```
 
 Install it in Chrome developer mode with **Load unpacked**, then set the popup API base to `http://localhost:3001`. The extension only shows a manual overlay on configured book domains and posts your manually entered observations back to the local verifier API.

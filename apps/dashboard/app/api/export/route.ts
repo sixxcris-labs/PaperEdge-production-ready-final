@@ -1,11 +1,12 @@
 import { db } from "@paperedge/database";
-
-const LOCAL_USER_EMAIL = "local@paperedge.app";
+import {
+  dollarsFromCentsOrNumber,
+  dollarsFromCentsOrNumberOrNull,
+} from "@paperedge/core/money-fields";
+import { getDashboardLocalUser } from "@/apps/dashboard/lib/local-user";
 
 export async function GET() {
-  const user = await db.user.findUniqueOrThrow({
-    where: { email: LOCAL_USER_EMAIL },
-  });
+  const user = await getDashboardLocalUser();
 
   const trades = await db.paperTrade.findMany({
     where: { userId: user.id },
@@ -23,6 +24,20 @@ export async function GET() {
     const mistakeNames = t.mistakes
       .map((m) => m.mistakeTag.name)
       .join("|");
+    const stakeA = legA
+      ? dollarsFromCentsOrNumber(legA.stakeCents, legA.stake)
+      : null;
+    const stakeB = legB
+      ? dollarsFromCentsOrNumber(legB.stakeCents, legB.stake)
+      : null;
+    const expectedProfit = dollarsFromCentsOrNumberOrNull(
+      t.worstCasePLCents,
+      t.worstCasePL,
+    );
+    const actualProfitLoss = dollarsFromCentsOrNumberOrNull(
+      t.result?.actualProfitLossCents,
+      t.result?.actualProfitLoss,
+    );
     return [
       new Date(t.tradeDate).toISOString().split("T")[0],
       t.sport,
@@ -33,13 +48,13 @@ export async function GET() {
       legA?.book.name ?? "",
       legA?.side ?? "",
       legA?.oddsAmerican ?? "",
-      legA?.stake?.toFixed(2) ?? "",
+      stakeA?.toFixed(2) ?? "",
       legB?.book.name ?? "",
       legB?.side ?? "",
       legB?.oddsAmerican ?? "",
-      legB?.stake?.toFixed(2) ?? "",
-      t.worstCasePL?.toFixed(2) ?? "",
-      t.result?.actualProfitLoss?.toFixed(2) ?? "",
+      stakeB?.toFixed(2) ?? "",
+      expectedProfit?.toFixed(2) ?? "",
+      actualProfitLoss?.toFixed(2) ?? "",
       t.status,
       t.result?.winningSide ?? "",
       mistakeNames,

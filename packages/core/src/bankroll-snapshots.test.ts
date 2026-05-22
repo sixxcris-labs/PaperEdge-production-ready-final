@@ -12,7 +12,7 @@ function daysAgo(n: number): Date {
 describe("computeSnapshotPL", () => {
   it("returns daily/weekly/monthly realized P/L for the snapshot instant", () => {
     const settled = [
-      { settledAt: daysAgo(0), actualProfitLoss: 25 },
+      { settledAt: daysAgo(0), actualProfitLoss: 25, actualProfitLossCents: 2525 },
       { settledAt: daysAgo(3), actualProfitLoss: -10 },
       { settledAt: daysAgo(8), actualProfitLoss: 40 },
       { settledAt: daysAgo(20), actualProfitLoss: -5 },
@@ -21,9 +21,9 @@ describe("computeSnapshotPL", () => {
 
     const out = computeSnapshotPL(settled, NOW);
 
-    expect(out.dailyPL).toBe(25);
-    expect(out.weeklyPL).toBe(15);
-    expect(out.monthlyPL).toBe(50);
+    expect(out.dailyPL).toBe(25.25);
+    expect(out.weeklyPL).toBe(15.25);
+    expect(out.monthlyPL).toBe(50.25);
   });
 
   it("ignores rows with missing settledAt or non-finite P/L", () => {

@@ -1,8 +1,7 @@
 import { db } from "@paperedge/database";
 import { SettingsClient } from "./SettingsClient";
 import Link from "next/link";
-
-const LOCAL_USER_EMAIL = "local@paperedge.app";
+import { getDashboardLocalUser } from "@/apps/dashboard/lib/local-user";
 export const dynamic = "force-dynamic";
 
 const DEFAULTS = {
@@ -15,7 +14,7 @@ const DEFAULTS = {
 };
 
 export default async function SettingsPage() {
-  const user = await db.user.findUniqueOrThrow({ where: { email: LOCAL_USER_EMAIL } });
+  const user = await getDashboardLocalUser();
   const settings = await db.userSettings.findUnique({ where: { userId: user.id } });
 
   return (
