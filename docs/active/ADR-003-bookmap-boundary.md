@@ -11,7 +11,7 @@ The repository contains `bookmap/` with its own app stack and data store:
 - Separate SQLite files in `bookmap/data/`
 - Separate server/client runtime under `bookmap/server` and `bookmap/client`
 
-PaperEdge already has its own split-app architecture (`apps/dashboard`, `apps/verifier`) and shared packages (`packages/core`, `packages/database`).
+PaperEdge runtime currently uses dashboard-only architecture (`apps/dashboard`) with shared packages (`packages/core`, `packages/database`).
 
 ## Decision
 
@@ -24,6 +24,6 @@ Treat `bookmap/` as an isolated product boundary for this phase.
 
 ## Consequences
 
-- Current PaperEdge completion work stays focused on dashboard/verifier/core/database scopes.
+- Current PaperEdge completion work stays focused on dashboard/core/database scopes.
 - Agents can ignore `bookmap/` for PaperEdge feature work unless a task explicitly targets Bookmap.
 - Merge conflict and accidental coupling risk is reduced.

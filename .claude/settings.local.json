@@ -89,7 +89,13 @@
       "PowerShell(Get-NetTCPConnection -LocalPort 3000 -State Listen -ErrorAction SilentlyContinue | Select-Object -Expand OwningProcess -Unique | ForEach-Object { Stop-Process -Id $_ -Force; \"killed PID $_\" })",
       "Bash(curl -s \"http://127.0.0.1:3001/\")",
       "Bash(node node_modules/tsx/dist/cli.mjs scripts-tmp-clear-settled.mjs)",
-      "Bash(node scripts-tmp-clear-settled.mjs)"
+      "Bash(node scripts-tmp-clear-settled.mjs)",
+      "Bash(node node_modules/vitest/vitest.mjs run packages/core/src/market-normalization.test.ts packages/core/src/edge-signal-engine.test.ts packages/core/src/edge-signal-import.test.ts packages/core/src/adapters)",
+      "Bash(node node_modules/typescript/bin/tsc --noEmit --pretty false)",
+      "Bash(grep -n \"adapters/bovada\\\\|\\\\\"\\\\\\\\./adapters\\\\\"\" packages/core/package.json)",
+      "Bash(echo \"---exit $?---\")",
+      "Bash(node node_modules/tsx/dist/cli.mjs scripts/normalize-bovada.ts)",
+      "Bash(node -e \"const fs=require\\('fs'\\);const d=JSON.parse\\(fs.readFileSync\\('raw_data/bovada_okc_spurs_event.json','utf8'\\)\\);const top=Array.isArray\\(d\\)?d[0]:d;console.log\\('top-level type:',Array.isArray\\(d\\)?'array':'object'\\);console.log\\('top keys:',Object.keys\\(top\\)\\);const ev=top.events?top.events[0]:top;console.log\\('event keys:',ev&&Object.keys\\(ev\\)\\);console.log\\('has displayGroups:',!!\\(ev&&ev.displayGroups\\),'count:',ev&&ev.displayGroups&&ev.displayGroups.length\\);const dg=ev&&ev.displayGroups&&ev.displayGroups[0];console.log\\('displayGroup keys:',dg&&Object.keys\\(dg\\)\\);const mk=dg&&dg.markets&&dg.markets[0];console.log\\('market keys:',mk&&Object.keys\\(mk\\)\\);const oc=mk&&mk.outcomes&&mk.outcomes[0];console.log\\('outcome keys:',oc&&Object.keys\\(oc\\)\\);console.log\\('price:',oc&&JSON.stringify\\(oc.price\\)\\);\")"
     ]
   }
 }

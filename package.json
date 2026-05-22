@@ -8,19 +8,19 @@
   ],
   "scripts": {
     "dev": "npm --workspace @paperedge/dashboard run dev",
-    "build": "next build",
+    "build": "npm --workspace @paperedge/dashboard run build",
     "build:dashboard": "npm --workspace @paperedge/dashboard run build",
-    "build:verifier": "npm --workspace @paperedge/verifier run build",
-    "start": "next start",
+    "build:verifier": "echo \"Verifier is disabled by ADR-002 (dashboard-only runtime).\"",
+    "start": "npm --workspace @paperedge/dashboard run start",
     "test": "vitest run",
     "test:watch": "vitest",
     "db:seed": "tsx packages/database/prisma/seed.ts",
     "db:backfill-money-cents": "node --import tsx packages/database/prisma/backfill-money-cents.ts",
     "dev:dashboard": "npm --workspace @paperedge/dashboard run dev",
-    "dev:verifier": "npm --workspace @paperedge/verifier run dev",
-    "build:all": "npm run build && npm run build:dashboard && npm run build:verifier",
+    "dev:verifier": "echo \"Verifier is disabled by ADR-002 (dashboard-only runtime).\"",
+    "build:all": "npm run build",
     "typecheck": "tsc --noEmit --pretty false",
-    "validate": "npm run typecheck && npm test && npm run build && npm run build:dashboard && npm run build:verifier"
+    "validate": "npm run typecheck && npm test && npm run build"
   },
   "prisma": {
     "seed": "tsx packages/database/prisma/seed.ts"

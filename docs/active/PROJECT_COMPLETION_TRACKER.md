@@ -1,6 +1,6 @@
 # Project Completion Tracker (Agent Source of Truth)
 
-Last audited: 2026-05-21 (America/Chicago)
+Last audited: 2026-05-22 (America/Chicago)
 
 ## Purpose
 This is the single cross-session tracker for what is still required to finish PaperEdge. Every coding agent must read and update this file before ending a work session.
@@ -18,22 +18,21 @@ Related docs:
 5. Do not mark a task `Done` without a reproducible verification command.
 
 ## Health Snapshot (Evidence-Based)
-Current repository state is **quality-gate green** on 2026-05-21:
+Current repository state is **quality-gate green** on 2026-05-22:
 
 1. `npm run typecheck` passes.
 2. `npm test` passes (`26` files, `208` tests).
 3. `npm run build:dashboard` passes.
-4. `npm run build:verifier` passes.
-5. `npm run validate` passes end-to-end.
-6. `npm run db:backfill-money-cents` is idempotent (re-run reports zero updates).
+4. `npm run validate` passes end-to-end.
+5. `npm run db:backfill-money-cents` is idempotent (re-run reports zero updates).
 
 Remaining release blocker:
-- No remaining P0 blockers. Continue P1 backlog (`P1-02+`).
+- No remaining P0/P1 blockers. Continue tracker maintenance (`P2-01`).
 
 ## Definition of Finished Project
 PaperEdge is considered "finished" for this phase only when all are true:
 
-1. Quality gates are green: `typecheck`, tests, dashboard build, verifier build.
+1. Quality gates are green: `typecheck`, tests, dashboard build.
 2. Verification-first flow works end-to-end:
 - Import opportunity
 - Verify both legs
@@ -83,8 +82,7 @@ Status values: `Not Started`, `In Progress`, `Blocked`, `Done`
 | P2-05 | Remove stale artifacts and merge leftovers (`*.before-merge`, outdated reports) | Done | Removed `apps/dashboard/app/trades/LockedTradesClient.tsx.before-merge` and `packages/database/prisma/dev.db.before-merge`; stale readiness report already removed (`PRODUCTION_READINESS_REPORT.md`) | `find . -path './node_modules' -prune -o -path './bookmap/node_modules' -prune -o -type f \\( -name '*.before-merge' -o -name '*.orig' -o -name '*.rej' -o -name '*.bak' -o -name '*~' -o -name '*.tmp' -o -name '*.old' \\) -print` returns no results |
 
 ## Immediate Execution Order
-1. Execute `P1` tasks in order.
-2. Complete `P2` polish and documentation alignment.
+1. Continue `P2-01` tracker/session maintenance each coding session.
 
 ## Session Log
 
@@ -370,7 +368,29 @@ Status values: `Not Started`, `In Progress`, `Blocked`, `Done`
   - `npm run typecheck` ✅
   - `npm run validate` ✅
 
+### 2026-05-22 — Codex architecture pivot (dashboard-only runtime)
+- User-directed architecture pivot to dashboard-only runtime.
+- Updated route ownership ADR:
+  - `docs/active/ADR-002-split-app-route-ownership.md` now supersedes split-app launcher decision and declares verifier runtime disabled.
+- Updated root app entry behavior:
+  - `app/page.tsx` now redirects directly to `NEXT_PUBLIC_DASHBOARD_URL` (default `http://localhost:3000`).
+  - `app/layout.tsx` metadata updated to redirect-entrypoint description.
+- Disabled verifier from default scripts/workflow:
+  - `package.json`: `build`/`start`/`dev` target dashboard runtime path.
+  - `build:verifier` and `dev:verifier` now explicit disabled notices.
+  - `validate` now runs typecheck + tests + dashboard build path.
+- Updated supporting docs for consistency:
+  - `README.md`
+  - `docs/QUALITY_GATES.md`
+  - `AGENTS.md`
+  - `docs/active/ADR-003-bookmap-boundary.md`
+- Validation:
+  - `npm run validate` ✅ (`26` test files, `210` tests; dashboard build passes)
+- Follow-up consistency updates:
+  - Synced `AGENTS.md` current product direction to dashboard-only runtime.
+  - Updated latest evidence date/counts in `docs/QUALITY_GATES.md`.
+
 ## Notes for Future Agents
-- P0 engineering baseline and architecture decision are complete; continue with P1 tasks.
+- P0/P1 engineering baseline is complete; continue tracker/session maintenance (`P2-01`).
 - Preserve paper-trading-only boundaries from `AGENTS.md`.
 - If you complete a task, update both the task table and this session log in the same commit.

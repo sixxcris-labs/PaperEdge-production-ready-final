@@ -24,6 +24,13 @@
     "./verify": "./src/verify.ts",
     "./verification-gates": "./src/verification-gates.ts",
     "./opportunity-parser": "./src/opportunity-parser.ts",
-    "./verification-analytics": "./src/verification-analytics.ts"
+    "./verification-analytics": "./src/verification-analytics.ts",
+    "./market-normalization": "./src/market-normalization.ts",
+    "./edge-signal-engine": "./src/edge-signal-engine.ts",
+    "./edge-signal-import": "./src/edge-signal-import.ts",
+    "./adapters": "./src/adapters/index.ts",
+    "./adapters/novig": "./src/adapters/novig.ts",
+    "./adapters/prophetx": "./src/adapters/prophetx.ts",
+    "./adapters/bovada": "./src/adapters/bovada.ts"
   }
 }

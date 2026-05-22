@@ -22,3 +22,26 @@ export function coreWorkspaceStatus(): string {
 }
 export * from "./opportunity-parser";
 export * from "./verification-analytics";
+export {
+  type MarketSource,
+  type NormalizedMarketStatus,
+  type NormalizedMarket,
+  type MarketRelationshipKind,
+  type MarketRelationshipAssessment,
+  normalizeText,
+  normalizeSide,
+  normalizePeriod,
+  normalizeMarketType,
+  americanToImpliedProbability,
+  probabilityToAmerican,
+  marketComparisonKey,
+  strictMarketComparisonKey,
+  groupMarketsByComparisonKey,
+  isOppositeSide,
+  hasSameLineRelationship,
+  hasMiddleLineRelationship,
+  assessMarketRelationship,
+} from "./market-normalization";
+export * from "./adapters";
+export * from "./edge-signal-engine";
+export * from "./edge-signal-import";

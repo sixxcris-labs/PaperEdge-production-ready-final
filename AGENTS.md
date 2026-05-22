@@ -354,10 +354,10 @@ Checks Needed:
 
 ## Current Product Direction
 
-PaperEdge is being split into two related apps:
+PaperEdge currently runs as a dashboard-only app for this phase.
 
-1. A dashboard app for tracking books, trades, journal entries, results, and performance.
-2. A separate verification/helper tool for parsing pasted opportunities and moving valid candidates into a review queue.
+- `apps/dashboard` is the active runtime surface.
+- `apps/verifier` is disabled in default runtime workflows unless explicitly reactivated by a future ADR.
 
 Keep shared logic portable where possible:
 
@@ -368,4 +368,4 @@ Keep shared logic portable where possible:
 - Profit/loss calculations.
 - Settlement helpers.
 
-The dashboard should not depend on risky browser automation. The verification helper can support guided manual review, but the final lock decision should remain user-confirmed.
+The dashboard should not depend on risky browser automation. Any future verification-helper reactivation must remain manual and user-confirmed.

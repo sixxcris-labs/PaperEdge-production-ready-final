@@ -3,7 +3,7 @@ import "./globals.css";
 
 export const metadata: Metadata = {
   title: "PaperEdge Workspace",
-  description: "Launch page for the PaperEdge dashboard and verifier apps.",
+  description: "Redirect entrypoint for the PaperEdge dashboard app.",
 };
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {

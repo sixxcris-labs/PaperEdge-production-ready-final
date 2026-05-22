@@ -2,16 +2,16 @@
 
 PaperEdge is a verification-first paper-trading workspace for sports betting opportunities. It is designed to help you paste or import opportunities from OddsJam-style sources, verify the market manually on the relevant books, promote only verified candidates into locked paper trades, settle them after the event, and review bankroll movement, P/L, mistakes, and book performance.
 
-PaperEdge is **not** a betting bot. It does not place bets, log into sportsbooks, scrape account balances, bypass geo/KYC, or auto-click sportsbook actions. It is a coach, tracker, calculator, and verifier.
+PaperEdge is **not** a betting bot. It does not place bets, log into sportsbooks, scrape account balances, bypass geo/KYC, or auto-click sportsbook actions. It is a coach, tracker, and calculator for paper-trading workflows.
 
 ## Current architecture
 
 ```text
 paperedge/
-├─ app/                         # Root launcher only
+├─ app/                         # Root redirect entrypoint
 ├─ apps/
-│  ├─ dashboard/                # P&L, locked trades, settlement, mistakes, books, settings
-│  └─ verifier/                 # Import queue, verification workflow, deep links, extension support
+│  ├─ dashboard/                # Active app: P&L, locked trades, settlement, mistakes, books, settings
+│  └─ verifier/                 # Disabled in current runtime scope (retained as inactive code)
 ├─ components/                  # Shared UI components
 ├─ lib/                         # App-specific services and server helpers
 ├─ packages/
@@ -57,12 +57,11 @@ cp .env.example .env.local
 
 Common variables:
 
-| Variable | Default | Purpose |
-|---|---:|---|
-| `PAPEREDGE_DATABASE_PATH` | `packages/database/prisma/dev.db` | Optional absolute or relative path to the SQLite database file. |
-| `NEXT_PUBLIC_DASHBOARD_URL` | `http://localhost:3000` | Link target for dashboard app. |
-| `NEXT_PUBLIC_VERIFIER_URL` | `http://localhost:3001` | Link target for verifier app. |
-| `NEXT_TELEMETRY_DISABLED` | unset | Set to `1` to disable Next telemetry in CI. |
+| Variable                    |                           Default | Purpose                                                         |
+|-----------------------------|----------------------------------:|-----------------------------------------------------------------|
+| `PAPEREDGE_DATABASE_PATH`   | `packages/database/prisma/dev.db` | Optional absolute or relative path to the SQLite database file. |
+| `NEXT_PUBLIC_DASHBOARD_URL` |           `http://localhost:3000` | Root redirect target for dashboard runtime.                     |
+| `NEXT_TELEMETRY_DISABLED`   |                             unset | Set to `1` to disable Next telemetry in CI.                     |
 
 ## Database
 
@@ -82,13 +81,7 @@ Start the dashboard on port 3000:
 npm run dev:dashboard
 ```
 
-Start the verifier on port 3001:
-
-```bash
-npm run dev:verifier
-```
-
-The root app is now only a launcher:
+The root command also loads dashboard:
 
 ```bash
 npm run dev
@@ -101,10 +94,9 @@ npm run typecheck
 npm test
 npm run build
 npm run build:dashboard
-npm run build:verifier
 ```
 
-`npm run validate` runs typecheck, tests, and all builds. In constrained CI containers, running the three build commands separately is more reliable than one long chained command.
+`npm run validate` runs typecheck, tests, and the active dashboard build path.
 
 ## Chrome verifier extension
 
@@ -114,7 +106,7 @@ The extension is located at:
 extensions/paperedge-verifier/
 ```
 
-Install it in Chrome developer mode with **Load unpacked**, then set the popup API base to `http://localhost:3001`. The extension only shows a manual overlay on configured book domains and posts your manually entered observations back to the local verifier API.
+Install it in Chrome developer mode with **Load unpacked**. The verifier app is disabled in this phase, so extension flows are inactive unless verifier runtime is explicitly re-enabled by a future ADR.
 
 ## Safety boundaries
 
